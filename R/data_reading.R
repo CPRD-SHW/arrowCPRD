@@ -64,3 +64,45 @@ write_arrow_to_parquet <- function(arrow_data, output_path, partitioning = NULL)
   output_path
 
 }
+
+
+#' Append data frame to parquet
+#'
+#' @param df A data frame
+#' @param out_dir Out directory
+#' @param table_name "Observation", "Patient" etc.
+#' @param data_schema A schema with `names` and `read_in_types`
+#' @param date_format Default "\%d/\%m/\%Y"
+#'
+#' @returns output directory
+#'
+#' @import duckdb DBI
+#' @export
+#'
+append_to_parquet <- function(df, out_dir, table_name, data_schema, date_format = "%d/%m/%Y") {
+  con <- DBI::dbConnect(duckdb::duckdb())
+
+  duckdb::duckdb_register(con, "tmp_arrow", df)
+
+  cast_expression <- cast_expression_from_schema(data_schema, table_name, date_format = date_format)
+
+  sql <- sprintf(
+    "
+    COPY (
+      SELECT %s
+      FROM tmp_arrow
+    )
+    TO '%s'
+    (FORMAT 'parquet', COMPRESSION 'ZSTD', APPEND TRUE, PARTITION_BY ('table'))
+  ",
+    cast_expression,
+    file.path(out_dir, table_name)
+  )
+
+  tryCatch(
+    DBI::dbExecute(con, sql),
+    finally = duckdb::duckdb_unregister(con, "tmp_arrow")
+  )
+
+  out_dir
+}

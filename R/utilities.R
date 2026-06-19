@@ -51,4 +51,44 @@ coerce_date_columns_arrow <- function(data_in) {
 
 }
 
+#' Cast data-type schema to a duckdb schema
+#'
+#' @param data_schema A list with `names` and `read_in_types`
+#' @param date_format (default "\%d/\%m/\%Y")
+#'
+#' @returns a string to be passed to duckdb as a cast expression
+cast_expression_from_schema <- function(data_schema, table_name, date_format = "%d/%m/%Y") {
+
+  variable_types <- data_schema$read_in_types
+  names(variable_types) <- data_schema$names
+
+  base_types <- c(
+    character = "VARCHAR",
+    integer = "BIGINT",
+    numeric = "DOUBLE"
+  )
+
+  base_variables <- grep(".*date$", data_schema$names, value = TRUE, invert = TRUE)
+
+  base_casts <- sprintf(
+    "%s::%s AS %s",
+    base_variables, base_types[variable_types[base_variables]], base_variables
+  )
+
+  time_variables <- grep(".*date$", data_schema$names, value = TRUE, invert = FALSE)
+
+
+
+  date_casts <- sprintf(
+    "CAST(try_strptime(%s, '%s') AS DATE) AS %s",
+    time_variables, date_format, time_variables
+  )
+
+
+  paste(
+    c(base_casts, date_casts, sprintf("'%s'::VARCHAR as table", table_name)),
+    collapse = ",\n  "
+  )
+
+}
 
