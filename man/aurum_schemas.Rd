@@ -14,23 +14,23 @@
 \alias{aurum_staff_schemas}
 \title{Schemas for reading in Aurum data by types}
 \format{
-An object of class \code{list} of length 2.
+An object of class \code{list} of length 3.
 
 An object of class \code{list} of length 1.
 
-An object of class \code{list} of length 2.
+An object of class \code{list} of length 3.
 
-An object of class \code{list} of length 2.
+An object of class \code{list} of length 3.
 
-An object of class \code{list} of length 2.
+An object of class \code{list} of length 3.
 
-An object of class \code{list} of length 2.
+An object of class \code{list} of length 3.
 
-An object of class \code{list} of length 2.
+An object of class \code{list} of length 3.
 
-An object of class \code{list} of length 2.
+An object of class \code{list} of length 3.
 
-An object of class \code{list} of length 2.
+An object of class \code{list} of length 3.
 }
 \usage{
 aurum_observation_schemas
