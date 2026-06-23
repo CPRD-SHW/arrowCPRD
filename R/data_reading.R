@@ -12,11 +12,11 @@
 #'
 read_file_from_zip <- function(zipfile, filename, schema = NULL, ...) {
   if (is.null(schema)) {
-    data.table::fread(cmd = sprintf("unzip -p %s %s", zipfile, filename))
+    data.table::fread(cmd = sprintf("unzip -p %s %s", zipfile, filename), ...)
   } else {
     data.table::fread(
       cmd = sprintf("unzip -p %s %s", zipfile, filename),
-      colClasses = schema$read_in_types
+      colClasses = schema$read_in_types, ...
     )
   }
 
@@ -105,4 +105,75 @@ append_to_parquet <- function(df, out_dir, table_name, data_schema, date_format 
   )
 
   out_dir
+}
+
+#' Return a list of files from within zips which match a pattern
+#'
+#' `find_files_from_zip` looks inside one zipfile, `find_files_from_zips` looks for all zipfiles in a directory
+#'
+#' @param root_directory Directory to search
+#' @param tag Tag in txt filenames within zips
+#' @param file_pattern Pattern zip files must match
+#'
+#' @returns A named list of txt/tsv files within each zip
+#' @export
+#'
+find_files_from_zips <- function(root_directory, tag, file_pattern = "*.zip$") {
+
+  all_zips <- dir(root_directory, pattern = file_pattern, recursive = TRUE, full.names = TRUE)
+
+  all_files <- lapply(all_zips, \(zipfile) {
+    find_files_from_zip(zipfile, tag)
+  })
+
+  names(all_files) <- all_zips
+
+  all_files
+}
+
+#' @rdname find_files_from_zips
+find_files_from_zip <- function(zipfile, tag) {
+
+  filenames <- unzip(zipfile, list = TRUE)$Name
+
+  grep(paste0(".*", tag, ".*"), filenames, value = TRUE)
+
+}
+
+
+#' Extract all files from a zip and write to a parquet file
+#'
+#' @param zip_directory Directory of zip files
+#' @param write_directory Directory in which to write parquet files
+#' @param dataset_tag Term that will identify relevant files (e.g. 'observation', 'consultation')
+#' @param schema Table schema to use
+#' @param table_name Optional, defaults to `dataset_tag`. Data for the table will be written in this sub-folder within `write_directory`
+#' @param quietly Whether to print progress
+#' @param ... Extra arguments passed to `append_to_parquet` (e.g. date formatting)
+#'
+#' @export
+#'
+read_zipped_dataset_to_parquet <- function(zip_directory, write_directory, dataset_tag, schema, table_name = NULL, quietly = FALSE, ...) {
+
+  if(is.null(table_name)) table_name <- dataset_tag
+  if(!dir.exists(write_directory)) dir.create(write_directory)
+
+  files_to_read <- find_files_from_zips(zip_directory, dataset_tag)
+
+
+  Map(\(tsv_files, zipfile, n) {
+
+    files_n <- length(tsv_files)
+
+    lapply(tsv_files, \(filename) {
+
+    if (!quietly) cat(paste0(n, "/", files_n, ": ", filename, " extracting and adding to parquet\n"))
+
+    read_file_from_zip(zipfile, filename, schema) |>
+      append_to_parquet(write_directory, table_name, schema, ...)
+    })
+
+
+  }, files_to_read, names(files_to_read), length(files_to_read))
+
 }

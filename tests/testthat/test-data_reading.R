@@ -1,8 +1,20 @@
-test_that("reading and single file from zip works", {
+test_that("reading and single file from observations zip works", {
   data_in <- read_file_from_zip(
     test_path("data", "testdata.zip"),
     "aurum_allpatid_set1_extract_observation_001.txt",
     aurum_observation_schemas,
+    nrow = 5
+  )
+
+  expect_s3_class(data_in, "data.table")
+
+})
+
+test_that("reading and single file from patient zip works", {
+  data_in <- read_file_from_zip(
+    test_path("data", "testdata.zip"),
+    "aurum_allpatid_set1_extract_patient_001.txt",
+    aurum_patient_schemas,
     nrow = 5
   )
 
@@ -19,3 +31,114 @@ test_that("reading tsv files work", {
 
 
 })
+
+test_that("writing to parquet works", {
+
+  temp_pq <- withr::local_tempdir()
+
+  data_in <- read_files_from_tsv("observation", test_path("data", "testdata"), aurum_observation_schemas$arrow_schema)
+
+  data_in |>
+    write_arrow_to_parquet(temp_pq)
+
+  pq_in <- open_dataset(temp_pq)
+
+
+  expect_equal(nrow(pq_in), 300)
+  expect_no_error(pq_in)
+
+  on.exit(unlink(temp_pq))
+})
+
+test_that("reading sequential zips to parquet works", {
+
+  temp_pq <- withr::local_tempdir()
+
+  read_file_from_zip(
+    test_path("data", "testdata.zip"),
+    "aurum_allpatid_set1_extract_observation_001.txt",
+    aurum_observation_schemas,
+    nrows = 100
+  ) |> append_to_parquet(temp_pq, "observations", aurum_observation_schemas)
+
+  read_file_from_zip(
+    test_path("data", "testdata.zip"),
+    "aurum_allpatid_set1_extract_observation_002.txt",
+    aurum_observation_schemas,
+    nrows = 100
+  ) |> append_to_parquet(temp_pq, "observations", aurum_observation_schemas)
+
+
+  pq_in <- open_dataset(file.path(temp_pq, "observations")) |>
+    tibble::as_tibble()
+
+  expect_no_error(pq_in)
+
+  on.exit(unlink(temp_pq))
+
+})
+
+test_that("reading all zips in a folder to parquet works", {
+
+  temp_pq <- withr::local_tempdir()
+
+  read_zipped_dataset_to_parquet(
+    test_path("data"),
+    write_directory = temp_pq,
+    dataset_tag = "patient",
+    schema = aurum_patient_schemas,
+    table_name = "fake_name"
+  )
+
+  pq_in <- open_dataset(file.path(temp_pq, "fake_name")) |>
+    tibble::as_tibble()
+
+  expect_no_error(pq_in)
+
+  on.exit(unlink(temp_pq))
+})
+
+test_that("finding files in a zip works", {
+
+  temp_pq <- withr::local_tempdir()
+
+  writeLines("one", file.path(temp_pq, "testfile1.txt"))
+  writeLines("two", file.path(temp_pq, "testfile2.txt"))
+
+  zip(file.path(temp_pq, "zipped.zip"), files = file.path(temp_pq))
+
+  zip_path <- file.path(temp_pq, "zipped.zip")
+
+  files_in <- find_files_from_zip(zip_path, "testfile")
+
+  expected <- c(file.path(temp_pq, "testfile1.txt"), file.path(temp_pq, "testfile2.txt"))
+
+  expect_equal(length(files_in), length(expected))
+
+  on.exit(unlink(temp_pq))
+
+})
+
+test_that("files across multiple zips works", {
+
+  temp_pq <- withr::local_tempdir()
+
+  writeLines("one", file.path(temp_pq, "testfile1.txt"))
+  writeLines("two", file.path(temp_pq, "testfile2.txt"))
+
+  zip(file.path(temp_pq, "zipped1.zip"), files = file.path(temp_pq, "testfile1.txt"))
+  zip(file.path(temp_pq, "zipped2.zip"), files = file.path(temp_pq, "testfile2.txt"))
+
+  zip_paths <- file.path(temp_pq)
+
+  files_in <- find_files_from_zips(zip_paths, "testfile")
+
+  expected <- list(file.path(temp_pq, "testfile1.txt"), file.path(temp_pq, "testfile2.txt"))
+  names(expected) <- c(file.path(temp_pq, "testfile1.txt"), file.path(temp_pq, "testfile2.txt"))
+
+  expect_equal(length(files_in), length(expected))
+
+  on.exit(unlink(temp_pq))
+
+})
+
