@@ -2,3 +2,6 @@
 ^\.Rproj\.user$
 data/testdata.zip
 data/testdata/
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
