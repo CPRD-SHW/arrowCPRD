@@ -1,5 +1,7 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://cprd-shw.github.io/arrowCPRD/404.html</loc></url>
+<url><loc>https://cprd-shw.github.io/arrowCPRD/LICENSE-text.html</loc></url>
+<url><loc>https://cprd-shw.github.io/arrowCPRD/LICENSE.html</loc></url>
 <url><loc>https://cprd-shw.github.io/arrowCPRD/authors.html</loc></url>
 <url><loc>https://cprd-shw.github.io/arrowCPRD/index.html</loc></url>
 <url><loc>https://cprd-shw.github.io/arrowCPRD/reference/append_to_parquet.html</loc></url>
