@@ -14,7 +14,7 @@ Description: More about what it does (maybe more than one line).
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/CPRD-SHW/arrowCPRD
+URL: https://github.com/CPRD-SHW/arrowCPRD, https://cprd-shw.github.io/arrowCPRD/
 BugReports: https://github.com/CPRD-SHW/arrowCPRD/issues
 RoxygenNote: 7.3.3
 Suggests: 
