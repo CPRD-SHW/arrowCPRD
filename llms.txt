@@ -1,0 +1,110 @@
+# arrowCPRD
+
+The goal of arrowCPRD is to allow a user of CPRD data to read these
+large tsv files into compressed, columnar, fast-reading
+[parquet](https://parquet.apache.org/docs/) files. You can read your
+data in after unzipping it, or read it straight from the zipped files!
+To get started, try some things below.
+
+## Installation
+
+You can install the development version of arrowCPRD from
+[GitHub](https://github.com/) with:
+
+``` r
+
+# install.packages("pak")
+pak::pak("CPRD-SHW/arrowCPRD")
+```
+
+## Creating parquet directly from zip files
+
+You can use the function `read_zipped_dataset_to_parquet`
+
+``` r
+library(arrowCPRD)
+
+read_zipped_dataset_to_parquet(
+  [folder containing zipped cprd aurum files],
+  write_directory = "parquet_data",
+  dataset_tag = "patient",
+  schema = aurum_patient_schemas,
+  table_name = "patient"
+)
+
+pq_in <- open_dataset("parquet_data") |>
+  tibble::as_tibble()
+```
+
+You can do this for each of the tables (‘patient’, ‘observation’,
+‘practice’) in your dataset.
+
+`pq_in` then functions like a normal data frame (running `collect` to
+bring into R session after computations):
+
+``` r
+
+library(tidyverse)
+
+pq_in |> 
+  summarise(mean_val = mean(value), .by = "pracid") |>
+  collect()
+```
+
+## Creating parquet files from unzipped datasets
+
+If you’ve unzipped your CPRD data, you can use `read_files_from_tsv` on
+the whole folder also.
+
+``` r
+
+  data_in <- read_files_from_tsv("observation", "path/to/data", aurum_observation_schemas$arrow_schema)
+
+  data_in |>
+    write_arrow_to_parquet("parquet_files/observation")
+
+  pq_in <- open_dataset("parquet_files/observation")
+  
+```
+
+# More to come!
+
+Check back here for more useful parts perhaps!
+
+# Package index
+
+## All functions
+
+- [`append_to_parquet()`](https://cprd-shw.github.io/arrowCPRD/reference/append_to_parquet.md)
+  : Append data frame to parquet
+- [`aurum_observation_schemas`](https://cprd-shw.github.io/arrowCPRD/reference/aurum_schemas.md)
+  [`aurum_linkage_schemas`](https://cprd-shw.github.io/arrowCPRD/reference/aurum_schemas.md)
+  [`aurum_patient_schemas`](https://cprd-shw.github.io/arrowCPRD/reference/aurum_schemas.md)
+  [`aurum_practice_schemas`](https://cprd-shw.github.io/arrowCPRD/reference/aurum_schemas.md)
+  [`aurum_problem_schemas`](https://cprd-shw.github.io/arrowCPRD/reference/aurum_schemas.md)
+  [`aurum_referral_schemas`](https://cprd-shw.github.io/arrowCPRD/reference/aurum_schemas.md)
+  [`aurum_drug_schemas`](https://cprd-shw.github.io/arrowCPRD/reference/aurum_schemas.md)
+  [`aurum_consultation_schemas`](https://cprd-shw.github.io/arrowCPRD/reference/aurum_schemas.md)
+  [`aurum_staff_schemas`](https://cprd-shw.github.io/arrowCPRD/reference/aurum_schemas.md)
+  : Schemas for reading in Aurum data by types
+- [`cast_expression_from_schema()`](https://cprd-shw.github.io/arrowCPRD/reference/cast_expression_from_schema.md)
+  : Cast data-type schema to a duckdb schema
+- [`coerce_date_columns_arrow()`](https://cprd-shw.github.io/arrowCPRD/reference/coerce_date_columns_arrow.md)
+  : Coerce dates in arrow dataset
+- [`coerce_date_columns_dt()`](https://cprd-shw.github.io/arrowCPRD/reference/coerce_date_columns_dt.md)
+  : Coerce dates in data.table
+- [`find_files_from_zips()`](https://cprd-shw.github.io/arrowCPRD/reference/find_files_from_zips.md)
+  [`find_files_from_zip()`](https://cprd-shw.github.io/arrowCPRD/reference/find_files_from_zips.md)
+  : Return a list of files from within zips which match a pattern
+- [`get_arrow_schema()`](https://cprd-shw.github.io/arrowCPRD/reference/get_arrow_schema.md)
+  : Create schema code for given names/types
+- [`read_file_from_zip()`](https://cprd-shw.github.io/arrowCPRD/reference/read_file_from_zip.md)
+  : Read a single file from a zip file (into a \`data.table\`)
+- [`read_files_from_tsv()`](https://cprd-shw.github.io/arrowCPRD/reference/read_files_from_tsv.md)
+  : Open a tsv file or multiple tsv files with a file_tag as an arrow
+  dataset
+- [`read_zipped_dataset_to_parquet()`](https://cprd-shw.github.io/arrowCPRD/reference/read_zipped_dataset_to_parquet.md)
+  : Extract all files from a zip and write to a parquet file
+- [`write_arrow_to_parquet()`](https://cprd-shw.github.io/arrowCPRD/reference/write_arrow_to_parquet.md)
+  : Write an arrow dataset to a parquet file
+

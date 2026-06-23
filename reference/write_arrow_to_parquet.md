@@ -1,0 +1,27 @@
+# Write an arrow dataset to a parquet file
+
+Write an arrow dataset to a parquet file
+
+## Usage
+
+``` r
+write_arrow_to_parquet(arrow_data, output_path, partitioning = NULL)
+```
+
+## Arguments
+
+- arrow_data:
+
+  An arrow dataset created from \`read_files_from_tsv\`
+
+- output_path:
+
+  Output path
+
+- partitioning:
+
+  Optional - variable to partition by
+
+## Value
+
+the output path
