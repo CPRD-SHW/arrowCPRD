@@ -1,6 +1,6 @@
 Package: arrowCPRD
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Reading CPRD Files Into Parquet Via Arrow
 Version: 0.1.0
 Authors@R: c(
     person(
