@@ -150,16 +150,17 @@ find_files_from_zip <- function(zipfile, tag) {
 #' @param schema Table schema to use
 #' @param table_name Optional, defaults to `dataset_tag`. Data for the table will be written in this sub-folder within `write_directory`
 #' @param quietly Whether to print progress
+#' @param zip_file_pattern Name pattern of zips to include (e.g. "Aurum.*\\.zip)
 #' @param ... Extra arguments passed to `append_to_parquet` (e.g. date formatting)
 #'
 #' @export
 #'
-read_zipped_dataset_to_parquet <- function(zip_directory, write_directory, dataset_tag, schema, table_name = NULL, quietly = FALSE, ...) {
+read_zipped_dataset_to_parquet <- function(zip_directory, write_directory, dataset_tag, schema, table_name = NULL, quietly = FALSE, zip_file_pattern = ".*\\.zip", ...) {
 
   if(is.null(table_name)) table_name <- dataset_tag
   if(!dir.exists(write_directory)) dir.create(write_directory)
 
-  files_to_read <- find_files_from_zips(zip_directory, dataset_tag)
+  files_to_read <- find_files_from_zips(zip_directory, dataset_tag, zip_file_pattern = zip_file_pattern)
 
 
   Map(\(tsv_files, zipfile, n) {
