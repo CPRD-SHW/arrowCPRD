@@ -34,7 +34,7 @@ read_file_from_zip <- function(zipfile, filename, schema = NULL, ...) {
 #' @export
 read_files_from_tsv <- function(file_tag, input_dir, schema = NULL) {
 
-  schema <- schema$arrow_schema
+  schema <- schema$arrow_schema$code()
 
   list.files(
     path      = input_dir,
@@ -43,7 +43,7 @@ read_files_from_tsv <- function(file_tag, input_dir, schema = NULL) {
     recursive  = TRUE,
     ignore.case = TRUE
   ) |>
-    arrow::open_tsv_dataset(schema = schema, skip = 1)
+    arrow::open_tsv_dataset(schema = eval(schema), skip = 1)
 }
 
 
