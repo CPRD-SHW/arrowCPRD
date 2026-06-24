@@ -29,7 +29,7 @@ read_zipped_dataset_to_parquet(
   [folder containing zipped cprd aurum files],
   write_directory = "parquet_data",
   dataset_tag = "patient",
-  schema = aurum_patient_schemas,
+  schema = get_schema("aurum", "patient"),
   table_name = "patient"
 )
 
@@ -55,7 +55,11 @@ pq_in |>
 If you've unzipped your CPRD data, you can use `read_files_from_tsv` on the whole folder also.
 
 ``` r
-  data_in <- read_files_from_tsv("observation", "path/to/data", aurum_observation_schemas$arrow_schema)
+  data_in <- read_files_from_tsv(
+    "observation", 
+    "path/to/data",
+    get_schema("aurum", "observation")
+  )
 
   data_in |>
     write_arrow_to_parquet("parquet_files/observation")
