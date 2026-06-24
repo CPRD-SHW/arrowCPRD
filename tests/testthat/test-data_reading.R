@@ -1,4 +1,4 @@
-test_that("reading and single file from observations zip works", {
+test_that("reading a single file from observations zip works", {
   data_in <- read_file_from_zip(
     test_path("data", "testdata.zip"),
     "aurum_allpatid_set1_extract_observation_001.txt",
@@ -10,7 +10,7 @@ test_that("reading and single file from observations zip works", {
 
 })
 
-test_that("reading and single file from patient zip works", {
+test_that("reading a single file from patient zip works", {
   data_in <- read_file_from_zip(
     test_path("data", "testdata.zip"),
     "aurum_allpatid_set1_extract_patient_001.txt",
@@ -22,9 +22,11 @@ test_that("reading and single file from patient zip works", {
 
 })
 
-test_that("reading tsv files work", {
 
-  data_in <- read_files_from_tsv("observation", test_path("data", "testdata"), get_schema("aurum", "observation"))
+test_that("reading tsv files work", {
+  data_in <- read_files_from_tsv("observation",
+                                 test_path("data", "testdata"),
+                                 get_schema("aurum", "observation"))
 
 
   expect_r6_class(data_in, "Dataset")
