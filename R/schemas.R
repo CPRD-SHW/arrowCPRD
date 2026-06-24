@@ -1,5 +1,5 @@
 #' Schemas for reading in Aurum data by types
-#' @export
+
 #' @name aurum_schemas
 aurum_observation_schemas <- list(
   names = c(
@@ -47,7 +47,7 @@ aurum_observation_schemas <- list(
 
 )
 
-#' @export
+
 #' @rdname aurum_schemas
 aurum_linkage_schemas <- list(
   read_in_types = c(
@@ -71,7 +71,7 @@ aurum_linkage_schemas <- list(
 
 )
 
-#' @export
+
 #' @rdname aurum_schemas
 aurum_patient_schemas <- list(
   names = c(
@@ -112,7 +112,7 @@ aurum_patient_schemas <- list(
                                cprd_ddate = arrow::utf8())
 )
 
-#' @export
+
 #' @rdname aurum_schemas
 aurum_practice_schemas <- list(
   names = c("pracid", "lcd", "uts", "region"),
@@ -122,7 +122,7 @@ aurum_practice_schemas <- list(
 
 )
 
-#' @export
+
 #' @rdname aurum_schemas
 aurum_problem_schemas <- list(
   names = c(
@@ -161,7 +161,7 @@ aurum_problem_schemas <- list(
 )
 
 
-#' @export
+
 #' @rdname aurum_schemas
 aurum_referral_schemas <- list(
   names = c(
@@ -192,7 +192,7 @@ aurum_referral_schemas <- list(
                                refmodeid = arrow::int64())
 )
 
-#' @export
+
 #' @rdname aurum_schemas
 aurum_drug_schemas <- list(
   names = c(
@@ -237,7 +237,7 @@ aurum_drug_schemas <- list(
                                estnhscost = arrow::float64())
 )
 
-#' @export
+
 #' @rdname aurum_schemas
 aurum_consultation_schemas <- list(
   names = c(
@@ -271,7 +271,7 @@ aurum_consultation_schemas <- list(
 
 )
 
-#' @export
+
 #' @rdname aurum_schemas
 aurum_staff_schemas <- list(
   names = c("staffid", "pracid", "jobcatid"),

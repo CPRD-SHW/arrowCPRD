@@ -11,6 +11,7 @@ read_zipped_dataset_to_parquet(
   schema,
   table_name = NULL,
   quietly = FALSE,
+  zip_file_pattern = ".*\\\\.zip",
   ...
 )
 }
@@ -26,6 +27,8 @@ read_zipped_dataset_to_parquet(
 \item{table_name}{Optional, defaults to `dataset_tag`. Data for the table will be written in this sub-folder within `write_directory`}
 
 \item{quietly}{Whether to print progress}
+
+\item{zip_file_pattern}{Name pattern of zips to include (e.g. "Aurum.*\\.zip)}
 
 \item{...}{Extra arguments passed to `append_to_parquet` (e.g. date formatting)}
 }

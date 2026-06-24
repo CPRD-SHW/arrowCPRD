@@ -5,7 +5,7 @@
 \alias{find_files_from_zip}
 \title{Return a list of files from within zips which match a pattern}
 \usage{
-find_files_from_zips(root_directory, tag, file_pattern = "*.zip$")
+find_files_from_zips(root_directory, tag, zip_file_pattern = "*.zip$")
 
 find_files_from_zip(zipfile, tag)
 }
@@ -14,7 +14,7 @@ find_files_from_zip(zipfile, tag)
 
 \item{tag}{Tag in txt filenames within zips}
 
-\item{file_pattern}{Pattern zip files must match}
+\item{zip_file_pattern}{Pattern zip files must match}
 }
 \value{
 A named list of txt/tsv files within each zip

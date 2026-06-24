@@ -173,7 +173,7 @@ test_that("files across multiple zips works", {
 
 })
 
-test_that("files across multiple zips allows wildcards in directory name", {
+test_that("files across multiple zips allows wildcards in file pattern name", {
 
   temp_pq <- withr::local_tempdir()
 
@@ -182,12 +182,12 @@ test_that("files across multiple zips allows wildcards in directory name", {
 
   dir.create(file.path(temp_pq, "data1"))
 
-  zip(file.path(temp_pq, "data1", "zipped1.zip"), files = file.path(temp_pq, "testfile1.txt"))
-  zip(file.path(temp_pq, "data1", "zipped2.zip"), files = file.path(temp_pq, "testfile2.txt"))
+  zip(file.path(temp_pq, "data1_zipped1.zip"), files = file.path(temp_pq, "testfile1.txt"))
+  zip(file.path(temp_pq, "data1_zipped2.zip"), files = file.path(temp_pq, "testfile2.txt"))
 
   zip_paths <- file.path(temp_pq)
 
-  files_in <- find_files_from_zips(paste0(zip_paths, "data*"), "testfile")
+  files_in <- find_files_from_zips(zip_paths, "testfile", zip_file_pattern = "data._.*\\.zip")
 
   expected <- list(file.path(temp_pq, "testfile1.txt"), file.path(temp_pq, "testfile2.txt"))
   names(expected) <- c(file.path(temp_pq, "testfile1.txt"), file.path(temp_pq, "testfile2.txt"))
