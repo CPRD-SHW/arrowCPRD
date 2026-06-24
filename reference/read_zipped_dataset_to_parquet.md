@@ -12,6 +12,7 @@ read_zipped_dataset_to_parquet(
   schema,
   table_name = NULL,
   quietly = FALSE,
+  zip_file_pattern = ".*\\.zip",
   ...
 )
 ```
@@ -43,6 +44,10 @@ read_zipped_dataset_to_parquet(
 - quietly:
 
   Whether to print progress
+
+- zip_file_pattern:
+
+  Name pattern of zips to include (e.g. "Aurum.\*\\zip)
 
 - ...:
 

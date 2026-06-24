@@ -6,7 +6,7 @@
 ## Usage
 
 ``` r
-find_files_from_zips(root_directory, tag, file_pattern = "*.zip$")
+find_files_from_zips(root_directory, tag, zip_file_pattern = "*.zip$")
 
 find_files_from_zip(zipfile, tag)
 ```
@@ -21,7 +21,7 @@ find_files_from_zip(zipfile, tag)
 
   Tag in txt filenames within zips
 
-- file_pattern:
+- zip_file_pattern:
 
   Pattern zip files must match
 
