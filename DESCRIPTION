@@ -9,7 +9,7 @@ Authors@R: c(
       role = c("aut", "cre")
     )
   )
-Description: R Package for reading CPRD data into parquet files
+Description: An R Package for reading CPRD data into parquet files.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -24,6 +24,7 @@ Imports:
     data.table,
     DBI,
     dplyr,
-    duckdb
+    duckdb,
+    lubridate
 Depends: 
     R (>= 4.2.0)

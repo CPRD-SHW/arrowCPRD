@@ -1,16 +1,28 @@
-#' Schemas for reading in Aurum data by types
-#'
-#' @param dataset_name Name of dataset - 'aurum' or 'gold'
-#' @param table_name Name of table - 'observation' etc.
-#'
-#' @returns A 'schema' - a list of names of variables, r data types and arrow types
-#'
-#' @export
-#' @examples
-#' get_schema("aurum", "observation")
-#' get_schema("aurum", "patient")
-#'
-get_schema <- function(dataset_name = c("aurum", "gold"), table_name = c("observation", "consultation", "patient", "staff", "drug", "linkage", "practice", "problem", "referral")) {
+#" Schemas for reading in Aurum data by types
+#"
+#" @param dataset_name Name of dataset - "aurum" or "gold"
+#" @param table_name Name of table - "observation" etc.
+#"
+#" @returns A "schema" - a list of names of variables, r data types and arrow types
+#"
+#" @export
+#" @examples
+#" # Not run
+#" # get_schema("aurum", "observation")
+#" # get_schema("aurum", "patient")
+#"
+get_schema <- function(dataset_name = c("aurum", "gold"),
+                       table_name = c(
+                         "observation",
+                         "consultation",
+                         "patient",
+                         "staff",
+                         "drug",
+                         "linkage",
+                         "practice",
+                         "problem",
+                         "referral"
+                       )) {
 
 
   match.arg(dataset_name)
@@ -52,21 +64,21 @@ get_schema <- function(dataset_name = c("aurum", "gold"), table_name = c("observ
     ),
 
     read_in_types = c(
-      'character',
-      'character',
-      'integer',
-      'character',
-      'character',
-      'character',
-      'character',
-      'character',
-      'character',
-      'numeric',
-      'integer',
-      'integer',
-      'numeric',
-      'numeric',
-      'character'
+      "character",
+      "character",
+      "integer",
+      "character",
+      "character",
+      "character",
+      "character",
+      "character",
+      "character",
+      "numeric",
+      "integer",
+      "integer",
+      "numeric",
+      "numeric",
+      "character"
     ),
 
     arrow_schema = arrow::schema(

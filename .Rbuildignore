@@ -7,3 +7,4 @@ data/testdata/
 ^pkgdown$
 ^\.github$
 ^LICENSE\.md$
+^\.lintr$

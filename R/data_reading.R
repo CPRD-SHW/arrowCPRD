@@ -136,6 +136,10 @@ find_files_from_zips <- function(root_directory, tag, zip_file_pattern = "*.zip$
 }
 
 #' @rdname find_files_from_zips
+#'
+#' @param zipfile Specific file to look in
+#'
+#' @importFrom utils unzip
 find_files_from_zip <- function(zipfile, tag) {
 
   filenames <- unzip(zipfile, list = TRUE)$Name
@@ -160,8 +164,8 @@ find_files_from_zip <- function(zipfile, tag) {
 #'
 read_zipped_dataset_to_parquet <- function(zip_directory, write_directory, dataset_tag, schema, table_name = NULL, quietly = FALSE, zip_file_pattern = ".*\\.zip", ...) {
 
-  if(is.null(table_name)) table_name <- dataset_tag
-  if(!dir.exists(write_directory)) dir.create(write_directory)
+  if (is.null(table_name)) table_name <- dataset_tag
+  if (!dir.exists(write_directory)) dir.create(write_directory)
 
   files_to_read <- find_files_from_zips(zip_directory, dataset_tag, zip_file_pattern = zip_file_pattern)
 
