@@ -3,7 +3,6 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/CPRD-SHW/arrowCPRD/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/CPRD-SHW/arrowCPRD/actions/workflows/R-CMD-check.yaml)
-[![Codecov test coverage](https://codecov.io/gh/CPRD-SHW/arrowCPRD/graph/badge.svg)](https://app.codecov.io/gh/CPRD-SHW/arrowCPRD)
 <!-- badges: end -->
 
 The goal of arrowCPRD is to allow a user of CPRD data to read these large tsv files into compressed, columnar, fast-reading [parquet](https://parquet.apache.org/docs/) files.
