@@ -33,6 +33,9 @@ read_file_from_zip <- function(zipfile, filename, schema = NULL, ...) {
 #' @import arrow
 #' @export
 read_files_from_tsv <- function(file_tag, input_dir, schema = NULL) {
+
+  schema <- schema$arrow_schema
+
   list.files(
     path      = input_dir,
     pattern   = paste0(file_tag, ".*\\.txt$"),

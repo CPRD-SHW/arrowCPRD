@@ -2,7 +2,7 @@ test_that("reading and single file from observations zip works", {
   data_in <- read_file_from_zip(
     test_path("data", "testdata.zip"),
     "aurum_allpatid_set1_extract_observation_001.txt",
-    aurum_observation_schemas,
+    get_schema("aurum", "observation"),
     nrow = 5
   )
 
@@ -14,7 +14,7 @@ test_that("reading and single file from patient zip works", {
   data_in <- read_file_from_zip(
     test_path("data", "testdata.zip"),
     "aurum_allpatid_set1_extract_patient_001.txt",
-    aurum_patient_schemas,
+    get_schema("aurum", "patient"),
     nrow = 5
   )
 
@@ -24,7 +24,7 @@ test_that("reading and single file from patient zip works", {
 
 test_that("reading tsv files work", {
 
-  data_in <- read_files_from_tsv("observation", test_path("data", "testdata"), aurum_observation_schemas$arrow_schema)
+  data_in <- read_files_from_tsv("observation", test_path("data", "testdata"), get_schema("aurum", "observation"))
 
 
   expect_r6_class(data_in, "Dataset")
@@ -34,7 +34,7 @@ test_that("reading tsv files work", {
 
 test_that("reading tsv files non-case sensitive", {
 
-  data_in <- read_files_from_tsv("Observation", test_path("data", "testdata"), aurum_observation_schemas$arrow_schema)
+  data_in <- read_files_from_tsv("Observation", test_path("data", "testdata"), get_schema("aurum", "observation"))
 
 
   expect_r6_class(data_in, "Dataset")
@@ -46,7 +46,7 @@ test_that("writing to parquet works", {
 
   temp_pq <- withr::local_tempdir()
 
-  data_in <- read_files_from_tsv("observation", test_path("data", "testdata"), aurum_observation_schemas$arrow_schema)
+  data_in <- read_files_from_tsv("observation", test_path("data", "testdata"), get_schema("aurum", "observation"))
 
   data_in |>
     write_arrow_to_parquet(temp_pq)
@@ -67,16 +67,16 @@ test_that("reading sequential zips to parquet works", {
   read_file_from_zip(
     test_path("data", "testdata.zip"),
     "aurum_allpatid_set1_extract_observation_001.txt",
-    aurum_observation_schemas,
+    get_schema("aurum", "observation"),
     nrows = 100
-  ) |> append_to_parquet(temp_pq, "observations", aurum_observation_schemas)
+  ) |> append_to_parquet(temp_pq, "observations", get_schema("aurum", "observation"))
 
   read_file_from_zip(
     test_path("data", "testdata.zip"),
     "aurum_allpatid_set1_extract_observation_002.txt",
-    aurum_observation_schemas,
+    get_schema("aurum", "observation"),
     nrows = 100
-  ) |> append_to_parquet(temp_pq, "observations", aurum_observation_schemas)
+  ) |> append_to_parquet(temp_pq, "observations", get_schema("aurum", "observation"))
 
 
   pq_in <- open_dataset(file.path(temp_pq, "observations")) |>
@@ -96,7 +96,7 @@ test_that("reading all zips in a folder to parquet works", {
     test_path("data"),
     write_directory = temp_pq,
     dataset_tag = "patient",
-    schema = aurum_patient_schemas,
+    schema = get_schema("aurum", "patient"),
     table_name = "fake_name"
   )
 

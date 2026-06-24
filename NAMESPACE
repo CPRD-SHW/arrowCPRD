@@ -2,6 +2,7 @@
 
 export(append_to_parquet)
 export(find_files_from_zips)
+export(get_schema)
 export(read_file_from_zip)
 export(read_files_from_tsv)
 export(read_zipped_dataset_to_parquet)
