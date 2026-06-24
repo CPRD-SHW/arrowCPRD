@@ -37,7 +37,8 @@ read_files_from_tsv <- function(file_tag, input_dir, schema = NULL) {
     path      = input_dir,
     pattern   = paste0(file_tag, ".*\\.txt$"),
     full.names = TRUE,
-    recursive  = TRUE
+    recursive  = TRUE,
+    ignore.case = TRUE
   ) |>
     arrow::open_tsv_dataset(schema = schema, skip = 1)
 }
@@ -113,14 +114,14 @@ append_to_parquet <- function(df, out_dir, table_name, data_schema, date_format 
 #'
 #' @param root_directory Directory to search
 #' @param tag Tag in txt filenames within zips
-#' @param file_pattern Pattern zip files must match
+#' @param zip_file_pattern Pattern zip files must match
 #'
 #' @returns A named list of txt/tsv files within each zip
 #' @export
 #'
-find_files_from_zips <- function(root_directory, tag, file_pattern = "*.zip$") {
+find_files_from_zips <- function(root_directory, tag, zip_file_pattern = "*.zip$") {
 
-  all_zips <- dir(root_directory, pattern = file_pattern, recursive = TRUE, full.names = TRUE)
+  all_zips <- dir(root_directory, pattern = zip_file_pattern, recursive = TRUE, full.names = TRUE)
 
   all_files <- lapply(all_zips, \(zipfile) {
     find_files_from_zip(zipfile, tag)
@@ -136,7 +137,7 @@ find_files_from_zip <- function(zipfile, tag) {
 
   filenames <- unzip(zipfile, list = TRUE)$Name
 
-  grep(paste0(".*", tag, ".*"), filenames, value = TRUE)
+  grep(paste0(".*", tag, ".*\\.(txt|tsv|csv)"), filenames, value = TRUE, ignore.case = TRUE)
 
 }
 

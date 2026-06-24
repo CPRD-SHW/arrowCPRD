@@ -32,6 +32,16 @@ test_that("reading tsv files work", {
 
 })
 
+test_that("reading tsv files non-case sensitive", {
+
+  data_in <- read_files_from_tsv("Observation", test_path("data", "testdata"), aurum_observation_schemas$arrow_schema)
+
+
+  expect_r6_class(data_in, "Dataset")
+
+
+})
+
 test_that("writing to parquet works", {
 
   temp_pq <- withr::local_tempdir()
@@ -119,6 +129,27 @@ test_that("finding files in a zip works", {
 
 })
 
+test_that("finding files in a zip is non-case sensitive", {
+
+  temp_pq <- withr::local_tempdir()
+
+  writeLines("one", file.path(temp_pq, "testfile1.txt"))
+  writeLines("two", file.path(temp_pq, "testfile2.txt"))
+
+  zip(file.path(temp_pq, "zipped.zip"), files = file.path(temp_pq))
+
+  zip_path <- file.path(temp_pq, "zipped.zip")
+
+  files_in <- find_files_from_zip(zip_path, "Testfile")
+
+  expected <- c(file.path(temp_pq, "testfile1.txt"), file.path(temp_pq, "testfile2.txt"))
+
+  expect_equal(length(files_in), length(expected))
+
+  on.exit(unlink(temp_pq))
+
+})
+
 test_that("files across multiple zips works", {
 
   temp_pq <- withr::local_tempdir()
@@ -132,6 +163,31 @@ test_that("files across multiple zips works", {
   zip_paths <- file.path(temp_pq)
 
   files_in <- find_files_from_zips(zip_paths, "testfile")
+
+  expected <- list(file.path(temp_pq, "testfile1.txt"), file.path(temp_pq, "testfile2.txt"))
+  names(expected) <- c(file.path(temp_pq, "testfile1.txt"), file.path(temp_pq, "testfile2.txt"))
+
+  expect_equal(length(files_in), length(expected))
+
+  on.exit(unlink(temp_pq))
+
+})
+
+test_that("files across multiple zips allows wildcards in directory name", {
+
+  temp_pq <- withr::local_tempdir()
+
+  writeLines("one", file.path(temp_pq, "testfile1.txt"))
+  writeLines("two", file.path(temp_pq, "testfile2.txt"))
+
+  dir.create(file.path(temp_pq, "data1"))
+
+  zip(file.path(temp_pq, "data1", "zipped1.zip"), files = file.path(temp_pq, "testfile1.txt"))
+  zip(file.path(temp_pq, "data1", "zipped2.zip"), files = file.path(temp_pq, "testfile2.txt"))
+
+  zip_paths <- file.path(temp_pq)
+
+  files_in <- find_files_from_zips(paste0(zip_paths, "data*"), "testfile")
 
   expected <- list(file.path(temp_pq, "testfile1.txt"), file.path(temp_pq, "testfile2.txt"))
   names(expected) <- c(file.path(temp_pq, "testfile1.txt"), file.path(temp_pq, "testfile2.txt"))
