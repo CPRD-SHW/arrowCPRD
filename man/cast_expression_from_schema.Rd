@@ -23,3 +23,4 @@ a string to be passed to duckdb as a cast expression
 \description{
 Cast data-type schema to a duckdb schema
 }
+\keyword{internal}

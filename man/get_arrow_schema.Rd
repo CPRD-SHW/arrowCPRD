@@ -17,3 +17,4 @@ A function for generating an `arrow::Schema`
 \description{
 Create schema code for given names/types
 }
+\keyword{internal}

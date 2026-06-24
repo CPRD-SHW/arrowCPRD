@@ -12,3 +12,4 @@ coerce_date_columns_dt(data_in)
 \description{
 Coerce dates in data.table
 }
+\keyword{internal}

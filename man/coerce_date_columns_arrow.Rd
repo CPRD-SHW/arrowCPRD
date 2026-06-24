@@ -12,3 +12,4 @@ coerce_date_columns_arrow(data_in)
 \description{
 Coerce dates in arrow dataset
 }
+\keyword{internal}

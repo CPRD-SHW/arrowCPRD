@@ -6,6 +6,8 @@
 #' @returns A function for generating an `arrow::Schema`
 #' @import arrow
 #'
+#' @keywords internal
+#'
 get_arrow_schema <- function(schema_in_names, schema_in_read_in_types) {
   schema_obj <- mapply(\(names, read_in_types) {
     data_in <- data.frame(x <- do.call(read_in_types, args = list(1)))
@@ -28,6 +30,7 @@ get_arrow_schema <- function(schema_in_names, schema_in_read_in_types) {
 #' @param data_in Dataset passed in
 #'
 #' @import data.table
+#' @keywords internal
 coerce_date_columns_dt <- function(data_in) {
 
   date_cols <- grep(".*date", names(data_in), value = TRUE)
@@ -45,6 +48,7 @@ coerce_date_columns_dt <- function(data_in) {
 #'
 #' @importFrom dplyr mutate across matches
 #' @importFrom lubridate parse_date_time
+#' @keywords internal
 coerce_date_columns_arrow <- function(data_in) {
 
 
@@ -64,6 +68,7 @@ coerce_date_columns_arrow <- function(data_in) {
 #' @param date_format (default "\%d/\%m/\%Y")
 #'
 #' @returns a string to be passed to duckdb as a cast expression
+#' @keywords internal
 cast_expression_from_schema <- function(data_schema, table_name, date_format = "%d/%m/%Y") {
 
   variable_types <- data_schema$read_in_types
