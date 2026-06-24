@@ -15,8 +15,6 @@
   : Return a list of files from within zips which match a pattern
 - [`get_arrow_schema()`](https://cprd-shw.github.io/arrowCPRD/reference/get_arrow_schema.md)
   : Create schema code for given names/types
-- [`get_schema()`](https://cprd-shw.github.io/arrowCPRD/reference/get_schema.md)
-  : Schemas for reading in Aurum data by types
 - [`read_file_from_zip()`](https://cprd-shw.github.io/arrowCPRD/reference/read_file_from_zip.md)
   : Read a single file from a zip file (into a \`data.table\`)
 - [`read_files_from_tsv()`](https://cprd-shw.github.io/arrowCPRD/reference/read_files_from_tsv.md)

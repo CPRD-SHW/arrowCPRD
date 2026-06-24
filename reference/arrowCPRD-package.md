@@ -1,6 +1,6 @@
 # arrowCPRD: Reading CPRD Files Into Parquet Via Arrow
 
-R Package for reading CPRD data into parquet files
+An R Package for reading CPRD data into parquet files.
 
 ## See also
 

@@ -25,6 +25,10 @@ find_files_from_zip(zipfile, tag)
 
   Pattern zip files must match
 
+- zipfile:
+
+  Specific file to look in
+
 ## Value
 
 A named list of txt/tsv files within each zip

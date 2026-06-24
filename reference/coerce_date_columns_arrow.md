@@ -7,3 +7,9 @@ Coerce dates in arrow dataset
 ``` r
 coerce_date_columns_arrow(data_in)
 ```
+
+## Arguments
+
+- data_in:
+
+  Dataset passed in
