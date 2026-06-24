@@ -13,6 +13,8 @@ cast_expression_from_schema(
 \arguments{
 \item{data_schema}{A list with `names` and `read_in_types`}
 
+\item{table_name}{Name of table to include in cast statement}
+
 \item{date_format}{(default "\%d/\%m/\%Y")}
 }
 \value{

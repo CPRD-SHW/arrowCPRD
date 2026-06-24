@@ -15,6 +15,8 @@ find_files_from_zip(zipfile, tag)
 \item{tag}{Tag in txt filenames within zips}
 
 \item{zip_file_pattern}{Pattern zip files must match}
+
+\item{zipfile}{Specific file to look in}
 }
 \value{
 A named list of txt/tsv files within each zip

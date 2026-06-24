@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-R Package for reading CPRD data into parquet files
+An R Package for reading CPRD data into parquet files.
 }
 \seealso{
 Useful links:

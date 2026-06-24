@@ -6,6 +6,9 @@
 \usage{
 coerce_date_columns_arrow(data_in)
 }
+\arguments{
+\item{data_in}{Dataset passed in}
+}
 \description{
 Coerce dates in arrow dataset
 }

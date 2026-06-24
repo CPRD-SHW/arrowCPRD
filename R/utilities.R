@@ -98,5 +98,3 @@ cast_expression_from_schema <- function(data_schema, table_name, date_format = "
   )
 
 }
-
-
