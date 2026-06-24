@@ -1,16 +1,16 @@
-#" Schemas for reading in Aurum data by types
-#"
-#" @param dataset_name Name of dataset - "aurum" or "gold"
-#" @param table_name Name of table - "observation" etc.
-#"
-#" @returns A "schema" - a list of names of variables, r data types and arrow types
-#"
-#" @export
-#" @examples
-#" # Not run
-#" # get_schema("aurum", "observation")
-#" # get_schema("aurum", "patient")
-#"
+#' Schemas for reading in Aurum data by types
+#'
+#' @param dataset_name Name of dataset - "aurum" or "gold"
+#' @param table_name Name of table - "observation" etc.
+#'
+#' @returns A "schema" - a list of names of variables, r data types and arrow types
+#'
+#' @export
+#' @examples
+#' # Not run
+#' # get_schema("aurum", "observation")
+#' # get_schema("aurum", "patient")
+#'
 get_schema <- function(dataset_name = c("aurum", "gold"),
                        table_name = c(
                          "observation",
