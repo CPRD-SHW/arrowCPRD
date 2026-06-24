@@ -170,19 +170,22 @@ read_zipped_dataset_to_parquet <- function(zip_directory, write_directory, datas
   files_to_read <- find_files_from_zips(zip_directory, dataset_tag, zip_file_pattern = zip_file_pattern)
 
 
-  Map(\(tsv_files, zipfile, n) {
+  files_to_read <- files_to_read[lapply(files_to_read, length) != 0]
+
+  Map(\(tsv_files, zipfile) {
 
     files_n <- length(tsv_files)
 
-    lapply(tsv_files, \(filename) {
+    Map(\(filename, n) {
 
     if (!quietly) cat(paste0(n, "/", files_n, ": ", filename, " extracting and adding to parquet\n"))
 
     read_file_from_zip(zipfile, filename, schema) |>
       append_to_parquet(write_directory, table_name, schema, ...)
-    })
+    }, tsv_files, seq(files_n))
 
 
-  }, files_to_read, names(files_to_read), length(files_to_read))
+  }, files_to_read, names(files_to_read))
 
+  invisible(files_to_read)
 }
