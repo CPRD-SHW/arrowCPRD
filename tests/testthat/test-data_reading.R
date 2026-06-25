@@ -106,6 +106,7 @@ test_that("reading all zips in a folder to parquet works", {
     tibble::as_tibble()
 
   expect_no_error(pq_in)
+  expect_s3_class(pq_in$regstartdate, "Date")
 
   on.exit(unlink(temp_pq))
 })
