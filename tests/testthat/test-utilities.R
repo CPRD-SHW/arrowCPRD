@@ -10,3 +10,15 @@ test_that("reading schema works", {
   expect_equal(expected = expected_schema$ToString(), object = out_schema$ToString())
 
 })
+
+
+test_that("coercing dates in a data.table works", {
+
+  dt_in <- data.table::data.table(adate = "2026/01/01", bdate = "02/03/2028")
+
+  coerce_date_columns_dt(dt_in)
+
+  expect_equal(dt_in$adate, as.Date("2026/01/01", format = "%Y/%m/%d"))
+  expect_equal(dt_in$bdate, as.Date("2028/03/02", format = "%Y/%m/%d"))
+
+})

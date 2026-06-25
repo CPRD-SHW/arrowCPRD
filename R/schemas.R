@@ -25,9 +25,6 @@ get_schema <- function(dataset_name = c("aurum", "gold"),
                        )) {
 
 
-  match.arg(dataset_name)
-  match.arg(table_name)
-
   key <- paste(dataset_name, table_name, sep = "_")
 
   schema <- .schemas[[key]]
