@@ -23,6 +23,42 @@ test_that("reading a single file from patient zip works", {
 })
 
 
+test_that("reading a file from zip allows spaces", {
+  temp_pq <- withr::local_tempdir()
+
+
+  dir.create(file.path(temp_pq, "folder with spaces"))
+
+  writeLines("one", file.path(temp_pq, "testfile 1.txt"))
+  writeLines("one",
+             file.path(temp_pq, "folder with spaces", "testfile2.txt"))
+
+  zip(file.path(temp_pq, "zipped.zip"), files = file.path(temp_pq))
+
+  zip_path <- file.path(temp_pq, "zipped.zip")
+
+  file1 <- find_files_from_zip(zip_path, tag = "testfile 1")
+  file2 <- find_files_from_zip(zip_path, tag = "testfile2")
+
+  expect_no_error(
+    in_file1 <- read_file_from_zip(
+      zip_path,
+      file1
+      )
+  )
+
+  expect_no_error(
+    in_file2 <- read_file_from_zip(
+      zip_path,
+      file2
+  )
+  )
+
+  on.exit(unlink(temp_pq))
+
+})
+
+
 test_that("reading tsv files work", {
   data_in <- read_files_from_tsv("observation",
                                  test_path("data", "testdata"),
