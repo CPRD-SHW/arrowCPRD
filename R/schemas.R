@@ -7,9 +7,8 @@
 #'
 #' @export
 #' @examples
-#' # Not run
-#' # get_schema("aurum", "observation")
-#' # get_schema("aurum", "patient")
+#' get_schema("aurum", "observation")
+#' get_schema("aurum", "patient")
 #'
 get_schema <- function(dataset_name = c("aurum", "gold"),
                        table_name = c(
@@ -23,18 +22,16 @@ get_schema <- function(dataset_name = c("aurum", "gold"),
                          "problem",
                          "referral"
                        )) {
-
-
   key <- paste(dataset_name, table_name, sep = "_")
 
   schema <- .schemas[[key]]
 
   if (is.null(schema)) {
-    stop(
-      sprintf("No schema found for '%s_%s'", dataset_name, table_name),
-      call. = FALSE
-    )
+    stop(sprintf("No schema found for '%s_%s'", dataset_name, table_name),
+         call. = FALSE)
   }
+
+  schema$arrow_schema <- eval(schema$arrow_schema)
 
   schema
 
@@ -78,22 +75,24 @@ get_schema <- function(dataset_name = c("aurum", "gold"),
       "character"
     ),
 
-    arrow_schema = arrow::schema(
-      patid = arrow::utf8(),
-      consid = arrow::utf8(),
-      pracid = arrow::int64(),
-      obsid = arrow::utf8(),
-      obsdate = arrow::utf8(),
-      enterdate = arrow::utf8(),
-      staffid = arrow::utf8(),
-      parentobsid = arrow::utf8(),
-      medcodeid = arrow::utf8(),
-      value = arrow::float64(),
-      numunitid = arrow::int64(),
-      obstypeid = arrow::int64(),
-      numrangelow = arrow::float64(),
-      numrangehigh = arrow::float64(),
-      probobsid = arrow::utf8()
+    arrow_schema = quote(
+      arrow::schema(
+        patid = arrow::utf8(),
+        consid = arrow::utf8(),
+        pracid = arrow::int64(),
+        obsid = arrow::utf8(),
+        obsdate = arrow::utf8(),
+        enterdate = arrow::utf8(),
+        staffid = arrow::utf8(),
+        parentobsid = arrow::utf8(),
+        medcodeid = arrow::utf8(),
+        value = arrow::float64(),
+        numunitid = arrow::int64(),
+        obstypeid = arrow::int64(),
+        numrangelow = arrow::float64(),
+        numrangehigh = arrow::float64(),
+        probobsid = arrow::utf8()
+      )
     )
 
   ),
@@ -153,19 +152,21 @@ get_schema <- function(dataset_name = c("aurum", "gold"),
       "character"
     ),
 
-    arrow_schema = arrow::schema(
-      patid = arrow::utf8(),
-      pracid = arrow::int64(),
-      usualgpstaffid = arrow::utf8(),
-      gender = arrow::int64(),
-      yob = arrow::int64(),
-      mob = arrow::int64(),
-      emis_ddate = arrow::utf8(),
-      regstartdate = arrow::utf8(),
-      patienttypeid = arrow::int64(),
-      regenddate = arrow::utf8(),
-      acceptable = arrow::int64(),
-      cprd_ddate = arrow::utf8()
+    arrow_schema = quote(
+      arrow::schema(
+        patid = arrow::utf8(),
+        pracid = arrow::int64(),
+        usualgpstaffid = arrow::utf8(),
+        gender = arrow::int64(),
+        yob = arrow::int64(),
+        mob = arrow::int64(),
+        emis_ddate = arrow::utf8(),
+        regstartdate = arrow::utf8(),
+        patienttypeid = arrow::int64(),
+        regenddate = arrow::utf8(),
+        acceptable = arrow::int64(),
+        cprd_ddate = arrow::utf8()
+      )
     )
   ),
 
@@ -173,11 +174,13 @@ get_schema <- function(dataset_name = c("aurum", "gold"),
   aurum_practice = list(
     names = c("pracid", "lcd", "uts", "region"),
     read_in_types = c("integer", "character", "character", "integer"),
-    arrow_schema = arrow::schema(
-      pracid = arrow::int64(),
-      lcd = arrow::utf8(),
-      uts = arrow::utf8(),
-      region = arrow::int64()
+    arrow_schema = quote(
+      arrow::schema(
+        pracid = arrow::int64(),
+        lcd = arrow::utf8(),
+        uts = arrow::utf8(),
+        region = arrow::int64()
+      )
     )
 
   ),
@@ -212,18 +215,20 @@ get_schema <- function(dataset_name = c("aurum", "gold"),
       "integer"
     ),
 
-    arrow_schema = arrow::schema(
-      patid = arrow::utf8(),
-      obsid = arrow::utf8(),
-      pracid = arrow::int64(),
-      parentprobobsid = arrow::utf8(),
-      probenddate = arrow::utf8(),
-      expduration = arrow::int64(),
-      lastrevdate = arrow::utf8(),
-      lastrevstaffid = arrow::utf8(),
-      parentprobrelid = arrow::int64(),
-      probstatusid = arrow::int64(),
-      signid = arrow::int64()
+    arrow_schema = quote(
+      arrow::schema(
+        patid = arrow::utf8(),
+        obsid = arrow::utf8(),
+        pracid = arrow::int64(),
+        parentprobobsid = arrow::utf8(),
+        probenddate = arrow::utf8(),
+        expduration = arrow::int64(),
+        lastrevdate = arrow::utf8(),
+        lastrevstaffid = arrow::utf8(),
+        parentprobrelid = arrow::int64(),
+        probstatusid = arrow::int64(),
+        signid = arrow::int64()
+      )
     )
   ),
 
@@ -252,15 +257,17 @@ get_schema <- function(dataset_name = c("aurum", "gold"),
       "integer"
     ),
 
-    arrow_schema = arrow::schema(
-      patid = arrow::utf8(),
-      obsid = arrow::utf8(),
-      pracid = arrow::int64(),
-      refsourceorgid = arrow::int64(),
-      reftargetorgid = arrow::int64(),
-      refurgencyid = arrow::int64(),
-      refservicetypeid = arrow::int64(),
-      refmodeid = arrow::int64()
+    arrow_schema = quote(
+      arrow::schema(
+        patid = arrow::utf8(),
+        obsid = arrow::utf8(),
+        pracid = arrow::int64(),
+        refsourceorgid = arrow::int64(),
+        reftargetorgid = arrow::int64(),
+        refurgencyid = arrow::int64(),
+        refservicetypeid = arrow::int64(),
+        refmodeid = arrow::int64()
+      )
     )
   ),
 
@@ -300,21 +307,23 @@ get_schema <- function(dataset_name = c("aurum", "gold"),
       "numeric"
     ),
 
-    arrow_schema = arrow::schema(
-      patid = arrow::utf8(),
-      issueid = arrow::utf8(),
-      pracid = arrow::int64(),
-      probobsid = arrow::utf8(),
-      drugrecid = arrow::utf8(),
-      issuedate = arrow::utf8(),
-      enterdate = arrow::utf8(),
-      staffid = arrow::utf8(),
-      prodcodeid = arrow::utf8(),
-      dosageid = arrow::utf8(),
-      quantity = arrow::float64(),
-      quantunitid = arrow::int64(),
-      duration = arrow::int64(),
-      estnhscost = arrow::float64()
+    arrow_schema = quote(
+      arrow::schema(
+        patid = arrow::utf8(),
+        issueid = arrow::utf8(),
+        pracid = arrow::int64(),
+        probobsid = arrow::utf8(),
+        drugrecid = arrow::utf8(),
+        issuedate = arrow::utf8(),
+        enterdate = arrow::utf8(),
+        staffid = arrow::utf8(),
+        prodcodeid = arrow::utf8(),
+        dosageid = arrow::utf8(),
+        quantity = arrow::float64(),
+        quantunitid = arrow::int64(),
+        duration = arrow::int64(),
+        estnhscost = arrow::float64()
+      )
     )
   ),
 
@@ -344,18 +353,19 @@ get_schema <- function(dataset_name = c("aurum", "gold"),
       "character"
     ),
 
-    arrow_schema = arrow::schema(
-      patid = arrow::utf8(),
-      consid = arrow::utf8(),
-      pracid = arrow::int64(),
-      consdate = arrow::utf8(),
-      enterdate = arrow::utf8(),
-      staffid = arrow::utf8(),
-      conssourceid = arrow::utf8(),
-      cprdconstype = arrow::int64(),
-      consmedcodeid = arrow::utf8()
+    arrow_schema = quote(
+      arrow::schema(
+        patid = arrow::utf8(),
+        consid = arrow::utf8(),
+        pracid = arrow::int64(),
+        consdate = arrow::utf8(),
+        enterdate = arrow::utf8(),
+        staffid = arrow::utf8(),
+        conssourceid = arrow::utf8(),
+        cprdconstype = arrow::int64(),
+        consmedcodeid = arrow::utf8()
+      )
     )
-
   ),
 
 
@@ -364,10 +374,12 @@ get_schema <- function(dataset_name = c("aurum", "gold"),
 
     read_in_types = c("character", "character", "character"),
 
-    arrow_schema = arrow::schema(
-      staffid = arrow::utf8(),
-      pracid = arrow::utf8(),
-      jobcatid = arrow::utf8()
+    arrow_schema = quote(
+      arrow::schema(
+        staffid = arrow::utf8(),
+        pracid = arrow::utf8(),
+        jobcatid = arrow::utf8()
+      )
     )
   )
 
