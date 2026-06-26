@@ -28,3 +28,10 @@ test_that("get_schema returns error for only bad table/dataset name", {
   )
 
 })
+
+
+test_that("schema prints", {
+
+  expect_no_error(print(get_schema("aurum", "patient")))
+
+})

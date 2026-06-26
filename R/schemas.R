@@ -7,9 +7,8 @@
 #'
 #' @export
 #' @examples
-#' # Not run
-#' # get_schema("aurum", "observation")
-#' # get_schema("aurum", "patient")
+#' get_schema("aurum", "observation")
+#' get_schema("aurum", "patient")
 #'
 get_schema <- function(dataset_name = c("aurum", "gold"),
                        table_name = c(

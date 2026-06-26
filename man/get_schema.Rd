@@ -22,8 +22,7 @@ A "schema" - a list of names of variables, r data types and arrow types
 Schemas for reading in Aurum data by types
 }
 \examples{
-# Not run
-# get_schema("aurum", "observation")
-# get_schema("aurum", "patient")
+get_schema("aurum", "observation")
+get_schema("aurum", "patient")
 
 }
