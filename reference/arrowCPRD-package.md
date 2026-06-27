@@ -15,3 +15,7 @@ Useful links:
 ## Author
 
 **Maintainer**: Andy Baxter <Andy.Baxter@glasgow.ac.uk>
+
+Authors:
+
+- Andy Baxter <Andy.Baxter@glasgow.ac.uk>
