@@ -91,7 +91,8 @@ test_that("writing to parquet from zip allows spaces", {
   )
 
   actual <- open_dataset(file.path(temp_pq, "parquet out")) |>
-    tibble::as_tibble()
+    tibble::as_tibble() |>
+    dplyr::arrange(one)
 
   expect_equal(expected, actual)
 
