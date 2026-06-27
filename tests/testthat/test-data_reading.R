@@ -278,3 +278,4 @@ test_that("files across multiple zips allows wildcards in file pattern name", {
   on.exit(unlink(temp_pq))
 
 })
+

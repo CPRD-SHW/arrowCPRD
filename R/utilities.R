@@ -124,9 +124,19 @@ cast_expression_from_schema <- function(data_schema, table_name, date_format = "
 #'
 create_new_schema <- function(col_names, col_types) {
 
-  if(length(col_names) != length(col_types)) {
+  if (length(col_names) != length(col_types)) {
     stop(sprintf("Length of `col_names` (%d) should match length of `col_types` (%d)",
                  length(col_names), length(col_types)))
+  }
+
+  for (vartype in col_types) {
+    if (vartype == "Date") {
+      stop("Using \"Date\" type at this stage isn't recommended. Please use \"character\" for reading which can be later cast to date.")
+    } else if (vartype %in% c("character", "integer", "numeric"))  {
+      next
+    } else {
+      stop(sprintf("Variable type \"%s\" not recognised. Please use \"character\", \"integer\" or \"numeric\"", vartype))
+    }
   }
 
   list(
