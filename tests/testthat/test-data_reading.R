@@ -23,6 +23,84 @@ test_that("reading a single file from patient zip works", {
 })
 
 
+test_that("reading a file from zip allows spaces", {
+  temp_pq <- withr::local_tempdir()
+
+
+  dir.create(file.path(temp_pq, "folder with spaces"))
+
+  writeLines("one", file.path(temp_pq, "testfile 1.txt"))
+  writeLines("one",
+             file.path(temp_pq, "folder with spaces", "testfile2.txt"))
+
+  zip(file.path(temp_pq, "zipped.zip"), files = file.path(temp_pq))
+
+  zip_path <- file.path(temp_pq, "zipped.zip")
+
+  file1 <- find_files_from_zip(zip_path, tag = "testfile 1")
+  file2 <- find_files_from_zip(zip_path, tag = "testfile2")
+
+  expect_no_error(
+    in_file1 <- read_file_from_zip(
+      zip_path,
+      file1
+      )
+  )
+
+  expect_no_error(
+    in_file2 <- read_file_from_zip(
+      zip_path,
+      file2
+  )
+  )
+
+  on.exit(unlink(temp_pq))
+
+})
+
+test_that("writing to parquet from zip allows spaces", {
+  temp_pq <- withr::local_tempdir()
+
+
+  dir.create(file.path(temp_pq, "folder with spaces"))
+
+  writeLines("one\n3", file.path(temp_pq, "testfile 1.txt"))
+  writeLines("one\n4",
+             file.path(temp_pq, "folder with spaces", "testfile2.txt"))
+
+  zip(file.path(temp_pq, "zipped.zip"), files = file.path(temp_pq))
+
+  zip_path <- file.path(temp_pq, "zipped.zip")
+
+  temp_schema <- list(names = "one", read_in_types = "integer")
+  temp_schema$arrow_schema <- arrow::schema(one = arrow::int64())
+
+  expect_no_error(
+    read_zipped_dataset_to_parquet(
+      temp_pq,
+      file.path(temp_pq, "parquet out"),
+      "testfile",
+      schema = temp_schema
+    )
+  )
+
+  expected <- tibble::tribble(
+    ~one, ~table,
+    3, "testfile",
+    4, "testfile"
+  )
+
+  actual <- open_dataset(file.path(temp_pq, "parquet out")) |>
+    tibble::as_tibble() |>
+    dplyr::arrange(one)
+
+  expect_equal(expected, actual)
+
+  on.exit(unlink(temp_pq))
+
+})
+
+
 test_that("reading tsv files work", {
   data_in <- read_files_from_tsv("observation",
                                  test_path("data", "testdata"),

@@ -12,10 +12,10 @@
 #'
 read_file_from_zip <- function(zipfile, filename, schema = NULL, ...) {
   if (is.null(schema)) {
-    data.table::fread(cmd = sprintf("unzip -p %s %s", zipfile, filename), ...)
+    data.table::fread(cmd = sprintf("unzip -p \'%s\' \'%s\'", zipfile, filename), ...)
   } else {
     data.table::fread(
-      cmd = sprintf("unzip -p %s %s", zipfile, filename),
+      cmd = sprintf("unzip -p \'%s\' \'%s\'", zipfile, filename),
       colClasses = schema$read_in_types, ...
     )
   }
