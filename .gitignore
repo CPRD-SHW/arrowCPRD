@@ -7,3 +7,4 @@ data/testdata/
 pq_test/
 docs
 temp_pq/
+*.csv
