@@ -216,6 +216,26 @@ test_that("reading all zips in a folder to parquet works", {
   on.exit(unlink(temp_pq))
 })
 
+test_that("reading all zips takes a null schema", {
+
+  temp_pq <- withr::local_tempdir()
+
+  read_zipped_dataset_to_parquet(
+    test_path("data"),
+    write_directory = temp_pq,
+    dataset_tag = "observation",
+    table_name = "fake_name"
+  )
+
+  pq_in <- open_dataset(file.path(temp_pq, "fake_name")) |>
+    tibble::as_tibble()
+
+  expect_no_error(pq_in)
+  expect_s3_class(pq_in$obsdate, "Date")
+
+  on.exit(unlink(temp_pq))
+})
+
 
 # Finding files -----------------------------------------------------------
 

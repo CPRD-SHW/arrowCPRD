@@ -18,7 +18,14 @@
 #'
 read_file_from_zip <- function(zipfile, filename, schema = NULL, ...) {
   if (is.null(schema)) {
-    data.table::fread(cmd = sprintf("unzip -p \'%s\' \'%s\'", zipfile, filename), ...)
+    dt_in <- data.table::fread(cmd = sprintf("unzip -p \'%s\' \'%s\'", zipfile, filename), integer64 = "character", ...)
+
+    id_cols <- grep(".*id$", names(dt_in), value = TRUE)
+
+    dt_in[,(id_cols) := lapply(.SD, as.character), .SDcols = id_cols]
+
+    dt_in
+
   } else {
     data.table::fread(
       cmd = sprintf("unzip -p \'%s\' \'%s\'", zipfile, filename),
@@ -53,7 +60,7 @@ read_files_from_tsv <- function(file_tag, input_dir, schema = NULL) {
       recursive  = TRUE,
       ignore.case = TRUE
     )
-    
+
   if (!is.null(schema)) {
     schema <- eval(schema$arrow_schema$code())
 
@@ -109,10 +116,18 @@ write_arrow_to_parquet <- function(arrow_data, output_path, partitioning = NULL)
 #' @import duckdb DBI
 #' @export
 #'
-append_to_parquet <- function(df, out_dir, table_name, data_schema, date_format = "%d/%m/%Y") {
+append_to_parquet <- function(df, out_dir, table_name, data_schema = NULL, date_format = "%d/%m/%Y") {
   con <- DBI::dbConnect(duckdb::duckdb())
 
   duckdb::duckdb_register(con, "tmp_arrow", df)
+
+  if(is.null(data_schema)) {
+
+    types <- vapply(df, class, character(1))
+
+    data_schema <- create_new_schema(names(types), unname(types))
+
+  }
 
   cast_expression <- cast_expression_from_schema(data_schema, table_name, date_format = date_format)
 
@@ -194,7 +209,7 @@ find_files_from_zip <- function(zipfile, tag) {
 #'
 #' @export
 #'
-read_zipped_dataset_to_parquet <- function(zip_directory, write_directory, dataset_tag, schema, table_name = NULL, quietly = FALSE, zip_file_pattern = ".*\\.zip", ...) {
+read_zipped_dataset_to_parquet <- function(zip_directory, write_directory, dataset_tag, schema = NULL, table_name = NULL, quietly = FALSE, zip_file_pattern = ".*\\.zip", ...) {
 
   if (is.null(table_name)) table_name <- dataset_tag
   if (!dir.exists(write_directory)) dir.create(write_directory)
