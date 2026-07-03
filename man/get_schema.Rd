@@ -4,11 +4,7 @@
 \alias{get_schema}
 \title{Schemas for reading in Aurum data by types}
 \usage{
-get_schema(
-  dataset_name = c("aurum", "gold"),
-  table_name = c("observation", "consultation", "patient", "staff", "drug", "linkage",
-    "practice", "problem", "referral")
-)
+get_schema(dataset_name = NULL, table_name = NULL)
 }
 \arguments{
 \item{dataset_name}{Name of dataset - "aurum" or "gold"}

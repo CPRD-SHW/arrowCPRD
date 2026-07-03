@@ -22,10 +22,5 @@ Useful links:
 \author{
 \strong{Maintainer}: Andy Baxter \email{Andy.Baxter@glasgow.ac.uk}
 
-Authors:
-\itemize{
-  \item Andy Baxter \email{Andy.Baxter@glasgow.ac.uk}
-}
-
 }
 \keyword{internal}

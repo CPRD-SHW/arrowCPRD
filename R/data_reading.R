@@ -22,7 +22,7 @@ read_file_from_zip <- function(zipfile, filename, schema = NULL, ...) {
 
     id_cols <- grep(".*id$", names(dt_in), value = TRUE)
 
-    dt_in[,(id_cols) := lapply(.SD, as.character), .SDcols = id_cols]
+    dt_in[, (id_cols) := lapply(.SD, as.character), .SDcols = id_cols]
 
     dt_in
 
@@ -121,7 +121,7 @@ append_to_parquet <- function(df, out_dir, table_name, data_schema = NULL, date_
 
   duckdb::duckdb_register(con, "tmp_arrow", df)
 
-  if(is.null(data_schema)) {
+  if (is.null(data_schema)) {
 
     types <- vapply(df, class, character(1))
 
@@ -209,10 +209,18 @@ find_files_from_zip <- function(zipfile, tag) {
 #'
 #' @export
 #'
-read_zipped_dataset_to_parquet <- function(zip_directory, write_directory, dataset_tag, schema = NULL, table_name = NULL, quietly = FALSE, zip_file_pattern = ".*\\.zip", ...) {
-
-  if (is.null(table_name)) table_name <- dataset_tag
-  if (!dir.exists(write_directory)) dir.create(write_directory)
+read_zipped_dataset_to_parquet <- function(zip_directory,
+                                           write_directory,
+                                           dataset_tag,
+                                           schema = NULL,
+                                           table_name = NULL,
+                                           quietly = FALSE,
+                                           zip_file_pattern = ".*\\.zip",
+                                           ...) {
+  if (is.null(table_name))
+    table_name <- dataset_tag
+  if (!dir.exists(write_directory))
+    dir.create(write_directory)
 
   files_to_read <- find_files_from_zips(zip_directory, dataset_tag, zip_file_pattern = zip_file_pattern)
 
@@ -220,15 +228,21 @@ read_zipped_dataset_to_parquet <- function(zip_directory, write_directory, datas
   files_to_read <- files_to_read[lapply(files_to_read, length) != 0]
 
   Map(\(tsv_files, zipfile) {
-
     files_n <- length(tsv_files)
 
     Map(\(filename, n) {
+      if (!quietly)
+        cat(paste0(
+          n,
+          "/",
+          files_n,
+          ": ",
+          filename,
+          " extracting and adding to parquet\n"
+        ))
 
-    if (!quietly) cat(paste0(n, "/", files_n, ": ", filename, " extracting and adding to parquet\n"))
-
-    read_file_from_zip(zipfile, filename, schema) |>
-      append_to_parquet(write_directory, table_name, schema, ...)
+      read_file_from_zip(zipfile, filename, schema) |>
+        append_to_parquet(write_directory, table_name, schema, ...)
     }, tsv_files, seq(files_n))
 
 

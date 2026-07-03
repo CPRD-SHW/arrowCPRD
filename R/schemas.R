@@ -12,7 +12,7 @@
 #'
 get_schema <- function(dataset_name = NULL,
                        table_name = NULL) {
-  if (is.null(dataset_name) | is.null(table_name)) {
+  if (is.null(dataset_name) || is.null(table_name)) {
     message(
       "Please use one of the following pairs of dataset/table names for a schema:\n - ",
       paste(gsub("_", " / ", x = names(.schemas)), collapse = "\n - ")
