@@ -12,13 +12,13 @@ Source:
 [`DESCRIPTION`](https://github.com/CPRD-SHW/arrowCPRD/blob/main/DESCRIPTION)
 
 Baxter A, Millington E (2026). *arrowCPRD: Reading CPRD Files Into
-Parquet Via Arrow*. R package version 0.1.4.9002,
+Parquet Via Arrow*. R package version 0.1.4.9003,
 <https://github.com/CPRD-SHW/arrowCPRD>.
 
     @Manual{,
       title = {arrowCPRD: Reading CPRD Files Into Parquet Via Arrow},
       author = {Andy Baxter and Elliot Millington},
       year = {2026},
-      note = {R package version 0.1.4.9002},
+      note = {R package version 0.1.4.9003},
       url = {https://github.com/CPRD-SHW/arrowCPRD},
     }

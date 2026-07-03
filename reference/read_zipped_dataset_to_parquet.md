@@ -9,7 +9,7 @@ read_zipped_dataset_to_parquet(
   zip_directory,
   write_directory,
   dataset_tag,
-  schema,
+  schema = NULL,
   table_name = NULL,
   quietly = FALSE,
   zip_file_pattern = ".*\\.zip",
@@ -52,3 +52,9 @@ read_zipped_dataset_to_parquet(
 - ...:
 
   Extra arguments passed to \`append_to_parquet\` (e.g. date formatting)
+
+  Several schemas are included in the package and accessed by passing
+  \`dataset_name\` and \`table_name\` to \[get_schema()\]. You can use
+  \`get_schema()\` with no arguments to list available schemas.
+
+  You can also construct a custom schema using \[create_schema()\]

@@ -5,11 +5,7 @@ Schemas for reading in Aurum data by types
 ## Usage
 
 ``` r
-get_schema(
-  dataset_name = c("aurum", "gold"),
-  table_name = c("observation", "consultation", "patient", "staff", "drug", "linkage",
-    "practice", "problem", "referral")
-)
+get_schema(dataset_name = NULL, table_name = NULL)
 ```
 
 ## Arguments
