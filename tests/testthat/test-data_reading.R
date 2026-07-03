@@ -399,3 +399,52 @@ test_that("dates in alternative formats work in reading zips", {
   on.exit(unlink(temp_pq))
 
 })
+
+
+test_that("dataset can take alternative date formats", {
+  temp_pq <- withr::local_tempdir()
+
+  dates1 <- data.frame(
+    id = 1:2,
+    a_date = c("2022oolalala02oolalala05", "2019oolalala05oolalala05")
+  )
+  dates2 <- data.frame(
+    id = 1:2,
+    a_date = c("2025oolalala02oolalala01", "2020oolalala04oolalala06")
+  )
+
+  write.table(
+    dates1,
+    file.path(temp_pq, "testfile1.txt"),
+    sep = "\t",
+    row.names = FALSE
+  )
+  write.table(
+    dates2,
+    file.path(temp_pq, "testfile2.txt"),
+    sep = "\t",
+    row.names = FALSE
+  )
+
+  zip(file.path(temp_pq, "zipped.zip"), files = file.path(temp_pq))
+
+  zip_path <- file.path(temp_pq, "zipped.zip")
+
+  read_zipped_dataset_to_parquet(
+    temp_pq,
+    file.path(temp_pq, "test_dataset"),
+    dataset_tag = "testfile",
+    date_format = "%Yoolalala%moolalala%d"
+  )
+
+  expected_dates <- as.Date(c("2019/05/05", "2020/04/06", "2022/02/05", "2025/02/01"))
+
+  expect_equal(
+    open_dataset(file.path(temp_pq, "test_dataset")) |> dplyr::arrange(a_date) |> dplyr::pull(a_date),
+    expected_dates
+  )
+
+  on.exit(unlink(temp_pq))
+
+
+})
