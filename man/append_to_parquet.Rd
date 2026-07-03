@@ -19,15 +19,15 @@ append_to_parquet(
 
 \item{table_name}{"Observation", "Patient" etc.}
 
-\item{data_schema}{A schema with `names` and `read_in_types`}
+\item{data_schema}{A schema with \code{names} and \code{read_in_types}}
 
-\item{date_format}{Default "\%d/\%m/\%Y"
+\item{date_format}{Default "\\%d/\\%m/\\%Y"
 
 Several schemas are included in the package and accessed by passing
-`dataset_name` and `table_name` to [get_schema()].
-You can use `get_schema()` with no arguments to list available schemas.
+\code{dataset_name} and \code{table_name} to \code{\link[=get_schema]{get_schema()}}.
+You can use \code{get_schema()} with no arguments to list available schemas.
 
-You can also construct a custom schema using [create_schema()]}
+You can also construct a custom schema using \code{\link[=create_new_schema]{create_new_schema()}}}
 }
 \value{
 output directory

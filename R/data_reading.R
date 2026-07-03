@@ -9,7 +9,7 @@
 #' `dataset_name` and `table_name` to [get_schema()].
 #' You can use `get_schema()` with no arguments to list available schemas.
 #'
-#' You can also construct a custom schema using [create_schema()]
+#' You can also construct a custom schema using [create_new_schema()]
 #'
 #' @returns A `data.table`
 #'
@@ -39,13 +39,13 @@ read_file_from_zip <- function(zipfile, filename, schema = NULL, ...) {
 #'
 #' @param file_tag "observation", "practice" etc.
 #' @param input_dir Directory with tsv files (or in sub-directories)
-#' @param schema Optional - an `arrow::Scheme` object to set variable types
+#' @param schema Optional - an `arrow::Schema` object to set variable types
 #'
 #' Several schemas are included in the package and accessed by passing
 #' `dataset_name` and `table_name` to [get_schema()].
 #' You can use `get_schema()` with no arguments to list available schemas.
 #'
-#' You can also construct a custom schema using [create_schema()]
+#' You can also construct a custom schema using [create_new_schema()]
 #'
 #' @returns An arrow dataset
 #'
@@ -109,7 +109,7 @@ write_arrow_to_parquet <- function(arrow_data, output_path, partitioning = NULL)
 #' `dataset_name` and `table_name` to [get_schema()].
 #' You can use `get_schema()` with no arguments to list available schemas.
 #'
-#' You can also construct a custom schema using [create_schema()]
+#' You can also construct a custom schema using [create_new_schema()]
 #'
 #' @returns output directory
 #'
@@ -205,7 +205,7 @@ find_files_from_zip <- function(zipfile, tag) {
 #' `dataset_name` and `table_name` to [get_schema()].
 #' You can use `get_schema()` with no arguments to list available schemas.
 #'
-#' You can also construct a custom schema using [create_schema()]
+#' You can also construct a custom schema using [create_new_schema()]
 #'
 #' @export
 #'

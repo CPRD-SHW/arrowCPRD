@@ -65,7 +65,7 @@ coerce_date_columns_arrow <- function(data_in) {
 #'
 #' @param data_schema A list with `names` and `read_in_types`
 #' @param table_name Name of table to include in cast statement
-#' @param date_format (default "\%d/\%m/\%Y")
+#' @param date_format (default "%d/%m/%Y")
 #'
 #' @returns a string to be passed to duckdb as a cast expression
 #' @keywords internal

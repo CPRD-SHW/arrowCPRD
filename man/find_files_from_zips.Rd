@@ -22,5 +22,5 @@ find_files_from_zip(zipfile, tag)
 A named list of txt/tsv files within each zip
 }
 \description{
-`find_files_from_zip` looks inside one zipfile, `find_files_from_zips` looks for all zipfiles in a directory
+\code{find_files_from_zip} looks inside one zipfile, \code{find_files_from_zips} looks for all zipfiles in a directory
 }
