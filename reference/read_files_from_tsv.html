@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">arrowCPRD</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,7 +27,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Open a tsv file or multiple tsv files with a file_tag as an arrow dataset</h1>
-      <small class="dont-index">Source: <a href="https://github.com/CPRD-SHW/arrowCPRD/blob/main/R/data_reading.R" class="external-link"><code>R/data_reading.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/CPRD-SHW/arrowCPRD/blob/0.1.4.9004/R/data_reading.R" class="external-link"><code>R/data_reading.R</code></a></small>
       <div class="d-none name"><code>read_files_from_tsv.Rd</code></div>
     </div>
 
@@ -53,7 +53,11 @@
 
 
 <dt id="arg-schema">schema<a class="anchor" aria-label="anchor" href="#arg-schema"></a></dt>
-<dd><p>Optional - an `arrow::Scheme` object to set variable types</p></dd>
+<dd><p>Optional - an <code><a href="https://arrow.apache.org/docs/r/reference/Schema-class.html" class="external-link">arrow::Schema</a></code> object to set variable types</p>
+<p>Several schemas are included in the package and accessed by passing
+<code>dataset_name</code> and <code>table_name</code> to <code><a href="get_schema.html">get_schema()</a></code>.
+You can use <code><a href="get_schema.html">get_schema()</a></code> with no arguments to list available schemas.</p>
+<p>You can also construct a custom schema using <code><a href="create_new_schema.html">create_new_schema()</a></code></p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -66,7 +70,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Jane Doe.</p>
+  <p>Developed by Andy Baxter, Elliot Millington.</p>
 </div>
 
 <div class="pkgdown-footer-right">

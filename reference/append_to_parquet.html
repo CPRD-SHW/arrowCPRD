@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">arrowCPRD</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,7 +27,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Append data frame to parquet</h1>
-      <small class="dont-index">Source: <a href="https://github.com/CPRD-SHW/arrowCPRD/blob/main/R/data_reading.R" class="external-link"><code>R/data_reading.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/CPRD-SHW/arrowCPRD/blob/0.1.4.9004/R/data_reading.R" class="external-link"><code>R/data_reading.R</code></a></small>
       <div class="d-none name"><code>append_to_parquet.Rd</code></div>
     </div>
 
@@ -41,7 +41,7 @@
 <span>  <span class="va">df</span>,</span>
 <span>  <span class="va">out_dir</span>,</span>
 <span>  <span class="va">table_name</span>,</span>
-<span>  <span class="va">data_schema</span>,</span>
+<span>  data_schema <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  date_format <span class="op">=</span> <span class="st">"%d/%m/%Y"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -63,11 +63,15 @@
 
 
 <dt id="arg-data-schema">data_schema<a class="anchor" aria-label="anchor" href="#arg-data-schema"></a></dt>
-<dd><p>A schema with `names` and `read_in_types`</p></dd>
+<dd><p>A schema with <code>names</code> and <code>read_in_types</code></p></dd>
 
 
 <dt id="arg-date-format">date_format<a class="anchor" aria-label="anchor" href="#arg-date-format"></a></dt>
-<dd><p>Default "%d/%m/%Y"</p></dd>
+<dd><p>Default "%d/%m/%Y"</p>
+<p>Several schemas are included in the package and accessed by passing
+<code>dataset_name</code> and <code>table_name</code> to <code><a href="get_schema.html">get_schema()</a></code>.
+You can use <code><a href="get_schema.html">get_schema()</a></code> with no arguments to list available schemas.</p>
+<p>You can also construct a custom schema using <code><a href="create_new_schema.html">create_new_schema()</a></code></p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -80,7 +84,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Jane Doe.</p>
+  <p>Developed by Andy Baxter, Elliot Millington.</p>
 </div>
 
 <div class="pkgdown-footer-right">

@@ -20,4 +20,5 @@ get_arrow_schema(schema_in_names, schema_in_read_in_types)
 
 ## Value
 
-A function for generating an \`arrow::Schema\`
+A function for generating an
+[`arrow::Schema`](https://arrow.apache.org/docs/r/reference/Schema-class.html)

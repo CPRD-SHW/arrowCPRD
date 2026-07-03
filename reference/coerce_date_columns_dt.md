@@ -7,3 +7,9 @@ Coerce dates in data.table
 ``` r
 coerce_date_columns_dt(data_in)
 ```
+
+## Arguments
+
+- data_in:
+
+  Dataset passed in

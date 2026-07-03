@@ -12,7 +12,7 @@ write_arrow_to_parquet(arrow_data, output_path, partitioning = NULL)
 
 - arrow_data:
 
-  An arrow dataset created from \`read_files_from_tsv\`
+  An arrow dataset created from `read_files_from_tsv`
 
 - output_path:
 

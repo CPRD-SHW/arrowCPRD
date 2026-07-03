@@ -16,7 +16,11 @@ cast_expression_from_schema(
 
 - data_schema:
 
-  A list with \`names\` and \`read_in_types\`
+  A list with `names` and `read_in_types`
+
+- table_name:
+
+  Name of table to include in cast statement
 
 - date_format:
 
