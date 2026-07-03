@@ -9,7 +9,7 @@
 #' `dataset_name` and `table_name` to [get_schema()].
 #' You can use `get_schema()` with no arguments to list available schemas.
 #'
-#' You can also construct a custom schema using [create_schema()]
+#' You can also construct a custom schema using [create_new_schema()]
 #'
 #' @returns A `data.table`
 #'
@@ -39,13 +39,13 @@ read_file_from_zip <- function(zipfile, filename, schema = NULL, ...) {
 #'
 #' @param file_tag "observation", "practice" etc.
 #' @param input_dir Directory with tsv files (or in sub-directories)
-#' @param schema Optional - an `arrow::Scheme` object to set variable types
+#' @param schema Optional - an `arrow::Schema` object to set variable types
 #'
 #' Several schemas are included in the package and accessed by passing
 #' `dataset_name` and `table_name` to [get_schema()].
 #' You can use `get_schema()` with no arguments to list available schemas.
 #'
-#' You can also construct a custom schema using [create_schema()]
+#' You can also construct a custom schema using [create_new_schema()]
 #'
 #' @returns An arrow dataset
 #'
@@ -103,13 +103,13 @@ write_arrow_to_parquet <- function(arrow_data, output_path, partitioning = NULL)
 #' @param out_dir Out directory
 #' @param table_name "Observation", "Patient" etc.
 #' @param data_schema A schema with `names` and `read_in_types`
-#' @param date_format Default "\%d/\%m/\%Y"
+#' @param date_format Default "%d/%m/%Y"
 #'
 #' Several schemas are included in the package and accessed by passing
 #' `dataset_name` and `table_name` to [get_schema()].
 #' You can use `get_schema()` with no arguments to list available schemas.
 #'
-#' You can also construct a custom schema using [create_schema()]
+#' You can also construct a custom schema using [create_new_schema()]
 #'
 #' @returns output directory
 #'
@@ -199,13 +199,14 @@ find_files_from_zip <- function(zipfile, tag) {
 #' @param table_name Optional, defaults to `dataset_tag`. Data for the table will be written in this sub-folder within `write_directory`
 #' @param quietly Whether to print progress
 #' @param zip_file_pattern Name pattern of zips to include (e.g. "Aurum.*\\.zip)
-#' @param ... Extra arguments passed to `append_to_parquet` (e.g. date formatting)
+#' @param date_format Read dates from files in this format. Check dataset! Default "%d/%m/%Y"
+#' @param ... Extra arguments passed to [append_to_parquet()] (e.g. date formatting)
 #'
 #' Several schemas are included in the package and accessed by passing
 #' `dataset_name` and `table_name` to [get_schema()].
 #' You can use `get_schema()` with no arguments to list available schemas.
 #'
-#' You can also construct a custom schema using [create_schema()]
+#' You can also construct a custom schema using [create_new_schema()]
 #'
 #' @export
 #'
@@ -216,6 +217,7 @@ read_zipped_dataset_to_parquet <- function(zip_directory,
                                            table_name = NULL,
                                            quietly = FALSE,
                                            zip_file_pattern = ".*\\.zip",
+                                           date_format = "%d/%m/%Y",
                                            ...) {
   if (is.null(table_name))
     table_name <- dataset_tag
@@ -242,7 +244,7 @@ read_zipped_dataset_to_parquet <- function(zip_directory,
         ))
 
       read_file_from_zip(zipfile, filename, schema) |>
-        append_to_parquet(write_directory, table_name, schema, ...)
+        append_to_parquet(write_directory, table_name, schema, date_format = date_format, ...)
     }, tsv_files, seq(files_n))
 
 

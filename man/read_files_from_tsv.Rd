@@ -11,13 +11,13 @@ read_files_from_tsv(file_tag, input_dir, schema = NULL)
 
 \item{input_dir}{Directory with tsv files (or in sub-directories)}
 
-\item{schema}{Optional - an `arrow::Scheme` object to set variable types
+\item{schema}{Optional - an \code{arrow::Schema} object to set variable types
 
 Several schemas are included in the package and accessed by passing
-`dataset_name` and `table_name` to [get_schema()].
-You can use `get_schema()` with no arguments to list available schemas.
+\code{dataset_name} and \code{table_name} to \code{\link[=get_schema]{get_schema()}}.
+You can use \code{get_schema()} with no arguments to list available schemas.
 
-You can also construct a custom schema using [create_schema()]}
+You can also construct a custom schema using \code{\link[=create_new_schema]{create_new_schema()}}}
 }
 \value{
 An arrow dataset

@@ -2,7 +2,7 @@
 % Please edit documentation in R/data_reading.R
 \name{read_file_from_zip}
 \alias{read_file_from_zip}
-\title{Read a single file from a zip file (into a `data.table`)}
+\title{Read a single file from a zip file (into a \code{data.table})}
 \usage{
 read_file_from_zip(zipfile, filename, schema = NULL, ...)
 }
@@ -13,17 +13,17 @@ read_file_from_zip(zipfile, filename, schema = NULL, ...)
 
 \item{schema}{A list with 'names' and 'read_in_types'. If not provided these types will be automatically generated on reading files.}
 
-\item{...}{Additional arguments to `data.table::fread`
+\item{...}{Additional arguments to \code{data.table::fread}
 
 Several schemas are included in the package and accessed by passing
-`dataset_name` and `table_name` to [get_schema()].
-You can use `get_schema()` with no arguments to list available schemas.
+\code{dataset_name} and \code{table_name} to \code{\link[=get_schema]{get_schema()}}.
+You can use \code{get_schema()} with no arguments to list available schemas.
 
-You can also construct a custom schema using [create_schema()]}
+You can also construct a custom schema using \code{\link[=create_new_schema]{create_new_schema()}}}
 }
 \value{
-A `data.table`
+A \code{data.table}
 }
 \description{
-Read a single file from a zip file (into a `data.table`)
+Read a single file from a zip file (into a \code{data.table})
 }

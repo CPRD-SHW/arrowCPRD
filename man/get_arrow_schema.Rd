@@ -12,7 +12,7 @@ get_arrow_schema(schema_in_names, schema_in_read_in_types)
 \item{schema_in_read_in_types}{A vector of column types}
 }
 \value{
-A function for generating an `arrow::Schema`
+A function for generating an \code{arrow::Schema}
 }
 \description{
 Create schema code for given names/types
