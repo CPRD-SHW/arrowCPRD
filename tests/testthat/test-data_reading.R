@@ -331,3 +331,29 @@ test_that("files across multiple zips allows wildcards in file pattern name", {
 
 })
 
+
+test_that("dates in alternative formats work in reading tsvs", {
+
+  temp_pq <- withr::local_tempdir()
+
+  dates1 <- data.frame(id = 1:2, a_date = c("01/02/2025", "06/04/2020"))
+  dates2 <- data.frame(id = 1:2, a_date = c("2025/02/01", "2020/04/06"))
+
+  write.table(dates1, file.path(temp_pq, "testfile1.txt"), sep = "\t", row.names = FALSE)
+  write.table(dates2, file.path(temp_pq, "testfile2.txt"), sep = "\t", row.names = FALSE)
+
+  read_files_from_tsv(1, temp_pq) |>
+    write_arrow_to_parquet(file.path(temp_pq, "test1"))
+
+  read_files_from_tsv(2, temp_pq) |>
+    write_arrow_to_parquet(file.path(temp_pq, "test2"))
+
+
+  expect_equal(
+    open_dataset(file.path(temp_pq, "test1")) |> dplyr::collect(),
+    open_dataset(file.path(temp_pq, "test2")) |> dplyr::collect()
+  )
+
+  on.exit(unlink(temp_pq))
+
+})
