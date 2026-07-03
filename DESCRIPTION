@@ -1,7 +1,7 @@
 Package: arrowCPRD
 Type: Package
 Title: Reading CPRD Files Into Parquet Via Arrow
-Version: 0.1.4.9003
+Version: 0.1.4.9004
 Authors@R: c(
     person(
       "Andy", "Baxter",
