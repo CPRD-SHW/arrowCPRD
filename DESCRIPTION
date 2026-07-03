@@ -1,7 +1,7 @@
 Package: arrowCPRD
 Type: Package
 Title: Reading CPRD Files Into Parquet Via Arrow
-Version: 0.1.4.9002
+Version: 0.1.4.9003
 Authors@R: c(
     person(
       "Andy", "Baxter",
@@ -36,3 +36,4 @@ Imports:
 Depends: 
     R (>= 4.2.0)
 Config/roxygen2/version: 8.0.0
+RoxygenNote: 7.3.3

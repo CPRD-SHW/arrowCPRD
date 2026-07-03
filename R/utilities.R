@@ -103,3 +103,46 @@ cast_expression_from_schema <- function(data_schema, table_name, date_format = "
   )
 
 }
+
+
+#' Create a new schema for reading/writing CPRD to arrow
+#'
+#' @param col_names A vector of column names in your dataset
+#' @param col_types A vector of column types ("character", "integer", "numeric")
+#'
+#' Date types should be entered as "character" in the schema and will be cast to dates when
+#' writing to parquet
+#'
+#' @returns A list with attributes for a schema to be passed to other objects
+#' @export
+#'
+#' @examples
+#' create_new_schema(
+#'  col_names = c("name", "age", "birthdate"),
+#'  col_types = c("character", "integer", "character")
+#' )
+#'
+create_new_schema <- function(col_names, col_types) {
+
+  if (length(col_names) != length(col_types)) {
+    stop(sprintf("Length of `col_names` (%d) should match length of `col_types` (%d)",
+                 length(col_names), length(col_types)))
+  }
+
+  for (vartype in col_types) {
+    if (vartype == "Date") {
+      stop("Using \"Date\" type at this stage isn't recommended. Please use \"character\" for reading which can be later cast to date.")
+    } else if (vartype %in% c("character", "integer", "numeric"))  {
+      next
+    } else {
+      stop(sprintf("Variable type \"%s\" not recognised. Please use \"character\", \"integer\" or \"numeric\"", vartype))
+    }
+  }
+
+  list(
+    names = col_names,
+    read_in_types = col_types,
+    arrow_schema = eval(get_arrow_schema(col_names, col_types)())
+  )
+
+}

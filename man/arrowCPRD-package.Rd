@@ -24,7 +24,7 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Andy Baxter \email{Andy.Baxter@glasgow.ac.uk}
+  \item Elliot Millington \email{Elliot.Millington@glasgow.ac.uk}
 }
 
 }

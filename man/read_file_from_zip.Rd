@@ -11,9 +11,15 @@ read_file_from_zip(zipfile, filename, schema = NULL, ...)
 
 \item{filename}{Filename within Zip file}
 
-\item{schema}{A list with 'names' and 'read_in_types'}
+\item{schema}{A list with 'names' and 'read_in_types'. If not provided these types will be automatically generated on reading files.}
 
-\item{...}{Additional arguments to `data.table::fread`}
+\item{...}{Additional arguments to `data.table::fread`
+
+Several schemas are included in the package and accessed by passing
+`dataset_name` and `table_name` to [get_schema()].
+You can use `get_schema()` with no arguments to list available schemas.
+
+You can also construct a custom schema using [create_schema()]}
 }
 \value{
 A `data.table`

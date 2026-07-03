@@ -2,8 +2,14 @@
 #'
 #' @param zipfile The Zip file to read from
 #' @param filename Filename within Zip file
-#' @param schema A list with 'names' and 'read_in_types'
+#' @param schema A list with 'names' and 'read_in_types'. If not provided these types will be automatically generated on reading files.
 #' @param ... Additional arguments to `data.table::fread`
+#'
+#' Several schemas are included in the package and accessed by passing
+#' `dataset_name` and `table_name` to [get_schema()].
+#' You can use `get_schema()` with no arguments to list available schemas.
+#'
+#' You can also construct a custom schema using [create_schema()]
 #'
 #' @returns A `data.table`
 #'
@@ -12,7 +18,14 @@
 #'
 read_file_from_zip <- function(zipfile, filename, schema = NULL, ...) {
   if (is.null(schema)) {
-    data.table::fread(cmd = sprintf("unzip -p \'%s\' \'%s\'", zipfile, filename), ...)
+    dt_in <- data.table::fread(cmd = sprintf("unzip -p \'%s\' \'%s\'", zipfile, filename), integer64 = "character", ...)
+
+    id_cols <- grep(".*id$", names(dt_in), value = TRUE)
+
+    dt_in[, (id_cols) := lapply(.SD, as.character), .SDcols = id_cols]
+
+    dt_in
+
   } else {
     data.table::fread(
       cmd = sprintf("unzip -p \'%s\' \'%s\'", zipfile, filename),
@@ -28,22 +41,36 @@ read_file_from_zip <- function(zipfile, filename, schema = NULL, ...) {
 #' @param input_dir Directory with tsv files (or in sub-directories)
 #' @param schema Optional - an `arrow::Scheme` object to set variable types
 #'
+#' Several schemas are included in the package and accessed by passing
+#' `dataset_name` and `table_name` to [get_schema()].
+#' You can use `get_schema()` with no arguments to list available schemas.
+#'
+#' You can also construct a custom schema using [create_schema()]
+#'
 #' @returns An arrow dataset
 #'
 #' @import arrow
 #' @export
 read_files_from_tsv <- function(file_tag, input_dir, schema = NULL) {
 
-  schema <- schema$arrow_schema$code()
+    files_in <- list.files(
+      path      = input_dir,
+      pattern   = paste0(file_tag, ".*\\.txt$"),
+      full.names = TRUE,
+      recursive  = TRUE,
+      ignore.case = TRUE
+    )
 
-  list.files(
-    path      = input_dir,
-    pattern   = paste0(file_tag, ".*\\.txt$"),
-    full.names = TRUE,
-    recursive  = TRUE,
-    ignore.case = TRUE
-  ) |>
-    arrow::open_tsv_dataset(schema = eval(schema), skip = 1)
+  if (!is.null(schema)) {
+    schema <- eval(schema$arrow_schema$code())
+
+    files_in |>
+      arrow::open_tsv_dataset(schema = schema, skip = 1)
+  }
+  else {
+    files_in |>
+      arrow::open_tsv_dataset()
+  }
 }
 
 
@@ -78,15 +105,29 @@ write_arrow_to_parquet <- function(arrow_data, output_path, partitioning = NULL)
 #' @param data_schema A schema with `names` and `read_in_types`
 #' @param date_format Default "\%d/\%m/\%Y"
 #'
+#' Several schemas are included in the package and accessed by passing
+#' `dataset_name` and `table_name` to [get_schema()].
+#' You can use `get_schema()` with no arguments to list available schemas.
+#'
+#' You can also construct a custom schema using [create_schema()]
+#'
 #' @returns output directory
 #'
 #' @import duckdb DBI
 #' @export
 #'
-append_to_parquet <- function(df, out_dir, table_name, data_schema, date_format = "%d/%m/%Y") {
+append_to_parquet <- function(df, out_dir, table_name, data_schema = NULL, date_format = "%d/%m/%Y") {
   con <- DBI::dbConnect(duckdb::duckdb())
 
   duckdb::duckdb_register(con, "tmp_arrow", df)
+
+  if (is.null(data_schema)) {
+
+    types <- vapply(df, class, character(1))
+
+    data_schema <- create_new_schema(names(types), unname(types))
+
+  }
 
   cast_expression <- cast_expression_from_schema(data_schema, table_name, date_format = date_format)
 
@@ -160,12 +201,26 @@ find_files_from_zip <- function(zipfile, tag) {
 #' @param zip_file_pattern Name pattern of zips to include (e.g. "Aurum.*\\.zip)
 #' @param ... Extra arguments passed to `append_to_parquet` (e.g. date formatting)
 #'
+#' Several schemas are included in the package and accessed by passing
+#' `dataset_name` and `table_name` to [get_schema()].
+#' You can use `get_schema()` with no arguments to list available schemas.
+#'
+#' You can also construct a custom schema using [create_schema()]
+#'
 #' @export
 #'
-read_zipped_dataset_to_parquet <- function(zip_directory, write_directory, dataset_tag, schema, table_name = NULL, quietly = FALSE, zip_file_pattern = ".*\\.zip", ...) {
-
-  if (is.null(table_name)) table_name <- dataset_tag
-  if (!dir.exists(write_directory)) dir.create(write_directory)
+read_zipped_dataset_to_parquet <- function(zip_directory,
+                                           write_directory,
+                                           dataset_tag,
+                                           schema = NULL,
+                                           table_name = NULL,
+                                           quietly = FALSE,
+                                           zip_file_pattern = ".*\\.zip",
+                                           ...) {
+  if (is.null(table_name))
+    table_name <- dataset_tag
+  if (!dir.exists(write_directory))
+    dir.create(write_directory)
 
   files_to_read <- find_files_from_zips(zip_directory, dataset_tag, zip_file_pattern = zip_file_pattern)
 
@@ -173,15 +228,21 @@ read_zipped_dataset_to_parquet <- function(zip_directory, write_directory, datas
   files_to_read <- files_to_read[lapply(files_to_read, length) != 0]
 
   Map(\(tsv_files, zipfile) {
-
     files_n <- length(tsv_files)
 
     Map(\(filename, n) {
+      if (!quietly)
+        cat(paste0(
+          n,
+          "/",
+          files_n,
+          ": ",
+          filename,
+          " extracting and adding to parquet\n"
+        ))
 
-    if (!quietly) cat(paste0(n, "/", files_n, ": ", filename, " extracting and adding to parquet\n"))
-
-    read_file_from_zip(zipfile, filename, schema) |>
-      append_to_parquet(write_directory, table_name, schema, ...)
+      read_file_from_zip(zipfile, filename, schema) |>
+        append_to_parquet(write_directory, table_name, schema, ...)
     }, tsv_files, seq(files_n))
 
 

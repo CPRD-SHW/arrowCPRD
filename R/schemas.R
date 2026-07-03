@@ -10,18 +10,18 @@
 #' get_schema("aurum", "observation")
 #' get_schema("aurum", "patient")
 #'
-get_schema <- function(dataset_name = c("aurum", "gold"),
-                       table_name = c(
-                         "observation",
-                         "consultation",
-                         "patient",
-                         "staff",
-                         "drug",
-                         "linkage",
-                         "practice",
-                         "problem",
-                         "referral"
-                       )) {
+get_schema <- function(dataset_name = NULL,
+                       table_name = NULL) {
+  if (is.null(dataset_name) || is.null(table_name)) {
+    message(
+      "Please use one of the following pairs of dataset/table names for a schema:\n - ",
+      paste(gsub("_", " / ", x = names(.schemas)), collapse = "\n - ")
+    )
+
+    return(invisible())
+
+  }
+
   key <- paste(dataset_name, table_name, sep = "_")
 
   schema <- .schemas[[key]]

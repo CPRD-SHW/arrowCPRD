@@ -22,3 +22,66 @@ test_that("coercing dates in a data.table works", {
   expect_equal(dt_in$bdate, as.Date("2028/03/02", format = "%Y/%m/%d"))
 
 })
+
+test_that("new schema catches wrong-length arguments", {
+
+  expect_error(
+
+    create_new_schema(
+      col_names = c("name", "age", "birthdate"),
+      col_types = c("character", "integer", "character", "integer")
+    ),
+    "Length of `col_names` \\(3\\) should match length of `col_types` \\(4\\)"
+  )
+
+})
+
+test_that("new schema catches wrong variable types", {
+
+  expect_error(
+
+    create_new_schema(
+      col_names = c("name", "age", "birthdate"),
+      col_types = c("character", "integer", "fakevar")
+    ),
+    "Variable type \"fakevar\" not recognised. Please use \"character\", \"integer\" or \"numeric\""
+  )
+
+})
+
+test_that("new schema catches date types", {
+
+  expect_error(
+
+    create_new_schema(
+      col_names = c("name", "age", "birthdate"),
+      col_types = c("character", "integer", "Date")
+    ),
+    "Using \"Date\" type at this stage isn't recommended. Please use \"character\" for reading which can be later cast to date."
+  )
+
+})
+
+
+test_that("new schema can be created", {
+  new_schema <- create_new_schema(
+    col_names = c("name", "age", "birthdate"),
+    col_types = c("character", "integer", "character")
+  )
+
+  expected <- list(
+    names = c("name", "age", "birthdate"),
+    read_in_types = c("character", "integer", "character"),
+    arrow_schema = arrow::schema(
+      name = arrow::utf8(),
+      age = arrow::int32(),
+      birthdate = arrow::utf8()
+    )
+  )
+
+  expect_equal(names(new_schema), names(expected))
+  expect_equal(new_schema$names, expected$names)
+  expect_equal(new_schema$read_in_types, expected$read_in_types)
+  expect_equal(new_schema$arrow_schema$num_fields, expected$arrow_schema$num_fields)
+
+})
