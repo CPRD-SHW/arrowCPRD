@@ -9,7 +9,7 @@ append_to_parquet(
   df,
   out_dir,
   table_name,
-  data_schema = NULL,
+  data_schema,
   date_format = "%d/%m/%Y"
 )
 ```
@@ -35,12 +35,6 @@ append_to_parquet(
 - date_format:
 
   Default "%d/%m/%Y"
-
-  Several schemas are included in the package and accessed by passing
-  \`dataset_name\` and \`table_name\` to \[get_schema()\]. You can use
-  \`get_schema()\` with no arguments to list available schemas.
-
-  You can also construct a custom schema using \[create_schema()\]
 
 ## Value
 

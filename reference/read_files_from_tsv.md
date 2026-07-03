@@ -23,12 +23,6 @@ read_files_from_tsv(file_tag, input_dir, schema = NULL)
 
   Optional - an \`arrow::Scheme\` object to set variable types
 
-  Several schemas are included in the package and accessed by passing
-  \`dataset_name\` and \`table_name\` to \[get_schema()\]. You can use
-  \`get_schema()\` with no arguments to list available schemas.
-
-  You can also construct a custom schema using \[create_schema()\]
-
 ## Value
 
 An arrow dataset

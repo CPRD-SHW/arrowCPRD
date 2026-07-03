@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">arrowCPRD</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.9003</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,10 +41,9 @@
 <span>  <span class="va">zip_directory</span>,</span>
 <span>  <span class="va">write_directory</span>,</span>
 <span>  <span class="va">dataset_tag</span>,</span>
-<span>  schema <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">schema</span>,</span>
 <span>  table_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  quietly <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  zip_file_pattern <span class="op">=</span> <span class="st">".*\\.zip"</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -77,16 +76,8 @@
 <dd><p>Whether to print progress</p></dd>
 
 
-<dt id="arg-zip-file-pattern">zip_file_pattern<a class="anchor" aria-label="anchor" href="#arg-zip-file-pattern"></a></dt>
-<dd><p>Name pattern of zips to include (e.g. "Aurum.*\.zip)</p></dd>
-
-
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Extra arguments passed to `append_to_parquet` (e.g. date formatting)</p>
-<p>Several schemas are included in the package and accessed by passing
-`dataset_name` and `table_name` to [get_schema()].
-You can use `get_schema()` with no arguments to list available schemas.</p>
-<p>You can also construct a custom schema using [create_schema()]</p></dd>
+<dd><p>Extra arguments passed to `append_to_parquet` (e.g. date formatting)</p></dd>
 
 </dl></div>
 
@@ -95,7 +86,7 @@ You can use `get_schema()` with no arguments to list available schemas.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Andy Baxter, Elliot Millington.</p>
+  <p>Developed by Jane Doe.</p>
 </div>
 
 <div class="pkgdown-footer-right">
