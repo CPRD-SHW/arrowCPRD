@@ -332,6 +332,8 @@ test_that("files across multiple zips allows wildcards in file pattern name", {
 })
 
 
+# date parsing ------------------------------------------------------------
+
 test_that("dates in alternative formats work in reading tsvs", {
 
   temp_pq <- withr::local_tempdir()
@@ -341,6 +343,8 @@ test_that("dates in alternative formats work in reading tsvs", {
 
   write.table(dates1, file.path(temp_pq, "testfile1.txt"), sep = "\t", row.names = FALSE)
   write.table(dates2, file.path(temp_pq, "testfile2.txt"), sep = "\t", row.names = FALSE)
+
+
 
   read_files_from_tsv(1, temp_pq) |>
     write_arrow_to_parquet(file.path(temp_pq, "test1"))
@@ -352,6 +356,44 @@ test_that("dates in alternative formats work in reading tsvs", {
   expect_equal(
     open_dataset(file.path(temp_pq, "test1")) |> dplyr::collect(),
     open_dataset(file.path(temp_pq, "test2")) |> dplyr::collect()
+  )
+
+  on.exit(unlink(temp_pq))
+
+})
+
+test_that("dates in alternative formats work in reading zips", {
+
+  temp_pq <- withr::local_tempdir()
+
+  dates1 <- data.frame(id = 1:2, a_date = c("01/02/2025", "06/04/2020"))
+  dates2 <- data.frame(id = 1:2, a_date = c("2025/02/01", "2020/04/06"))
+
+  write.table(dates1, file.path(temp_pq, "testfile1.txt"), sep = "\t", row.names = FALSE)
+  write.table(dates2, file.path(temp_pq, "testfile2.txt"), sep = "\t", row.names = FALSE)
+
+  zip(file.path(temp_pq, "zipped.zip"), files = file.path(temp_pq))
+
+  zip_path <- file.path(temp_pq, "zipped.zip")
+
+  file1 <- find_files_from_zip(zip_path, tag = "testfile1")
+  file2 <- find_files_from_zip(zip_path, tag = "testfile2")
+
+  read_file_from_zip(
+    zip_path,
+    file1
+  ) |>
+    append_to_parquet(file.path(temp_pq), "test1")
+
+  read_file_from_zip(
+    zip_path,
+    file2
+  ) |>
+    append_to_parquet(file.path(temp_pq), "test2", date_format = "%Y/%m/%d")
+
+  expect_equal(
+    open_dataset(file.path(temp_pq, "test1")) |> dplyr::select(id, a_date) |> dplyr::collect(),
+    open_dataset(file.path(temp_pq, "test2")) |> dplyr::select(id, a_date) |> dplyr::collect()
   )
 
   on.exit(unlink(temp_pq))
