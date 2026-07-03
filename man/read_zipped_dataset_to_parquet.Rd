@@ -31,9 +31,9 @@ read_zipped_dataset_to_parquet(
 
 \item{zip_file_pattern}{Name pattern of zips to include (e.g. "Aurum.*\\.zip)}
 
-\item{date_format}{Read dates from files in this format. Check dataset! Default "\\%d/\\%m/\\%Y"}
+\item{date_format}{Read dates from files in this format. Check dataset! Default "\%d/\%m/\%Y"}
 
-\item{...}{Extra arguments passed to \code{append_to_parquet} (e.g. date formatting)
+\item{...}{Extra arguments passed to \code{\link[=append_to_parquet]{append_to_parquet()}} (e.g. date formatting)
 
 Several schemas are included in the package and accessed by passing
 \code{dataset_name} and \code{table_name} to \code{\link[=get_schema]{get_schema()}}.

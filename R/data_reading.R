@@ -103,7 +103,7 @@ write_arrow_to_parquet <- function(arrow_data, output_path, partitioning = NULL)
 #' @param out_dir Out directory
 #' @param table_name "Observation", "Patient" etc.
 #' @param data_schema A schema with `names` and `read_in_types`
-#' @param date_format Default "\%d/\%m/\%Y"
+#' @param date_format Default "%d/%m/%Y"
 #'
 #' Several schemas are included in the package and accessed by passing
 #' `dataset_name` and `table_name` to [get_schema()].
@@ -199,8 +199,8 @@ find_files_from_zip <- function(zipfile, tag) {
 #' @param table_name Optional, defaults to `dataset_tag`. Data for the table will be written in this sub-folder within `write_directory`
 #' @param quietly Whether to print progress
 #' @param zip_file_pattern Name pattern of zips to include (e.g. "Aurum.*\\.zip)
-#' @param date_format Read dates from files in this format. Check dataset! Default "\%d/\%m/\%Y"
-#' @param ... Extra arguments passed to `append_to_parquet` (e.g. date formatting)
+#' @param date_format Read dates from files in this format. Check dataset! Default "%d/%m/%Y"
+#' @param ... Extra arguments passed to [append_to_parquet()] (e.g. date formatting)
 #'
 #' Several schemas are included in the package and accessed by passing
 #' `dataset_name` and `table_name` to [get_schema()].

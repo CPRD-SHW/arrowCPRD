@@ -21,7 +21,7 @@ append_to_parquet(
 
 \item{data_schema}{A schema with \code{names} and \code{read_in_types}}
 
-\item{date_format}{Default "\\%d/\\%m/\\%Y"
+\item{date_format}{Default "\%d/\%m/\%Y"
 
 Several schemas are included in the package and accessed by passing
 \code{dataset_name} and \code{table_name} to \code{\link[=get_schema]{get_schema()}}.
