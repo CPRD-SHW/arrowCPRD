@@ -2,8 +2,14 @@
 #'
 #' @param zipfile The Zip file to read from
 #' @param filename Filename within Zip file
-#' @param schema A list with 'names' and 'read_in_types'
+#' @param schema A list with 'names' and 'read_in_types'. If not provided these types will be automatically generated on reading files.
 #' @param ... Additional arguments to `data.table::fread`
+#'
+#' Several schemas are included in the package and accessed by passing
+#' `dataset_name` and `table_name` to [get_schema()].
+#' You can use `get_schema()` with no arguments to list available schemas.
+#'
+#' You can also construct a custom schema using [create_schema()]
 #'
 #' @returns A `data.table`
 #'
@@ -28,22 +34,36 @@ read_file_from_zip <- function(zipfile, filename, schema = NULL, ...) {
 #' @param input_dir Directory with tsv files (or in sub-directories)
 #' @param schema Optional - an `arrow::Scheme` object to set variable types
 #'
+#' Several schemas are included in the package and accessed by passing
+#' `dataset_name` and `table_name` to [get_schema()].
+#' You can use `get_schema()` with no arguments to list available schemas.
+#'
+#' You can also construct a custom schema using [create_schema()]
+#'
 #' @returns An arrow dataset
 #'
 #' @import arrow
 #' @export
 read_files_from_tsv <- function(file_tag, input_dir, schema = NULL) {
 
-  schema <- schema$arrow_schema$code()
+    files_in <- list.files(
+      path      = input_dir,
+      pattern   = paste0(file_tag, ".*\\.txt$"),
+      full.names = TRUE,
+      recursive  = TRUE,
+      ignore.case = TRUE
+    )
+    
+  if (!is.null(schema)) {
+    schema <- eval(schema$arrow_schema$code())
 
-  list.files(
-    path      = input_dir,
-    pattern   = paste0(file_tag, ".*\\.txt$"),
-    full.names = TRUE,
-    recursive  = TRUE,
-    ignore.case = TRUE
-  ) |>
-    arrow::open_tsv_dataset(schema = eval(schema), skip = 1)
+    files_in |>
+      arrow::open_tsv_dataset(schema = schema, skip = 1)
+  }
+  else {
+    files_in |>
+      arrow::open_tsv_dataset()
+  }
 }
 
 
@@ -77,6 +97,12 @@ write_arrow_to_parquet <- function(arrow_data, output_path, partitioning = NULL)
 #' @param table_name "Observation", "Patient" etc.
 #' @param data_schema A schema with `names` and `read_in_types`
 #' @param date_format Default "\%d/\%m/\%Y"
+#'
+#' Several schemas are included in the package and accessed by passing
+#' `dataset_name` and `table_name` to [get_schema()].
+#' You can use `get_schema()` with no arguments to list available schemas.
+#'
+#' You can also construct a custom schema using [create_schema()]
 #'
 #' @returns output directory
 #'
@@ -159,6 +185,12 @@ find_files_from_zip <- function(zipfile, tag) {
 #' @param quietly Whether to print progress
 #' @param zip_file_pattern Name pattern of zips to include (e.g. "Aurum.*\\.zip)
 #' @param ... Extra arguments passed to `append_to_parquet` (e.g. date formatting)
+#'
+#' Several schemas are included in the package and accessed by passing
+#' `dataset_name` and `table_name` to [get_schema()].
+#' You can use `get_schema()` with no arguments to list available schemas.
+#'
+#' You can also construct a custom schema using [create_schema()]
 #'
 #' @export
 #'

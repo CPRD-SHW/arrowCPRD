@@ -1,3 +1,5 @@
+# Reading in files --------------------------------------------------------
+
 test_that("reading a single file from observations zip works", {
   data_in <- read_file_from_zip(
     test_path("data", "testdata.zip"),
@@ -122,6 +124,31 @@ test_that("reading tsv files non-case sensitive", {
 
 })
 
+test_that("reading zip with null schema works", {
+  data_in <- read_file_from_zip(
+    test_path("data", "testdata.zip"),
+    "aurum_allpatid_set1_extract_observation_001.txt",
+    nrow = 5
+  )
+
+  expect_s3_class(data_in, "data.table")
+
+
+})
+
+test_that("reading tsv with null schema works", {
+
+  data_in <- read_files_from_tsv("observation",
+                                 test_path("data", "testdata"))
+
+
+  expect_r6_class(data_in, "Dataset")
+
+})
+
+
+# Writing outputs ---------------------------------------------------------
+
 test_that("writing to parquet works", {
 
   temp_pq <- withr::local_tempdir()
@@ -188,6 +215,11 @@ test_that("reading all zips in a folder to parquet works", {
 
   on.exit(unlink(temp_pq))
 })
+
+
+# Finding files -----------------------------------------------------------
+
+
 
 test_that("finding files in a zip works", {
 
