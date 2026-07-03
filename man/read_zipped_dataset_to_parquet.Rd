@@ -12,6 +12,7 @@ read_zipped_dataset_to_parquet(
   table_name = NULL,
   quietly = FALSE,
   zip_file_pattern = ".*\\\\.zip",
+  date_format = "\%d/\%m/\%Y",
   ...
 )
 }
@@ -29,6 +30,8 @@ read_zipped_dataset_to_parquet(
 \item{quietly}{Whether to print progress}
 
 \item{zip_file_pattern}{Name pattern of zips to include (e.g. "Aurum.*\\.zip)}
+
+\item{date_format}{Read dates from files in this format. Check dataset! Default "\\%d/\\%m/\\%Y"}
 
 \item{...}{Extra arguments passed to \code{append_to_parquet} (e.g. date formatting)
 
