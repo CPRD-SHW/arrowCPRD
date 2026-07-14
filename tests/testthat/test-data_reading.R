@@ -157,12 +157,12 @@ test_that("writing to parquet directly works", {
   temp_pq <- withr::local_tempdir()
 
   read_tsv_dataset_to_parquet(tsv_file_directory = test_path("data", "testdata"),
-                              write_directory = temp_pq,
+                              write_directory = file.path(temp_pq, "dataset"),
                               dataset_tag = "observation",
                               data_schema = get_schema("aurum", "observation"))
 
 
-  pq_in <- open_dataset(temp_pq)
+  pq_in <- open_dataset(file.path(temp_pq, "dataset"))
 
 
   expect_equal(nrow(pq_in), 300)
