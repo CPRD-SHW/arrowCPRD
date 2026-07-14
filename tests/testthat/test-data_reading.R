@@ -153,6 +153,24 @@ test_that("writing to parquet works", {
   on.exit(unlink(temp_pq))
 })
 
+test_that("writing to parquet directly works", {
+  temp_pq <- withr::local_tempdir()
+
+  read_tsv_dataset_to_parquet(tsv_file_directory = test_path("data", "testdata"),
+                              write_directory = temp_pq,
+                              dataset_tag = "observation",
+                              data_schema = get_schema("aurum", "observation"))
+
+
+  pq_in <- open_dataset(temp_pq)
+
+
+  expect_equal(nrow(pq_in), 300)
+  expect_no_error(pq_in)
+
+  on.exit(unlink(temp_pq))
+})
+
 test_that("reading sequential zips to parquet works", {
   temp_pq <- withr::local_tempdir()
 
