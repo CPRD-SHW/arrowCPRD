@@ -39,6 +39,8 @@ get_schema <- function(dataset_name = NULL,
 
 .schemas <- list(
   aurum_observation = list(
+    date_cols = c("obsdate", "enterdate"),
+
     names = c(
       "patid",
       "consid",
@@ -122,6 +124,8 @@ get_schema <- function(dataset_name = NULL,
 
 
   aurum_patient = list(
+    date_cols = c("emis_ddate", "regstartdate", "regenddate", "cprd_ddate"),
+
     names = c(
       "patid",
       "pracid",
@@ -172,6 +176,8 @@ get_schema <- function(dataset_name = NULL,
 
 
   aurum_practice = list(
+    date_cols = c("lcd", "uts"),
+
     names = c("pracid", "lcd", "uts", "region"),
     read_in_types = c("integer", "character", "character", "integer"),
     arrow_schema = quote(
@@ -187,6 +193,8 @@ get_schema <- function(dataset_name = NULL,
 
 
   aurum_problem = list(
+    date_cols = c("probenddate", "lastrevdate"),
+
     names = c(
       "patid",
       "obsid",
@@ -273,6 +281,8 @@ get_schema <- function(dataset_name = NULL,
 
 
   aurum_drug = list(
+    date_cols = c("issuedate", "enterdate"),
+
     names = c(
       "patid",
       "issueid",
@@ -329,6 +339,8 @@ get_schema <- function(dataset_name = NULL,
 
 
   aurum_consultation = list(
+    date_cols = c("consdate", "enterdate"),
+
     names = c(
       "patid",
       "consid",
@@ -385,6 +397,8 @@ get_schema <- function(dataset_name = NULL,
 
 
   gold_patient = list(
+    date_cols = c("chsdate", "frd", "crd", "tod", "deathdate"),
+
     names = c(
       "patid",
       "vmid",
@@ -459,6 +473,8 @@ get_schema <- function(dataset_name = NULL,
 
 
   gold_practice = list(
+    date_cols = c("lcd", "uts"),
+
     names = c("pracid", "region", "lcd", "uts"),
 
     read_in_types = c("integer", "integer", "character", "character"),
@@ -490,6 +506,8 @@ get_schema <- function(dataset_name = NULL,
 
 
   gold_consultation = list(
+    date_cols = c("eventdate", "sysdate"),
+
     names = c(
       "patid",
       "eventdate",
@@ -525,6 +543,8 @@ get_schema <- function(dataset_name = NULL,
 
 
   gold_clinical = list(
+    date_cols = c("eventdate", "sysdate"),
+
     names = c(
       "patid",
       "eventdate",
@@ -649,6 +669,8 @@ get_schema <- function(dataset_name = NULL,
 
 
   gold_referral = list(
+    date_cols = c("eventdate", "sysdate"),
+
     names = c(
       "patid",
       "eventdate",
@@ -723,6 +745,8 @@ get_schema <- function(dataset_name = NULL,
 
 
   gold_immunisation = list(
+    date_cols = c("eventdate", "sysdate"),
+
     names = c(
       "patid",
       "eventdate",
@@ -803,6 +827,8 @@ get_schema <- function(dataset_name = NULL,
 
 
   gold_test = list(
+    date_cols = c("eventdate", "sysdate"),
+
     names = c(
       "patid",
       "eventdate",
@@ -886,6 +912,8 @@ get_schema <- function(dataset_name = NULL,
 
 
   gold_therapy = list(
+    date_cols = c("eventdate", "sysdate"),
+
     names = c(
       "patid",
       "eventdate",

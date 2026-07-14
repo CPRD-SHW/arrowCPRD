@@ -348,10 +348,10 @@ test_that("dates in alternative formats work in reading tsvs", {
 
 
   read_files_from_tsv(1, temp_pq) |>
-    write_arrow_to_parquet(file.path(temp_pq, "test1"))
+    write_arrow_to_parquet(file.path(temp_pq, "test1"), date_cols = "a_date")
 
   read_files_from_tsv(2, temp_pq) |>
-    write_arrow_to_parquet(file.path(temp_pq, "test2"))
+    write_arrow_to_parquet(file.path(temp_pq, "test2"), date_cols = "a_date")
 
 
   expect_equal(
@@ -391,11 +391,17 @@ test_that("dates in alternative formats work in reading zips", {
   file1 <- find_files_from_zip(zip_path, tag = "testfile1")
   file2 <- find_files_from_zip(zip_path, tag = "testfile2")
 
+  date_schema <- create_new_schema(
+    col_names = c("id", "a_date"),
+    col_types = c("integer", "character"),
+    date_cols = "a_date"
+  )
+
   read_file_from_zip(zip_path, file1) |>
-    append_to_parquet(file.path(temp_pq), "test1")
+    append_to_parquet(file.path(temp_pq), "test1", date_schema)
 
   read_file_from_zip(zip_path, file2) |>
-    append_to_parquet(file.path(temp_pq), "test2", date_format = "%Y/%m/%d")
+    append_to_parquet(file.path(temp_pq), "test2", date_schema, date_format = "%Y/%m/%d")
 
   expect_equal(
     open_dataset(file.path(temp_pq, "test1")) |> dplyr::select(id, a_date) |> dplyr::collect(),
@@ -436,10 +442,17 @@ test_that("dataset can take alternative date formats", {
 
   zip_path <- file.path(temp_pq, "zipped.zip")
 
+  date_schema <- create_new_schema(
+    col_names = c("id", "a_date"),
+    col_types = c("integer", "character"),
+    date_cols = "a_date"
+  )
+
   read_zipped_dataset_to_parquet(
     temp_pq,
     file.path(temp_pq, "test_dataset"),
     dataset_tag = "testfile",
+    schema = date_schema,
     date_format = "%Yoolalala%moolalala%d"
   )
 

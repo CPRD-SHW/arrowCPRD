@@ -79,16 +79,17 @@ read_files_from_tsv <- function(file_tag, input_dir, schema = NULL) {
 #' @param arrow_data An arrow dataset created from `read_files_from_tsv`
 #' @param output_path Output path
 #' @param partitioning Optional - variable to partition by
+#' @param date_cols Character vector of column names to cast to date
 #'
 #' @returns the output path
 #' @importFrom dplyr compute
 #' @import arrow
 #' @export
 #'
-write_arrow_to_parquet <- function(arrow_data, output_path, partitioning = NULL) {
+write_arrow_to_parquet <- function(arrow_data, output_path, partitioning = NULL, date_cols = NULL) {
 
   arrow_data |>
-    coerce_date_columns_arrow() |>
+    coerce_date_columns_arrow(date_cols = date_cols) |>
     dplyr::compute() |>
     arrow::write_dataset(output_path, partitioning = partitioning)
 

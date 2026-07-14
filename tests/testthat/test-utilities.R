@@ -16,7 +16,7 @@ test_that("coercing dates in a data.table works", {
 
   dt_in <- data.table::data.table(adate = "2026/01/01", bdate = "02/03/2028")
 
-  coerce_date_columns_dt(dt_in)
+  coerce_date_columns_dt(dt_in, date_cols = c("adate", "bdate"))
 
   expect_equal(dt_in$adate, as.Date("2026/01/01", format = "%Y/%m/%d"))
   expect_equal(dt_in$bdate, as.Date("2028/03/02", format = "%Y/%m/%d"))
@@ -66,12 +66,14 @@ test_that("new schema catches date types", {
 test_that("new schema can be created", {
   new_schema <- create_new_schema(
     col_names = c("name", "age", "birthdate"),
-    col_types = c("character", "integer", "character")
+    col_types = c("character", "integer", "character"),
+    date_cols = "birthdate"
   )
 
   expected <- list(
     names = c("name", "age", "birthdate"),
     read_in_types = c("character", "integer", "character"),
+    date_cols = "birthdate",
     arrow_schema = arrow::schema(
       name = arrow::utf8(),
       age = arrow::int32(),
@@ -82,6 +84,20 @@ test_that("new schema can be created", {
   expect_equal(names(new_schema), names(expected))
   expect_equal(new_schema$names, expected$names)
   expect_equal(new_schema$read_in_types, expected$read_in_types)
+  expect_equal(new_schema$date_cols, expected$date_cols)
   expect_equal(new_schema$arrow_schema$num_fields, expected$arrow_schema$num_fields)
+
+})
+
+test_that("new schema rejects date_cols not in col_names", {
+
+  expect_error(
+    create_new_schema(
+      col_names = c("name", "age", "birthdate"),
+      col_types = c("character", "integer", "character"),
+      date_cols = c("birthdate", "notacol")
+    ),
+    "`date_cols` must be a subset of `col_names`. Not found: notacol"
+  )
 
 })

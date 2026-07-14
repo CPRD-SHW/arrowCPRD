@@ -28,12 +28,13 @@ get_arrow_schema <- function(schema_in_names, schema_in_read_in_types) {
 #' Coerce dates in data.table
 #'
 #' @param data_in Dataset passed in
+#' @param date_cols Character vector of column names to cast to date
 #'
 #' @import data.table
 #' @keywords internal
-coerce_date_columns_dt <- function(data_in) {
+coerce_date_columns_dt <- function(data_in, date_cols = NULL) {
 
-  date_cols <- grep(".*date", names(data_in), value = TRUE)
+  if (is.null(date_cols)) return(data_in)
 
   data_in[, (date_cols) := lapply(.SD, \(date_col)
                                   as.Date(date_col, tryFormats = c("%d/%m/%Y", "%Y/%m/%d"))
@@ -45,25 +46,28 @@ coerce_date_columns_dt <- function(data_in) {
 #' Coerce dates in arrow dataset
 #'
 #' @param data_in Dataset passed in
+#' @param date_cols Character vector of column names to cast to date
 #'
-#' @importFrom dplyr mutate across matches
+#' @importFrom dplyr mutate across all_of
 #' @importFrom lubridate parse_date_time
 #' @keywords internal
-coerce_date_columns_arrow <- function(data_in) {
+coerce_date_columns_arrow <- function(data_in, date_cols = NULL) {
 
+  if (length(date_cols) == 0) return(data_in)
 
-    data_in |>
-      dplyr::mutate(dplyr::across(
-        dplyr::matches("date", ignore.case = TRUE),
-        ~ lubridate::parse_date_time(.x, orders = c("%d/%m/%Y", "%Y/%m/%d"))
-      ))
+  data_in |>
+    dplyr::mutate(dplyr::across(
+      dplyr::all_of(date_cols),
+      ~ lubridate::parse_date_time(.x, orders = c("%d/%m/%Y", "%Y/%m/%d"))
+    ))
 
 }
 
 
 #' Cast data-type schema to a duckdb schema
 #'
-#' @param data_schema A list with `names` and `read_in_types`
+#' @param data_schema A list with `names`, `read_in_types` and (optionally)
+#'   `date_cols`
 #' @param table_name Name of table to include in cast statement
 #' @param date_format (default "%d/%m/%Y")
 #'
@@ -80,15 +84,14 @@ cast_expression_from_schema <- function(data_schema, table_name, date_format = "
     numeric = "DOUBLE"
   )
 
-  base_variables <- grep(".*date$", data_schema$names, value = TRUE, invert = TRUE)
+  time_variables <- data_schema$date_cols
+
+  base_variables <- setdiff(data_schema$names, time_variables)
 
   base_casts <- sprintf(
     "%s::%s AS %s",
     base_variables, base_types[variable_types[base_variables]], base_variables
   )
-
-  time_variables <- grep(".*date$", data_schema$names, value = TRUE, invert = FALSE)
-
 
 
   date_casts <- sprintf(
@@ -109,9 +112,7 @@ cast_expression_from_schema <- function(data_schema, table_name, date_format = "
 #'
 #' @param col_names A vector of column names in your dataset
 #' @param col_types A vector of column types ("character", "integer", "numeric")
-#'
-#' Date types should be entered as "character" in the schema and will be cast to dates when
-#' writing to parquet
+#' @param date_cols A vector of column names to cast to date
 #'
 #' @returns A list with attributes for a schema to be passed to other objects
 #' @export
@@ -119,10 +120,11 @@ cast_expression_from_schema <- function(data_schema, table_name, date_format = "
 #' @examples
 #' create_new_schema(
 #'  col_names = c("name", "age", "birthdate"),
-#'  col_types = c("character", "integer", "character")
+#'  col_types = c("character", "integer", "character"),
+#'  date_cols = "birthdate"
 #' )
 #'
-create_new_schema <- function(col_names, col_types) {
+create_new_schema <- function(col_names, col_types, date_cols = NULL) {
 
   if (length(col_names) != length(col_types)) {
     stop(sprintf("Length of `col_names` (%d) should match length of `col_types` (%d)",
@@ -139,9 +141,16 @@ create_new_schema <- function(col_names, col_types) {
     }
   }
 
+  if (!is.null(date_cols) && !all(date_cols %in% col_names)) {
+    missing_cols <- setdiff(date_cols, col_names)
+    stop(sprintf("`date_cols` must be a subset of `col_names`. Not found: %s",
+                 paste(missing_cols, collapse = ", ")))
+  }
+
   list(
     names = col_names,
     read_in_types = col_types,
+    date_cols = date_cols,
     arrow_schema = eval(get_arrow_schema(col_names, col_types)())
   )
 
