@@ -89,7 +89,6 @@ write_arrow_to_parquet <- function(arrow_data, output_path, partitioning = NULL)
 
   arrow_data |>
     coerce_date_columns_arrow() |>
-    dplyr::compute() |>
     arrow::write_dataset(output_path, partitioning = partitioning)
 
   output_path
