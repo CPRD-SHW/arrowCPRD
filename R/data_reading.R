@@ -257,7 +257,7 @@ read_zipped_dataset_to_parquet <- function(zip_directory,
 #' @param tsv_file_directory Directory with .txt tsv files
 #' @param write_directory Directory in which to write parquet files
 #' @param dataset_tag Term that will identify relevant files (e.g. 'observation', 'consultation')
-#' @param schema Table schema to use
+#' @param data_schema Table schema to use
 #' @param table_name Optional, defaults to `dataset_tag`. Data for the table will be written in this sub-folder within `write_directory`
 #' @param quietly Whether to print progress
 #' @param date_format Read dates from files in this format. Check dataset! Default "%d/%m/%Y"
@@ -268,20 +268,13 @@ read_zipped_dataset_to_parquet <- function(zip_directory,
 read_tsv_dataset_to_parquet <- function(tsv_file_directory,
                                         write_directory,
                                         dataset_tag,
-                                        data_schema = NULL,
+                                        data_schema,
                                         table_name = NULL,
                                         quietly = FALSE,
                                         date_format = "%d/%m/%Y") {
 
   con <- DBI::dbConnect(duckdb::duckdb())
 
-  if (is.null(data_schema)) {
-
-    types <- vapply(df, class, character(1))
-
-    data_schema <- create_new_schema(names(types), unname(types))
-
-  }
 
   if (is.null(table_name))
     table_name <- dataset_tag

@@ -8,7 +8,7 @@ read_tsv_dataset_to_parquet(
   tsv_file_directory,
   write_directory,
   dataset_tag,
-  data_schema = NULL,
+  data_schema,
   table_name = NULL,
   quietly = FALSE,
   date_format = "\%d/\%m/\%Y"
@@ -21,13 +21,13 @@ read_tsv_dataset_to_parquet(
 
 \item{dataset_tag}{Term that will identify relevant files (e.g. 'observation', 'consultation')}
 
+\item{data_schema}{Table schema to use}
+
 \item{table_name}{Optional, defaults to \code{dataset_tag}. Data for the table will be written in this sub-folder within \code{write_directory}}
 
 \item{quietly}{Whether to print progress}
 
 \item{date_format}{Read dates from files in this format. Check dataset! Default "\%d/\%m/\%Y"}
-
-\item{schema}{Table schema to use}
 }
 \value{
 The directory name where files were stored
