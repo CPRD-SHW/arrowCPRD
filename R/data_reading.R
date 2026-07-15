@@ -89,7 +89,6 @@ write_arrow_to_parquet <- function(arrow_data, output_path, partitioning = NULL)
 
   arrow_data |>
     coerce_date_columns_arrow() |>
-    dplyr::compute() |>
     arrow::write_dataset(output_path, partitioning = partitioning)
 
   output_path
@@ -251,4 +250,59 @@ read_zipped_dataset_to_parquet <- function(zip_directory,
   }, files_to_read, names(files_to_read))
 
   invisible(files_to_read)
+}
+
+#' Read tsv files from directory into parquet files
+#'
+#' @param tsv_file_directory Directory with .txt tsv files
+#' @param write_directory Directory in which to write parquet files
+#' @param dataset_tag Term that will identify relevant files (e.g. 'observation', 'consultation')
+#' @param data_schema Table schema to use
+#' @param table_name Optional, defaults to `dataset_tag`. Data for the table will be written in this sub-folder within `write_directory`
+#' @param quietly Whether to print progress
+#' @param date_format Read dates from files in this format. Check dataset! Default "%d/%m/%Y"
+#'
+#' @returns The directory name where files were stored
+#' @export
+#'
+read_tsv_dataset_to_parquet <- function(tsv_file_directory,
+                                        write_directory,
+                                        dataset_tag,
+                                        data_schema,
+                                        table_name = NULL,
+                                        quietly = FALSE,
+                                        date_format = "%d/%m/%Y") {
+
+  con <- DBI::dbConnect(duckdb::duckdb())
+
+
+  if (is.null(table_name))
+    table_name <- dataset_tag
+  if (!dir.exists(write_directory))
+    dir.create(write_directory)
+
+
+  cast_expression <- cast_expression_from_schema(data_schema, table_name, date_format = date_format)
+
+  sql <- sprintf(
+    "
+    COPY (
+      SELECT %s
+      FROM read_csv('%s/*%s*', all_varchar = true)
+    )
+    TO '%s'
+    (FORMAT 'parquet', COMPRESSION 'ZSTD', APPEND TRUE, PARTITION_BY ('table'))
+  ",
+    cast_expression,
+    tsv_file_directory,
+    dataset_tag,
+    file.path(write_directory, table_name)
+  )
+
+  tryCatch(
+    DBI::dbExecute(con, sql)
+  )
+
+  write_directory
+
 }
