@@ -24,6 +24,9 @@
   : Open a tsv file or multiple tsv files with a file_tag as an arrow
   dataset
 
+- [`read_tsv_dataset_to_parquet()`](https://cprd-shw.github.io/arrowCPRD/reference/read_tsv_dataset_to_parquet.md)
+  : Read tsv files from directory into parquet files
+
 - [`read_zipped_dataset_to_parquet()`](https://cprd-shw.github.io/arrowCPRD/reference/read_zipped_dataset_to_parquet.md)
   : Extract all files from a zip and write to a parquet file
 

@@ -32,6 +32,10 @@ read_zipped_dataset_to_parquet(
   table_name = "patient"
 )
 
+# Loading dataset in a fresh session
+
+library(arrow)
+
 pq_in <- open_dataset("parquet_data") |>
   tibble::as_tibble()
 ```
@@ -53,21 +57,23 @@ pq_in |>
 
 ## Creating parquet files from unzipped datasets
 
-If you’ve unzipped your CPRD data, you can use `read_files_from_tsv` on
-the whole folder also.
+If you’ve unzipped your CPRD data, you can use
+`read_tsv_dataset_to_parquet` on the whole folder also.
 
 ``` r
 
-  data_in <- read_files_from_tsv(
-    "observation", 
-    "path/to/data",
-    get_schema("aurum", "observation")
-  )
+read_tsv_dataset_to_parquet(
+  tsv_file_directory = "path/to/data",
+  write_directory ="parquet_files/observation",
+  dataset_tag = "observation",
+  data_schema = get_schema("aurum", "observation")
+)
 
-  data_in |>
-    write_arrow_to_parquet("parquet_files/observation")
+# Loading dataset in a fresh session
 
-  pq_in <- open_dataset("parquet_files/observation")
+library(arrow)
+
+pq_in <- open_dataset("parquet_files/observation")
   
 ```
 
@@ -100,6 +106,9 @@ Check back here for more useful parts perhaps!
 - [`read_files_from_tsv()`](https://cprd-shw.github.io/arrowCPRD/reference/read_files_from_tsv.md)
   : Open a tsv file or multiple tsv files with a file_tag as an arrow
   dataset
+
+- [`read_tsv_dataset_to_parquet()`](https://cprd-shw.github.io/arrowCPRD/reference/read_tsv_dataset_to_parquet.md)
+  : Read tsv files from directory into parquet files
 
 - [`read_zipped_dataset_to_parquet()`](https://cprd-shw.github.io/arrowCPRD/reference/read_zipped_dataset_to_parquet.md)
   : Extract all files from a zip and write to a parquet file

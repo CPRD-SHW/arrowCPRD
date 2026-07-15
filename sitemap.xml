@@ -16,6 +16,7 @@
 <url><loc>https://cprd-shw.github.io/arrowCPRD/reference/index.html</loc></url>
 <url><loc>https://cprd-shw.github.io/arrowCPRD/reference/read_file_from_zip.html</loc></url>
 <url><loc>https://cprd-shw.github.io/arrowCPRD/reference/read_files_from_tsv.html</loc></url>
+<url><loc>https://cprd-shw.github.io/arrowCPRD/reference/read_tsv_dataset_to_parquet.html</loc></url>
 <url><loc>https://cprd-shw.github.io/arrowCPRD/reference/read_zipped_dataset_to_parquet.html</loc></url>
 <url><loc>https://cprd-shw.github.io/arrowCPRD/reference/write_arrow_to_parquet.html</loc></url>
 </urlset>

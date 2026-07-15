@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">arrowCPRD</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.9004</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.9005</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,8 +81,12 @@
 <span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  <span class="at">table_name =</span> <span class="st">"patient"</span></span>
 <span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>)</span>
 <span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>pq_in <span class="ot">&lt;-</span> <span class="fu">open_dataset</span>(<span class="st">"parquet_data"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">as_tibble</span>()</span></code></pre></div>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co"># Loading dataset in a fresh session</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="fu">library</span>(arrow)</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>pq_in <span class="ot">&lt;-</span> <span class="fu">open_dataset</span>(<span class="st">"parquet_data"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">as_tibble</span>()</span></code></pre></div>
 <p>You can do this for each of the tables (‘patient’, ‘observation’, ‘practice’) in your dataset.</p>
 <p><code>pq_in</code> then functions like a normal data frame (running <code>collect</code> to bring into R session after computations):</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -95,18 +99,20 @@
 <div class="section level2">
 <h2 id="creating-parquet-files-from-unzipped-datasets">Creating parquet files from unzipped datasets<a class="anchor" aria-label="anchor" href="#creating-parquet-files-from-unzipped-datasets"></a>
 </h2>
-<p>If you’ve unzipped your CPRD data, you can use <code>read_files_from_tsv</code> on the whole folder also.</p>
+<p>If you’ve unzipped your CPRD data, you can use <code>read_tsv_dataset_to_parquet</code> on the whole folder also.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span>  <span class="va">data_in</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/read_files_from_tsv.html">read_files_from_tsv</a></span><span class="op">(</span></span>
-<span>    <span class="st">"observation"</span>, </span>
-<span>    <span class="st">"path/to/data"</span>,</span>
-<span>    <span class="fu"><a href="reference/get_schema.html">get_schema</a></span><span class="op">(</span><span class="st">"aurum"</span>, <span class="st">"observation"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/read_tsv_dataset_to_parquet.html">read_tsv_dataset_to_parquet</a></span><span class="op">(</span></span>
+<span>  tsv_file_directory <span class="op">=</span> <span class="st">"path/to/data"</span>,</span>
+<span>  write_directory <span class="op">=</span><span class="st">"parquet_files/observation"</span>,</span>
+<span>  dataset_tag <span class="op">=</span> <span class="st">"observation"</span>,</span>
+<span>  data_schema <span class="op">=</span> <span class="fu"><a href="reference/get_schema.html">get_schema</a></span><span class="op">(</span><span class="st">"aurum"</span>, <span class="st">"observation"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span>  <span class="va">data_in</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="reference/write_arrow_to_parquet.html">write_arrow_to_parquet</a></span><span class="op">(</span><span class="st">"parquet_files/observation"</span><span class="op">)</span></span>
+<span><span class="co"># Loading dataset in a fresh session</span></span>
 <span></span>
-<span>  <span class="va">pq_in</span> <span class="op">&lt;-</span> <span class="fu">open_dataset</span><span class="op">(</span><span class="st">"parquet_files/observation"</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/apache/arrow/" class="external-link">arrow</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pq_in</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://arrow.apache.org/docs/r/reference/open_dataset.html" class="external-link">open_dataset</a></span><span class="op">(</span><span class="st">"parquet_files/observation"</span><span class="op">)</span></span>
 <span>  </span></code></pre></div>
 </div>
 </div>
@@ -165,7 +171,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>
