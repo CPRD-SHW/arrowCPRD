@@ -288,7 +288,7 @@ read_tsv_dataset_to_parquet <- function(tsv_file_directory,
     "
     COPY (
       SELECT %s
-      FROM read_csv('%s/*%s*', all_varchar = true)
+      FROM read_csv('%s/**/*%s*', all_varchar = true)
     )
     TO '%s'
     (FORMAT 'parquet', COMPRESSION 'ZSTD', APPEND TRUE, PARTITION_BY ('table'))
