@@ -153,6 +153,57 @@ test_that("writing to parquet works", {
   on.exit(unlink(temp_pq))
 })
 
+test_that("writing to parquet directly works", {
+  temp_pq <- withr::local_tempdir()
+
+  read_tsv_dataset_to_parquet(tsv_file_directory = test_path("data", "testdata"),
+                              write_directory = file.path(temp_pq, "dataset"),
+                              dataset_tag = "observation",
+                              data_schema = get_schema("aurum", "observation"))
+
+
+  pq_in <- open_dataset(file.path(temp_pq, "dataset"))
+
+
+  expect_equal(nrow(pq_in), 300)
+  expect_no_error(pq_in)
+
+  on.exit(unlink(temp_pq))
+})
+
+test_that("writing tsvs from nested folders works", {
+  temp_pq <- withr::local_tempdir()
+
+  dir.create(file.path(temp_pq, "raw", "nested"), recursive = TRUE)
+
+  obs_files <- grep(".*observation.*", dir(test_path("data", "testdata"), full.names = TRUE), value = TRUE)
+
+  file.copy(
+    obs_files[1:2],
+    file.path(temp_pq, "raw")
+  )
+
+  file.copy(
+    obs_files[3],
+    file.path(temp_pq, "raw", "nested")
+  )
+
+
+  read_tsv_dataset_to_parquet(tsv_file_directory = file.path(temp_pq, "raw"),
+                              write_directory = file.path(temp_pq, "dataset"),
+                              dataset_tag = "observation",
+                              data_schema = get_schema("aurum", "observation"))
+
+
+  pq_in <- open_dataset(file.path(temp_pq, "dataset"))
+
+
+  expect_equal(nrow(pq_in), 300)
+  expect_no_error(pq_in)
+
+  on.exit(unlink(temp_pq))
+})
+
 test_that("reading sequential zips to parquet works", {
   temp_pq <- withr::local_tempdir()
 
