@@ -4,10 +4,12 @@
 \alias{coerce_date_columns_arrow}
 \title{Coerce dates in arrow dataset}
 \usage{
-coerce_date_columns_arrow(data_in)
+coerce_date_columns_arrow(data_in, date_cols = NULL)
 }
 \arguments{
 \item{data_in}{Dataset passed in}
+
+\item{date_cols}{Character vector of column names to cast to date}
 }
 \description{
 Coerce dates in arrow dataset

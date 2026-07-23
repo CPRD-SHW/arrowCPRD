@@ -4,7 +4,12 @@
 \alias{write_arrow_to_parquet}
 \title{Write an arrow dataset to a parquet file}
 \usage{
-write_arrow_to_parquet(arrow_data, output_path, partitioning = NULL)
+write_arrow_to_parquet(
+  arrow_data,
+  output_path,
+  partitioning = NULL,
+  date_cols = NULL
+)
 }
 \arguments{
 \item{arrow_data}{An arrow dataset created from \code{read_files_from_tsv}}
@@ -12,6 +17,8 @@ write_arrow_to_parquet(arrow_data, output_path, partitioning = NULL)
 \item{output_path}{Output path}
 
 \item{partitioning}{Optional - variable to partition by}
+
+\item{date_cols}{Character vector of column names to cast to date}
 }
 \value{
 the output path

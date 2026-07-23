@@ -4,15 +4,14 @@
 \alias{create_new_schema}
 \title{Create a new schema for reading/writing CPRD to arrow}
 \usage{
-create_new_schema(col_names, col_types)
+create_new_schema(col_names, col_types, date_cols = NULL)
 }
 \arguments{
 \item{col_names}{A vector of column names in your dataset}
 
-\item{col_types}{A vector of column types ("character", "integer", "numeric")
+\item{col_types}{A vector of column types ("character", "integer", "numeric")}
 
-Date types should be entered as "character" in the schema and will be cast to dates when
-writing to parquet}
+\item{date_cols}{A vector of column names to cast to date}
 }
 \value{
 A list with attributes for a schema to be passed to other objects
@@ -23,7 +22,8 @@ Create a new schema for reading/writing CPRD to arrow
 \examples{
 create_new_schema(
  col_names = c("name", "age", "birthdate"),
- col_types = c("character", "integer", "character")
+ col_types = c("character", "integer", "character"),
+ date_cols = "birthdate"
 )
 
 }
