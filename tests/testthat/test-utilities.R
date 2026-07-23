@@ -23,6 +23,16 @@ test_that("coercing dates in a data.table works", {
 
 })
 
+test_that("coerce_date_columns_dt() doesn't touch columns when date_cols is NULL", {
+
+  dt_no_dates <- data.table::data.table(data.frame(dont_touch_me_date = c("2026/05/01", "2022/04/31")))
+
+  coerce_date_columns_dt(dt_no_dates)
+
+  expect_equal(dt_no_dates$dont_touch_me_date, c("2026/05/01", "2022/04/31"))
+
+})
+
 test_that("new schema catches wrong-length arguments", {
 
   expect_error(
