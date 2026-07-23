@@ -103,7 +103,9 @@ write_arrow_to_parquet <- function(arrow_data, output_path, partitioning = NULL,
 #' @param df A data frame
 #' @param out_dir Out directory
 #' @param table_name "Observation", "Patient" etc.
-#' @param data_schema A schema with `names` and `read_in_types`
+#' @param data_schema A schema with `names` and `read_in_types`. If not
+#'   provided, types are taken from the data frame and any character column
+#'   whose name ends in "date" is cast to a date.
 #' @param date_format Default "%d/%m/%Y"
 #'
 #' Several schemas are included in the package and accessed by passing
@@ -126,7 +128,13 @@ append_to_parquet <- function(df, out_dir, table_name, data_schema = NULL, date_
 
     types <- vapply(df, class, character(1))
 
-    data_schema <- create_new_schema(names(types), unname(types))
+    date_cols <- grep("date$", names(types)[types == "character"], value = TRUE)
+
+    data_schema <- create_new_schema(
+      col_names = names(types),
+      col_types = unname(types),
+      date_cols = date_cols
+    )
 
   }
 
