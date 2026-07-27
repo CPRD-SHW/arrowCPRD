@@ -19,7 +19,9 @@ append_to_parquet(
 
 \item{table_name}{"Observation", "Patient" etc.}
 
-\item{data_schema}{A schema with \code{names} and \code{read_in_types}}
+\item{data_schema}{A schema with \code{names} and \code{read_in_types}. If not
+provided, types are taken from the data frame and any character column
+whose name ends in "date" is cast to a date.}
 
 \item{date_format}{Default "\%d/\%m/\%Y"
 

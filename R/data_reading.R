@@ -79,16 +79,17 @@ read_files_from_tsv <- function(file_tag, input_dir, schema = NULL) {
 #' @param arrow_data An arrow dataset created from `read_files_from_tsv`
 #' @param output_path Output path
 #' @param partitioning Optional - variable to partition by
+#' @param date_cols Character vector of column names to cast to date
 #'
 #' @returns the output path
 #' @importFrom dplyr compute
 #' @import arrow
 #' @export
 #'
-write_arrow_to_parquet <- function(arrow_data, output_path, partitioning = NULL) {
+write_arrow_to_parquet <- function(arrow_data, output_path, partitioning = NULL, date_cols = NULL) {
 
   arrow_data |>
-    coerce_date_columns_arrow() |>
+    coerce_date_columns_arrow(date_cols = date_cols) |>
     arrow::write_dataset(output_path, partitioning = partitioning)
 
   output_path
@@ -101,7 +102,9 @@ write_arrow_to_parquet <- function(arrow_data, output_path, partitioning = NULL)
 #' @param df A data frame
 #' @param out_dir Out directory
 #' @param table_name "Observation", "Patient" etc.
-#' @param data_schema A schema with `names` and `read_in_types`
+#' @param data_schema A schema with `names` and `read_in_types`. If not
+#'   provided, types are taken from the data frame and any character column
+#'   whose name ends in "date" is cast to a date.
 #' @param date_format Default "%d/%m/%Y"
 #'
 #' Several schemas are included in the package and accessed by passing
@@ -124,7 +127,13 @@ append_to_parquet <- function(df, out_dir, table_name, data_schema = NULL, date_
 
     types <- vapply(df, class, character(1))
 
-    data_schema <- create_new_schema(names(types), unname(types))
+    date_cols <- grep("date$", names(types)[types == "character"], value = TRUE)
+
+    data_schema <- create_new_schema(
+      col_names = names(types),
+      col_types = unname(types),
+      date_cols = date_cols
+    )
 
   }
 
