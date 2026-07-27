@@ -37,7 +37,12 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">write_arrow_to_parquet</span><span class="op">(</span><span class="va">arrow_data</span>, <span class="va">output_path</span>, partitioning <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">write_arrow_to_parquet</span><span class="op">(</span></span>
+<span>  <span class="va">arrow_data</span>,</span>
+<span>  <span class="va">output_path</span>,</span>
+<span>  partitioning <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  date_cols <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -54,6 +59,10 @@
 
 <dt id="arg-partitioning">partitioning<a class="anchor" aria-label="anchor" href="#arg-partitioning"></a></dt>
 <dd><p>Optional - variable to partition by</p></dd>
+
+
+<dt id="arg-date-cols">date_cols<a class="anchor" aria-label="anchor" href="#arg-date-cols"></a></dt>
+<dd><p>Character vector of column names to cast to date</p></dd>
 
 </dl></div>
     <div class="section level2">

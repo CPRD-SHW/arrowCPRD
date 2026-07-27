@@ -30,7 +30,9 @@ append_to_parquet(
 
 - data_schema:
 
-  A schema with `names` and `read_in_types`
+  A schema with `names` and `read_in_types`. If not provided, types are
+  taken from the data frame and any character column whose name ends in
+  "date" is cast to a date.
 
 - date_format:
 

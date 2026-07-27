@@ -63,7 +63,9 @@
 
 
 <dt id="arg-data-schema">data_schema<a class="anchor" aria-label="anchor" href="#arg-data-schema"></a></dt>
-<dd><p>A schema with <code>names</code> and <code>read_in_types</code></p></dd>
+<dd><p>A schema with <code>names</code> and <code>read_in_types</code>. If not
+provided, types are taken from the data frame and any character column
+whose name ends in "date" is cast to a date.</p></dd>
 
 
 <dt id="arg-date-format">date_format<a class="anchor" aria-label="anchor" href="#arg-date-format"></a></dt>

@@ -5,7 +5,7 @@ Coerce dates in arrow dataset
 ## Usage
 
 ``` r
-coerce_date_columns_arrow(data_in)
+coerce_date_columns_arrow(data_in, date_cols = NULL)
 ```
 
 ## Arguments
@@ -13,3 +13,7 @@ coerce_date_columns_arrow(data_in)
 - data_in:
 
   Dataset passed in
+
+- date_cols:
+
+  Character vector of column names to cast to date

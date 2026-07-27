@@ -5,7 +5,7 @@ Create a new schema for reading/writing CPRD to arrow
 ## Usage
 
 ``` r
-create_new_schema(col_names, col_types)
+create_new_schema(col_names, col_types, date_cols = NULL)
 ```
 
 ## Arguments
@@ -18,8 +18,9 @@ create_new_schema(col_names, col_types)
 
   A vector of column types ("character", "integer", "numeric")
 
-  Date types should be entered as "character" in the schema and will be
-  cast to dates when writing to parquet
+- date_cols:
+
+  A vector of column names to cast to date
 
 ## Value
 
@@ -30,13 +31,17 @@ A list with attributes for a schema to be passed to other objects
 ``` r
 create_new_schema(
  col_names = c("name", "age", "birthdate"),
- col_types = c("character", "integer", "character")
+ col_types = c("character", "integer", "character"),
+ date_cols = "birthdate"
 )
 #> $names
 #> [1] "name"      "age"       "birthdate"
 #> 
 #> $read_in_types
 #> [1] "character" "integer"   "character"
+#> 
+#> $date_cols
+#> [1] "birthdate"
 #> 
 #> $arrow_schema
 #> Schema

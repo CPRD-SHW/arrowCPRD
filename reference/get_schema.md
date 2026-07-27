@@ -26,6 +26,9 @@ A "schema" - a list of names of variables, r data types and arrow types
 
 ``` r
 get_schema("aurum", "observation")
+#> $date_cols
+#> [1] "obsdate"   "enterdate"
+#> 
 #> $names
 #>  [1] "patid"        "consid"       "pracid"       "obsid"        "obsdate"     
 #>  [6] "enterdate"    "staffid"      "parentobsid"  "medcodeid"    "value"       
@@ -55,6 +58,9 @@ get_schema("aurum", "observation")
 #> probobsid: string
 #> 
 get_schema("aurum", "patient")
+#> $date_cols
+#> [1] "emis_ddate"   "regstartdate" "regenddate"   "cprd_ddate"  
+#> 
 #> $names
 #>  [1] "patid"          "pracid"         "usualgpstaffid" "gender"        
 #>  [5] "yob"            "mob"            "emis_ddate"     "regstartdate"  

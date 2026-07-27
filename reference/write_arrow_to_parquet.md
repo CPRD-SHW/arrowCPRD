@@ -5,7 +5,12 @@ Write an arrow dataset to a parquet file
 ## Usage
 
 ``` r
-write_arrow_to_parquet(arrow_data, output_path, partitioning = NULL)
+write_arrow_to_parquet(
+  arrow_data,
+  output_path,
+  partitioning = NULL,
+  date_cols = NULL
+)
 ```
 
 ## Arguments
@@ -21,6 +26,10 @@ write_arrow_to_parquet(arrow_data, output_path, partitioning = NULL)
 - partitioning:
 
   Optional - variable to partition by
+
+- date_cols:
+
+  Character vector of column names to cast to date
 
 ## Value
 

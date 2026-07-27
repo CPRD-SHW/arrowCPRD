@@ -18,4 +18,6 @@ Useful links:
 
 Authors:
 
+- Andy Baxter <Andy.Baxter@glasgow.ac.uk>
+
 - Elliot Millington <Elliot.Millington@glasgow.ac.uk>
