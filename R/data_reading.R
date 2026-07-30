@@ -224,8 +224,8 @@ read_zipped_dataset_to_parquet <- function(zip_directory,
                                            data_schema = NULL,
                                            table_name = NULL,
                                            quietly = FALSE,
-                                           zip_file_pattern = ".*\\.zip",
                                            date_format = "%d/%m/%Y",
+                                           zip_file_pattern = ".*\\.zip",
                                            ...) {
   if (is.null(table_name))
     table_name <- dataset_tag
