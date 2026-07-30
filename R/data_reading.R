@@ -277,11 +277,10 @@ read_zipped_dataset_to_parquet <- function(zip_directory,
 read_tsv_dataset_to_parquet <- function(tsv_file_directory,
                                         write_directory,
                                         dataset_tag,
-                                        data_schema,
+                                        data_schema = NULL,
                                         table_name = NULL,
                                         quietly = FALSE,
                                         date_format = "%d/%m/%Y") {
-
   con <- DBI::dbConnect(duckdb::duckdb())
 
 
@@ -291,10 +290,11 @@ read_tsv_dataset_to_parquet <- function(tsv_file_directory,
     dir.create(write_directory)
 
 
-  cast_expression <- cast_expression_from_schema(data_schema, table_name, date_format = date_format)
+  if (!is.null(data_schema)) {
+    cast_expression <- cast_expression_from_schema(data_schema, table_name, date_format = date_format)
 
-  sql <- sprintf(
-    "
+    sql <- sprintf(
+      "
     COPY (
       SELECT %s
       FROM read_csv('%s/**/*%s*', all_varchar = true)
@@ -302,11 +302,29 @@ read_tsv_dataset_to_parquet <- function(tsv_file_directory,
     TO '%s'
     (FORMAT 'parquet', COMPRESSION 'ZSTD', APPEND TRUE, PARTITION_BY ('table'))
   ",
-    cast_expression,
-    tsv_file_directory,
-    dataset_tag,
-    file.path(write_directory, table_name)
-  )
+      cast_expression,
+      tsv_file_directory,
+      dataset_tag,
+      file.path(write_directory, table_name)
+    )
+  } else {
+    cast_expression <- sprintf("*, '%s'::VARCHAR as table", table_name)
+
+    sql <- sprintf(
+      "
+    COPY (
+      SELECT %s
+      FROM read_csv('%s/**/*%s*', all_varchar = true)
+    )
+    TO '%s'
+    (FORMAT 'parquet', COMPRESSION 'ZSTD', APPEND TRUE, PARTITION_BY ('table'))
+  ",
+      cast_expression,
+      tsv_file_directory,
+      dataset_tag,
+      file.path(write_directory, table_name)
+    )
+  }
 
   tryCatch(
     DBI::dbExecute(con, sql)

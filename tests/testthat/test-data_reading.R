@@ -171,6 +171,23 @@ test_that("writing to parquet directly works", {
   on.exit(unlink(temp_pq))
 })
 
+test_that("read_tsv_dataset_to_parquet() accepts null schema", {
+  temp_pq <- withr::local_tempdir()
+
+  read_tsv_dataset_to_parquet(tsv_file_directory = test_path("data", "testdata"),
+                              write_directory = file.path(temp_pq, "dataset"),
+                              dataset_tag = "observation")
+
+
+  pq_in <- open_dataset(file.path(temp_pq, "dataset"))
+
+
+  expect_equal(nrow(pq_in), 300)
+  expect_no_error(pq_in)
+
+  on.exit(unlink(temp_pq))
+})
+
 test_that("writing tsvs from nested folders works", {
   temp_pq <- withr::local_tempdir()
 
