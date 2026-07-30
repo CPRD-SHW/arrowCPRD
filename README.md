@@ -26,10 +26,10 @@ You can use the function `read_zipped_dataset_to_parquet`
 library(arrowCPRD)
 
 read_zipped_dataset_to_parquet(
-  [folder containing zipped cprd aurum files],
+  zip_directory = "path/to/zipped/data",
   write_directory = "parquet_data",
   dataset_tag = "patient",
-  schema = get_schema("aurum", "patient"),
+  data_schema = get_schema("aurum", "patient"),
   table_name = "patient"
 )
 
@@ -37,19 +37,19 @@ read_zipped_dataset_to_parquet(
 
 library(arrow)
 
-pq_in <- open_dataset("parquet_data") |>
+pq_patient <- open_dataset("parquet_data/patient") |>
   tibble::as_tibble()
 ```
 
 You can do this for each of the tables ('patient', 'observation', 'practice') in your dataset.
 
-`pq_in` then functions like a normal data frame (running `collect` to bring into R session after computations):
+`pq_patient` then functions like a normal data frame (running `collect` to bring into R session after computations):
 
 
 ``` r
 library(tidyverse)
 
-pq_in |> 
+pq_patient |> 
   summarise(mean_val = mean(value), .by = "pracid") |>
   collect()
 ```
@@ -61,16 +61,17 @@ If you've unzipped your CPRD data, you can use `read_tsv_dataset_to_parquet` on 
 ``` r
 read_tsv_dataset_to_parquet(
   tsv_file_directory = "path/to/data",
-  write_directory ="parquet_files/observation",
+  write_directory ="parquet_data",
   dataset_tag = "observation",
-  data_schema = get_schema("aurum", "observation")
+  data_schema = get_schema("aurum", "observation"),
+  table_name = "patient"
 )
 
 # Loading dataset in a fresh session
 
 library(arrow)
 
-pq_in <- open_dataset("parquet_files/observation")
+pq_observation <- open_dataset("parquet_files/observation")
   
 ```
 
