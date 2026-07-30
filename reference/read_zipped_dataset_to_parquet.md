@@ -9,11 +9,11 @@ read_zipped_dataset_to_parquet(
   zip_directory,
   write_directory,
   dataset_tag,
-  schema = NULL,
+  data_schema = NULL,
   table_name = NULL,
   quietly = FALSE,
-  zip_file_pattern = ".*\\.zip",
   date_format = "%d/%m/%Y",
+  zip_file_pattern = ".*\\.zip",
   ...
 )
 ```
@@ -33,7 +33,7 @@ read_zipped_dataset_to_parquet(
   Term that will identify relevant files (e.g. 'observation',
   'consultation')
 
-- schema:
+- data_schema:
 
   Table schema to use
 
@@ -46,14 +46,14 @@ read_zipped_dataset_to_parquet(
 
   Whether to print progress
 
-- zip_file_pattern:
-
-  Name pattern of zips to include (e.g. "Aurum.\*\\zip)
-
 - date_format:
 
   Read dates from files in this format. Check dataset! Default
   "%d/%m/%Y"
+
+- zip_file_pattern:
+
+  Name pattern of zips to include (e.g. "Aurum.\*\\zip)
 
 - ...:
 

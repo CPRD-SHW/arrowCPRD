@@ -9,7 +9,7 @@ read_tsv_dataset_to_parquet(
   tsv_file_directory,
   write_directory,
   dataset_tag,
-  data_schema,
+  data_schema = NULL,
   table_name = NULL,
   quietly = FALSE,
   date_format = "%d/%m/%Y"

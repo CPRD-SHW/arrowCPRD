@@ -41,11 +41,11 @@
 <span>  <span class="va">zip_directory</span>,</span>
 <span>  <span class="va">write_directory</span>,</span>
 <span>  <span class="va">dataset_tag</span>,</span>
-<span>  schema <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  data_schema <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  table_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  quietly <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  zip_file_pattern <span class="op">=</span> <span class="st">".*\\.zip"</span>,</span>
 <span>  date_format <span class="op">=</span> <span class="st">"%d/%m/%Y"</span>,</span>
+<span>  zip_file_pattern <span class="op">=</span> <span class="st">".*\\.zip"</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -66,7 +66,7 @@
 <dd><p>Term that will identify relevant files (e.g. 'observation', 'consultation')</p></dd>
 
 
-<dt id="arg-schema">schema<a class="anchor" aria-label="anchor" href="#arg-schema"></a></dt>
+<dt id="arg-data-schema">data_schema<a class="anchor" aria-label="anchor" href="#arg-data-schema"></a></dt>
 <dd><p>Table schema to use</p></dd>
 
 
@@ -78,12 +78,12 @@
 <dd><p>Whether to print progress</p></dd>
 
 
-<dt id="arg-zip-file-pattern">zip_file_pattern<a class="anchor" aria-label="anchor" href="#arg-zip-file-pattern"></a></dt>
-<dd><p>Name pattern of zips to include (e.g. "Aurum.*\.zip)</p></dd>
-
-
 <dt id="arg-date-format">date_format<a class="anchor" aria-label="anchor" href="#arg-date-format"></a></dt>
 <dd><p>Read dates from files in this format. Check dataset! Default "%d/%m/%Y"</p></dd>
+
+
+<dt id="arg-zip-file-pattern">zip_file_pattern<a class="anchor" aria-label="anchor" href="#arg-zip-file-pattern"></a></dt>
+<dd><p>Name pattern of zips to include (e.g. "Aurum.*\.zip)</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
