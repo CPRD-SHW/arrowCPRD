@@ -221,7 +221,7 @@ find_files_from_zip <- function(zipfile, tag) {
 read_zipped_dataset_to_parquet <- function(zip_directory,
                                            write_directory,
                                            dataset_tag,
-                                           schema = NULL,
+                                           data_schema = NULL,
                                            table_name = NULL,
                                            quietly = FALSE,
                                            zip_file_pattern = ".*\\.zip",
@@ -251,8 +251,8 @@ read_zipped_dataset_to_parquet <- function(zip_directory,
           " extracting and adding to parquet\n"
         ))
 
-      read_file_from_zip(zipfile, filename, schema) |>
-        append_to_parquet(write_directory, table_name, schema, date_format = date_format, ...)
+      read_file_from_zip(zipfile, filename, data_schema) |>
+        append_to_parquet(write_directory, table_name, data_schema, date_format = date_format, ...)
     }, tsv_files, seq(files_n))
 
 
