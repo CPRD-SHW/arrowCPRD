@@ -203,7 +203,7 @@ find_files_from_zip <- function(zipfile, tag) {
 #' @param zip_directory Directory of zip files
 #' @param write_directory Directory in which to write parquet files
 #' @param dataset_tag Term that will identify relevant files (e.g. 'observation', 'consultation')
-#' @param schema Table schema to use
+#' @param data_schema Table schema to use
 #' @param table_name Optional, defaults to `dataset_tag`. Data for the table will be written in this sub-folder within `write_directory`
 #' @param quietly Whether to print progress
 #' @param zip_file_pattern Name pattern of zips to include (e.g. "Aurum.*\\.zip)

@@ -8,11 +8,11 @@ read_zipped_dataset_to_parquet(
   zip_directory,
   write_directory,
   dataset_tag,
-  schema = NULL,
+  data_schema = NULL,
   table_name = NULL,
   quietly = FALSE,
-  zip_file_pattern = ".*\\\\.zip",
   date_format = "\%d/\%m/\%Y",
+  zip_file_pattern = ".*\\\\.zip",
   ...
 )
 }
@@ -23,15 +23,15 @@ read_zipped_dataset_to_parquet(
 
 \item{dataset_tag}{Term that will identify relevant files (e.g. 'observation', 'consultation')}
 
-\item{schema}{Table schema to use}
+\item{data_schema}{Table schema to use}
 
 \item{table_name}{Optional, defaults to \code{dataset_tag}. Data for the table will be written in this sub-folder within \code{write_directory}}
 
 \item{quietly}{Whether to print progress}
 
-\item{zip_file_pattern}{Name pattern of zips to include (e.g. "Aurum.*\\.zip)}
-
 \item{date_format}{Read dates from files in this format. Check dataset! Default "\%d/\%m/\%Y"}
+
+\item{zip_file_pattern}{Name pattern of zips to include (e.g. "Aurum.*\\.zip)}
 
 \item{...}{Extra arguments passed to \code{\link[=append_to_parquet]{append_to_parquet()}} (e.g. date formatting)
 
