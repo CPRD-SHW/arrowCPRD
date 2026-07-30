@@ -203,7 +203,7 @@ find_files_from_zip <- function(zipfile, tag) {
 #' @param zip_directory Directory of zip files
 #' @param write_directory Directory in which to write parquet files
 #' @param dataset_tag Term that will identify relevant files (e.g. 'observation', 'consultation')
-#' @param schema Table schema to use
+#' @param data_schema Table schema to use
 #' @param table_name Optional, defaults to `dataset_tag`. Data for the table will be written in this sub-folder within `write_directory`
 #' @param quietly Whether to print progress
 #' @param zip_file_pattern Name pattern of zips to include (e.g. "Aurum.*\\.zip)
@@ -221,11 +221,11 @@ find_files_from_zip <- function(zipfile, tag) {
 read_zipped_dataset_to_parquet <- function(zip_directory,
                                            write_directory,
                                            dataset_tag,
-                                           schema = NULL,
+                                           data_schema = NULL,
                                            table_name = NULL,
                                            quietly = FALSE,
-                                           zip_file_pattern = ".*\\.zip",
                                            date_format = "%d/%m/%Y",
+                                           zip_file_pattern = ".*\\.zip",
                                            ...) {
   if (is.null(table_name))
     table_name <- dataset_tag
@@ -251,8 +251,8 @@ read_zipped_dataset_to_parquet <- function(zip_directory,
           " extracting and adding to parquet\n"
         ))
 
-      read_file_from_zip(zipfile, filename, schema) |>
-        append_to_parquet(write_directory, table_name, schema, date_format = date_format, ...)
+      read_file_from_zip(zipfile, filename, data_schema) |>
+        append_to_parquet(write_directory, table_name, data_schema, date_format = date_format, ...)
     }, tsv_files, seq(files_n))
 
 
@@ -277,11 +277,10 @@ read_zipped_dataset_to_parquet <- function(zip_directory,
 read_tsv_dataset_to_parquet <- function(tsv_file_directory,
                                         write_directory,
                                         dataset_tag,
-                                        data_schema,
+                                        data_schema = NULL,
                                         table_name = NULL,
                                         quietly = FALSE,
                                         date_format = "%d/%m/%Y") {
-
   con <- DBI::dbConnect(duckdb::duckdb())
 
 
@@ -291,10 +290,11 @@ read_tsv_dataset_to_parquet <- function(tsv_file_directory,
     dir.create(write_directory)
 
 
-  cast_expression <- cast_expression_from_schema(data_schema, table_name, date_format = date_format)
+  if (!is.null(data_schema)) {
+    cast_expression <- cast_expression_from_schema(data_schema, table_name, date_format = date_format)
 
-  sql <- sprintf(
-    "
+    sql <- sprintf(
+      "
     COPY (
       SELECT %s
       FROM read_csv('%s/**/*%s*', all_varchar = true)
@@ -302,11 +302,29 @@ read_tsv_dataset_to_parquet <- function(tsv_file_directory,
     TO '%s'
     (FORMAT 'parquet', COMPRESSION 'ZSTD', APPEND TRUE, PARTITION_BY ('table'))
   ",
-    cast_expression,
-    tsv_file_directory,
-    dataset_tag,
-    file.path(write_directory, table_name)
-  )
+      cast_expression,
+      tsv_file_directory,
+      dataset_tag,
+      file.path(write_directory, table_name)
+    )
+  } else {
+    cast_expression <- sprintf("*, '%s'::VARCHAR as table", table_name)
+
+    sql <- sprintf(
+      "
+    COPY (
+      SELECT %s
+      FROM read_csv('%s/**/*%s*', all_varchar = true)
+    )
+    TO '%s'
+    (FORMAT 'parquet', COMPRESSION 'ZSTD', APPEND TRUE, PARTITION_BY ('table'))
+  ",
+      cast_expression,
+      tsv_file_directory,
+      dataset_tag,
+      file.path(write_directory, table_name)
+    )
+  }
 
   tryCatch(
     DBI::dbExecute(con, sql)

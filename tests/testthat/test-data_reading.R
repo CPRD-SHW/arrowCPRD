@@ -50,7 +50,7 @@ test_that("reading a file from zip allows spaces", {
 
 })
 
-test_that("writing to parquet from zip allows spaces", {
+test_that("read_zipped_dataset_to_parquet() writing to parquet from zip allows spaces", {
   temp_pq <- withr::local_tempdir()
 
 
@@ -72,7 +72,7 @@ test_that("writing to parquet from zip allows spaces", {
       temp_pq,
       file.path(temp_pq, "parquet out"),
       "testfile",
-      schema = temp_schema
+      data_schema = temp_schema
     )
   )
 
@@ -153,7 +153,7 @@ test_that("writing to parquet works", {
   on.exit(unlink(temp_pq))
 })
 
-test_that("writing to parquet directly works", {
+test_that("read_tsv_dataset_to_parquet() writing to parquet directly works", {
   temp_pq <- withr::local_tempdir()
 
   read_tsv_dataset_to_parquet(tsv_file_directory = test_path("data", "testdata"),
@@ -171,7 +171,24 @@ test_that("writing to parquet directly works", {
   on.exit(unlink(temp_pq))
 })
 
-test_that("writing tsvs from nested folders works", {
+test_that("read_tsv_dataset_to_parquet() accepts null schema", {
+  temp_pq <- withr::local_tempdir()
+
+  read_tsv_dataset_to_parquet(tsv_file_directory = test_path("data", "testdata"),
+                              write_directory = file.path(temp_pq, "dataset"),
+                              dataset_tag = "observation")
+
+
+  pq_in <- open_dataset(file.path(temp_pq, "dataset"))
+
+
+  expect_equal(nrow(pq_in), 300)
+  expect_no_error(pq_in)
+
+  on.exit(unlink(temp_pq))
+})
+
+test_that("read_tsv_dataset_to_parquet() writing tsvs from nested folders works", {
   temp_pq <- withr::local_tempdir()
 
   dir.create(file.path(temp_pq, "raw", "nested"), recursive = TRUE)
@@ -231,14 +248,14 @@ test_that("reading sequential zips to parquet works", {
 
 })
 
-test_that("reading all zips in a folder to parquet works", {
+test_that("read_zipped_dataset_to_parquet() reading all zips in a folder to parquet works", {
   temp_pq <- withr::local_tempdir()
 
   read_zipped_dataset_to_parquet(
     test_path("data"),
     write_directory = temp_pq,
     dataset_tag = "patient",
-    schema = get_schema("aurum", "patient"),
+    data_schema = get_schema("aurum", "patient"),
     table_name = "fake_name"
   )
 
@@ -251,7 +268,7 @@ test_that("reading all zips in a folder to parquet works", {
   on.exit(unlink(temp_pq))
 })
 
-test_that("reading all zips takes a null schema", {
+test_that("read_zipped_dataset_to_parquet() reading all zips takes a null schema", {
   temp_pq <- withr::local_tempdir()
 
   read_zipped_dataset_to_parquet(
@@ -464,7 +481,7 @@ test_that("dates in alternative formats work in reading zips", {
 })
 
 
-test_that("dataset can take alternative date formats", {
+test_that("read_zipped_dataset_to_parquet() dataset can take alternative date formats", {
   temp_pq <- withr::local_tempdir()
 
   dates1 <- data.frame(
@@ -503,7 +520,7 @@ test_that("dataset can take alternative date formats", {
     temp_pq,
     file.path(temp_pq, "test_dataset"),
     dataset_tag = "testfile",
-    schema = date_schema,
+    data_schema = date_schema,
     date_format = "%Yoolalala%moolalala%d"
   )
 
