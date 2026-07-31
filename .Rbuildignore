@@ -7,3 +7,5 @@
 ^LICENSE\.md$
 ^\.lintr$
 ^tests/testthat/synthetic$
+^
+^temp_pq

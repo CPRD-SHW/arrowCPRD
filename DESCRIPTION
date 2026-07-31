@@ -32,7 +32,9 @@ Imports:
     DBI,
     dplyr,
     duckdb,
-    lubridate
+    lubridate,
+    purrr,
+    stringr
 Depends: 
     arrow,
     R (>= 4.2.0)
