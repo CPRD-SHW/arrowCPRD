@@ -125,6 +125,8 @@ synth_generic_column <- function(name, type, n) {
     sample(c("aa", "bb", "cc", "dd", "ee"), n, replace = TRUE)
   } else if (type == "integer") {
     sample(1:100, n, replace = TRUE)
+  } else if (type == "logical") {
+    sample(c(TRUE, FALSE), n, replace = TRUE)
   } else {
     round(runif(n, 0, 1000), 2)
   }
