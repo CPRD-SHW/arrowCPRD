@@ -64,7 +64,7 @@ test_that("schema types match up", {
         codes <- eval(arrow_schema)
         tibble::tibble(names,
                        read_in_types,
-                       arrow = codes$fields |> map_chr(~ .x$ToString()))
+                       arrow = codes$fields |> purrr::map_chr(~ .x$ToString()))
       })
 
     }) |>
