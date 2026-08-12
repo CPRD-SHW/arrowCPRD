@@ -40,3 +40,43 @@ test_that("schema prints", {
   expect_no_error(print(get_schema("aurum", "patient")))
 
 })
+
+test_that("schema types match up", {
+  type_conversion <- c(
+    character = "string",
+    integer = "int64",
+    logical = "bool",
+    numeric = "double"
+  )
+
+  match_tables <- .schemas |>
+    purrr::map(\(schema) {
+      if (is.null(schema[["arrow_schema"]]))
+        return(
+          tibble::tibble(
+            names = character(0),
+            read_in_types = character(0),
+            arrow = character(0),
+          )
+        )
+
+      with(schema, {
+        codes <- eval(arrow_schema)
+        tibble::tibble(names,
+                       read_in_types,
+                       arrow = codes$fields |> purrr::map_chr(~ .x$ToString()))
+      })
+
+    }) |>
+    purrr::map(\(types_table) {
+      types_table |>
+        dplyr::mutate(type_switch = type_conversion[read_in_types]) |>
+        dplyr::filter(!stringr::str_detect(arrow, names) |
+                        !stringr::str_detect(arrow, type_switch))
+
+    })
+
+
+  expect_all_equal(vapply(match_tables, nrow, integer(1)), 0L)
+
+})

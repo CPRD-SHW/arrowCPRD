@@ -81,7 +81,8 @@ cast_expression_from_schema <- function(data_schema, table_name, date_format = "
   base_types <- c(
     character = "VARCHAR",
     integer = "BIGINT",
-    numeric = "DOUBLE"
+    numeric = "DOUBLE",
+    logical = "BOOLEAN"
   )
 
   time_variables <- data_schema$date_cols

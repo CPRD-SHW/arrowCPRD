@@ -27,10 +27,20 @@ read_file_from_zip <- function(zipfile, filename, schema = NULL, ...) {
     dt_in
 
   } else {
-    data.table::fread(
+    dt_in <- data.table::fread(
       cmd = sprintf("unzip -p \'%s\' \'%s\'", zipfile, filename),
       colClasses = schema$read_in_types, ...
     )
+
+    bool_cols <-  schema$names[schema$read_in_types == "logical"]
+
+    if(!is.null(bool_cols)) {
+
+      dt_in[, (bool_cols) := lapply(.SD, as.logical), .SDcols = bool_cols]
+
+    }
+
+    dt_in
   }
 
 }
