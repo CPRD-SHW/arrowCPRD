@@ -9,7 +9,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/CPRD-SHW/arrowCPRD/blob/0.1.4.9008/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/CPRD-SHW/arrowCPRD/blob/main/DESCRIPTION)
 
 Baxter A, Millington E (2026). *arrowCPRD: Reading CPRD Files Into
 Parquet Via Arrow*. R package version 0.1.4.9008,
