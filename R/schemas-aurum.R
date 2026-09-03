@@ -23,29 +23,6 @@
   ),
 
 
-  aurum_linkage = list(
-    read_in_types = c(
-      "character",
-      "integer",
-      "character",
-      "integer",
-      "integer",
-      "integer",
-      "integer",
-      "integer",
-      "integer",
-      "integer",
-      "integer",
-      "integer",
-      "integer",
-      "integer",
-      "integer",
-      "integer"
-    )
-
-  ),
-
-
   aurum_patient = list(
     date_cols = c("emis_ddate", "regstartdate", "regenddate", "cprd_ddate"),
 

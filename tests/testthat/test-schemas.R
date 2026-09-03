@@ -31,7 +31,8 @@ test_that("get_schema returns error for only bad table/dataset name", {
 
 test_that("schema gives suggestions", {
 
-  expect_message(get_schema(), "Please use one of the following")
+  expect_message(get_schema(), "Available schemas")
+  expect_message(get_schema(), 'get_schema\\("linked", "hes_patient"\\)')
 
 })
 

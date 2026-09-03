@@ -7,18 +7,14 @@
 .expand_schema(spec)
 }
 \arguments{
-\item{spec}{A schema list with \code{col_types} (and optionally \code{date_cols}), or a
-legacy list with \code{names}/\code{read_in_types}/\code{arrow_schema}.}
+\item{spec}{A schema list with \code{col_types} (a named character vector) and
+optionally \code{date_cols}.}
 }
 \value{
-A list with \code{names}, \code{read_in_types}, \code{date_cols} and (unless column
-names are unavailable) an evaluated \code{arrow_schema}.
+A list with \code{names}, \code{read_in_types}, \code{date_cols} and an
+evaluated \code{arrow_schema}.
 }
 \description{
-Takes a schema entry that stores columns once as a named \code{col_types} vector
-(names = column names, values = R types) and derives \code{names},
-\code{read_in_types} and an evaluated \code{arrow_schema}. Any \code{date_cols} are kept.
-Entries that only carry \code{read_in_types} (no column names) are returned
-unchanged apart from evaluating any quoted \code{arrow_schema}.
+Expand a compact schema definition to a full schema
 }
 \keyword{internal}

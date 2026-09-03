@@ -7,10 +7,10 @@
   logical = arrow::bool
 )
 
-#' Build an `arrow::Schema` from column names and R types
+#' Build an `arrow::Schema` from column names and types
 #'
 #' @param col_names Character vector of column names
-#' @param col_types Character vector of R types
+#' @param col_types Character vector of types
 #'
 #' @returns An `arrow::Schema`
 #' @keywords internal
@@ -149,7 +149,8 @@ cast_expression_from_schema <- function(data_schema, table_name, date_format = "
 #' Create a new schema for reading/writing CPRD to arrow
 #'
 #' @param col_names A vector of column names in your dataset
-#' @param col_types A vector of column types ("character", "integer", "numeric")
+#' @param col_types A vector of column types ("character", "integer", "numeric",
+#'   "logical")
 #' @param date_cols A vector of column names to cast to date
 #'
 #' @returns A list with attributes for a schema to be passed to other objects
@@ -172,10 +173,10 @@ create_new_schema <- function(col_names, col_types, date_cols = NULL) {
   for (vartype in col_types) {
     if (vartype == "Date") {
       stop("Using \"Date\" type at this stage isn't recommended. Please use \"character\" for reading which can be later cast to date.")
-    } else if (vartype %in% c("character", "integer", "numeric"))  {
+    } else if (vartype %in% c("character", "integer", "numeric", "logical"))  {
       next
     } else {
-      stop(sprintf("Variable type \"%s\" not recognised. Please use \"character\", \"integer\" or \"numeric\"", vartype))
+      stop(sprintf("Variable type \"%s\" not recognised. Please use \"character\", \"integer\", \"numeric\" or \"logical\"", vartype))
     }
   }
 

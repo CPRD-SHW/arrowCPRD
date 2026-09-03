@@ -9,8 +9,7 @@ arrow_schema_from_types(col_names, col_types)
 \arguments{
 \item{col_names}{Character vector of column names}
 
-\item{col_types}{Character vector of R types (\code{"character"}, \code{"integer"},
-\code{"numeric"}, \code{"logical"})}
+\item{col_types}{Character vector of R types}
 }
 \value{
 An \code{arrow::Schema}

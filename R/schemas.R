@@ -13,9 +13,22 @@
 get_schema <- function(dataset_name = NULL,
                        table_name = NULL) {
   if (is.null(dataset_name) || is.null(table_name)) {
+    keys <- names(.schemas())
+    datasets <- sub("_.*$", "", keys)
+    tables <- sub("^[^_]+_", "", keys)
+
+    lines <- unlist(lapply(unique(datasets), function(ds) {
+      in_ds <- datasets == ds
+      c(
+        sprintf("%s:", ds),
+        sprintf('  get_schema("%s", "%s")', ds, tables[in_ds]),
+        ""
+      )
+    }))
+
     message(
-      "Please use one of the following pairs of dataset/table names for a schema:\n - ",
-      paste(gsub("_", " / ", x = names(.schemas())), collapse = "\n - ")
+      "Please choose a dataset and table. Available schemas:\n\n",
+      paste(lines, collapse = "\n")
     )
 
     return(invisible())

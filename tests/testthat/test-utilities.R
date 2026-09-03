@@ -52,7 +52,7 @@ test_that("new schema catches wrong variable types", {
       col_names = c("name", "age", "birthdate"),
       col_types = c("character", "integer", "fakevar")
     ),
-    "Variable type \"fakevar\" not recognised. Please use \"character\", \"integer\" or \"numeric\""
+    "Variable type \"fakevar\" not recognised"
   )
 
 })

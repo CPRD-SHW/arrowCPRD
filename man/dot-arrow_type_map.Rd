@@ -2,11 +2,11 @@
 % Please edit documentation in R/utilities.R
 \name{.arrow_type_map}
 \alias{.arrow_type_map}
-\title{R type -> arrow type factory, shared by every schema}
+\title{R type -> arrow type}
 \usage{
 .arrow_type_map
 }
 \description{
-R type -> arrow type factory, shared by every schema
+R type -> arrow type
 }
 \keyword{internal}

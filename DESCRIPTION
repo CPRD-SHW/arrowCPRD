@@ -34,6 +34,7 @@ Imports:
     duckdb,
     lubridate,
     purrr,
+    stats,
     stringr
 Depends: 
     arrow,
