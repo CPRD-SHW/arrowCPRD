@@ -49,7 +49,7 @@ test_that("schema types match up", {
     numeric = "double"
   )
 
-  match_tables <- .schemas |>
+  match_tables <- .schemas() |>
     purrr::map(\(schema) {
       if (is.null(schema[["arrow_schema"]]))
         return(
