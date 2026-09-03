@@ -41,6 +41,26 @@ test_that("schema prints", {
 
 })
 
+test_that("schema definitions are internally consistent", {
+  for (key in names(.schemas())) {
+    spec <- .schemas()[[key]]
+
+    if (is.null(spec$col_types)) next
+
+    col_names <- names(spec$col_types)
+
+    expect_false(anyDuplicated(col_names) > 0,
+                 info = sprintf("duplicate column names in '%s'", key))
+
+    if (!is.null(spec$date_cols)) {
+      expect_true(all(spec$date_cols %in% col_names),
+                  info = sprintf("date_cols not a subset of columns in '%s'", key))
+    }
+
+    expect_no_error(.expand_schema(spec))
+  }
+})
+
 test_that("schema types match up", {
   type_conversion <- c(
     character = "string",
@@ -50,6 +70,7 @@ test_that("schema types match up", {
   )
 
   match_tables <- .schemas() |>
+    purrr::map(.expand_schema) |>
     purrr::map(\(schema) {
       if (is.null(schema[["arrow_schema"]]))
         return(
@@ -61,7 +82,7 @@ test_that("schema types match up", {
         )
 
       with(schema, {
-        codes <- eval(arrow_schema)
+        codes <- arrow_schema
         tibble::tibble(names,
                        read_in_types,
                        arrow = codes$fields |> purrr::map_chr(~ .x$ToString()))

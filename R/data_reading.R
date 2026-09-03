@@ -72,10 +72,8 @@ read_files_from_tsv <- function(file_tag, input_dir, schema = NULL) {
     )
 
   if (!is.null(schema)) {
-    schema <- eval(schema$arrow_schema$code())
-
     files_in |>
-      arrow::open_tsv_dataset(schema = schema, skip = 1)
+      arrow::open_tsv_dataset(schema = schema$arrow_schema, skip = 1)
   }
   else {
     files_in |>

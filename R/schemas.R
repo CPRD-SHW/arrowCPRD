@@ -31,9 +31,7 @@ get_schema <- function(dataset_name = NULL,
          call. = FALSE)
   }
 
-  schema$arrow_schema <- eval(schema$arrow_schema)
-
-  schema
+  .expand_schema(schema)
 
 }
 
@@ -48,5 +46,6 @@ get_schema <- function(dataset_name = NULL,
     .schemas_linked_hes_op,
     .schemas_linked_hes_ae,
     .schemas_linked_hes_did,
+    .schemas_linked_deaths,
     .schemas_linked_smallarea)
 }

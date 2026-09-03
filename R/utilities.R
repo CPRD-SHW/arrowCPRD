@@ -1,28 +1,65 @@
-#' Create schema code for given names/types
-#'
-#' @param schema_in_names A vector of column names
-#' @param schema_in_read_in_types A vector of column types
-#'
-#' @returns A function for generating an `arrow::Schema`
-#' @import arrow
-#'
+#' DuckDB type -> arrow type
 #' @keywords internal
+.arrow_type_map <- list(
+  character = arrow::utf8,
+  integer = arrow::int64,
+  numeric = arrow::float64,
+  logical = arrow::bool
+)
+
+#' Build an `arrow::Schema` from column names and R types
 #'
-get_arrow_schema <- function(schema_in_names, schema_in_read_in_types) {
-  schema_obj <- mapply(\(names, read_in_types) {
-    data_in <- data.frame(x <- do.call(read_in_types, args = list(1)))
+#' @param col_names Character vector of column names
+#' @param col_types Character vector of R types
+#'
+#' @returns An `arrow::Schema`
+#' @keywords internal
+arrow_schema_from_types <- function(col_names, col_types) {
+  unknown <- setdiff(col_types, names(.arrow_type_map))
+  if (length(unknown) > 0) {
+    stop(sprintf("Unknown column type(s): %s", paste(unique(unknown), collapse = ", ")),
+         call. = FALSE)
+  }
 
-    names(data_in) <- names
+  fields <- Map(
+    function(nm, ty) arrow::field(nm, .arrow_type_map[[ty]]()),
+    col_names, col_types
+  )
 
-    data_in
+  do.call(arrow::schema, fields)
+}
 
-  }, schema_in_names, schema_in_read_in_types, SIMPLIFY = FALSE) |>
-    as.data.frame() |>
-    arrow::as_arrow_table() |>
-    arrow::schema()
+#' Expand a compact schema definition to a full schema
+#'
+#' @param spec A schema list with `col_types` (a named character vector) and
+#'   optionally `date_cols`.
+#'
+#' @returns A list with `names`, `read_in_types`, `date_cols` and an 
+#' evaluated `arrow_schema`.
+#' @keywords internal
+.expand_schema <- function(spec) {
 
-  schema_obj$code
+  if (is.null(spec$col_types)) {
+    return(spec)
+  }
 
+  col_names <- names(spec$col_types)
+  col_types <- unname(spec$col_types)
+
+  out <- list(
+    names = col_names,
+    read_in_types = col_types,
+    date_cols = spec$date_cols
+  )
+
+  if (!is.null(col_names) && !any(col_names == "")) {
+    out$arrow_schema <- arrow_schema_from_types(col_names, col_types)
+  }
+
+  extra <- setdiff(names(spec), c("col_types", "date_cols", names(out)))
+  out[extra] <- spec[extra]
+
+  out
 }
 
 #' Coerce dates in data.table
@@ -148,11 +185,9 @@ create_new_schema <- function(col_names, col_types, date_cols = NULL) {
                  paste(missing_cols, collapse = ", ")))
   }
 
-  list(
-    names = col_names,
-    read_in_types = col_types,
-    date_cols = date_cols,
-    arrow_schema = eval(get_arrow_schema(col_names, col_types)())
-  )
+  .expand_schema(list(
+    col_types = stats::setNames(col_types, col_names),
+    date_cols = date_cols
+  ))
 
 }
