@@ -517,6 +517,62 @@
 )
 
 
+# BSA Dispensing Data
+.schemas_linked_dispensing <- list(
+
+  linked_dispensing = list(
+    date_cols = c("processingperioddate"),
+
+    col_types = c(
+      patid = "character",
+      pracid = "character",
+      mpsid = "integer",
+      prescriptionid = "integer",
+      itemid = "integer",
+      chargestatus = "character",
+      costcentresubtype = "character",
+      costcentretype = "integer",
+      dispensedcountrycode = "integer",
+      dispensedpharmacytype = "integer",
+      epsprescriptionindicator = "integer",
+      exemptioncode = "character",
+      highvolvaccineindicator = "character",
+      itemactualcost = "integer",
+      itemnic = "integer",
+      maternityexemptionflag = "integer",
+      notdispensedindicator = "character",
+      outofhoursindicator = "integer",
+      paidacbsindicator = "character",
+      paidbnfcode = "character",
+      paidbnfname = "integer",
+      paidcdindicator = "integer",
+      paiddisallowedreason = "integer",
+      paiddissallowedindicator = "character",
+      paiddmdcode = "integer",
+      paiddrugstrength = "integer",
+      paidflavourindicator = "character",
+      paidformulation = "integer",
+      paidindicator = "character",
+      paidpadmindicator = "character",
+      paidquantity = "integer",
+      paidspeccontindicator = "character",
+      paidsuppliername = "integer",
+      prescribedbnfcode = "character",
+      prescribedbnfname = "integer",
+      prescribedcountrycode = "integer",
+      prescribeddmdcode = "integer",
+      prescribedformulation = "integer",
+      prescribedmedicinestrength = "integer",
+      prescribedquantity = "integer",
+      prescribedsuppliername = "integer",
+      prescribertype = "integer",
+      privateprescriptionindicator = "integer",
+      processingperioddate = "character"
+    )
+  )
+)
+
+
 # Small area data
 .schemas_linked_smallarea <- list(
 

@@ -47,5 +47,6 @@ get_schema <- function(dataset_name = NULL,
     .schemas_linked_hes_ae,
     .schemas_linked_hes_did,
     .schemas_linked_deaths,
+    .schemas_linked_dispensing,
     .schemas_linked_smallarea)
 }
