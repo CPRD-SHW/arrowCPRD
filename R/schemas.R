@@ -46,5 +46,6 @@ get_schema <- function(dataset_name = NULL,
     .schemas_gold,
     .schemas_linked_hes_apc,
     .schemas_linked_hes_op,
+    .schemas_linked_hes_ae,
     .schemas_linked_smallarea)
 }
