@@ -1,6 +1,6 @@
 #' Schemas for reading in Aurum data by types
 #'
-#' @param dataset_name Name of dataset - "aurum" or "gold"
+#' @param dataset_name Name of dataset - "aurum", "gold", or "linked"
 #' @param table_name Name of table - "observation" etc.
 #'
 #' @returns A "schema" - a list of names of variables, r data types and arrow types
@@ -43,5 +43,6 @@ get_schema <- function(dataset_name = NULL,
 #' @noRd
 .schemas <- function() {
   c(.schemas_aurum,
-    .schemas_gold)
+    .schemas_gold,
+    .schemas_linked)
 }

@@ -81,11 +81,11 @@
 
     names = c("pracid", "region", "lcd", "uts"),
 
-    read_in_types = c("integer", "integer", "character", "character"),
+    read_in_types = c("character", "integer", "character", "character"),
 
     arrow_schema = quote(
       arrow::schema(
-        pracid = arrow::int64(),
+        pracid = arrow::utf8(),
         region = arrow::int64(),
         lcd = arrow::utf8(),
         uts = arrow::utf8()
