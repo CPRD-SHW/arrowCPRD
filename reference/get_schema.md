@@ -12,7 +12,7 @@ get_schema(dataset_name = NULL, table_name = NULL)
 
 - dataset_name:
 
-  Name of dataset - "aurum" or "gold"
+  Name of dataset - "aurum", "gold", or "linked"
 
 - table_name:
 
@@ -26,9 +26,6 @@ A "schema" - a list of names of variables, r data types and arrow types
 
 ``` r
 get_schema("aurum", "observation")
-#> $date_cols
-#> [1] "obsdate"   "enterdate"
-#> 
 #> $names
 #>  [1] "patid"        "consid"       "pracid"       "obsid"        "obsdate"     
 #>  [6] "enterdate"    "staffid"      "parentobsid"  "medcodeid"    "value"       
@@ -38,6 +35,9 @@ get_schema("aurum", "observation")
 #>  [1] "character" "character" "integer"   "character" "character" "character"
 #>  [7] "character" "character" "character" "numeric"   "integer"   "integer"  
 #> [13] "numeric"   "numeric"   "character"
+#> 
+#> $date_cols
+#> [1] "obsdate"   "enterdate"
 #> 
 #> $arrow_schema
 #> Schema
@@ -58,9 +58,6 @@ get_schema("aurum", "observation")
 #> probobsid: string
 #> 
 get_schema("aurum", "patient")
-#> $date_cols
-#> [1] "emis_ddate"   "regstartdate" "regenddate"   "cprd_ddate"  
-#> 
 #> $names
 #>  [1] "patid"          "pracid"         "usualgpstaffid" "gender"        
 #>  [5] "yob"            "mob"            "emis_ddate"     "regstartdate"  
@@ -69,6 +66,9 @@ get_schema("aurum", "patient")
 #> $read_in_types
 #>  [1] "character" "integer"   "character" "integer"   "integer"   "integer"  
 #>  [7] "character" "character" "integer"   "character" "integer"   "character"
+#> 
+#> $date_cols
+#> [1] "emis_ddate"   "regstartdate" "regenddate"   "cprd_ddate"  
 #> 
 #> $arrow_schema
 #> Schema

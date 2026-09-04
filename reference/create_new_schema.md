@@ -16,7 +16,8 @@ create_new_schema(col_names, col_types, date_cols = NULL)
 
 - col_types:
 
-  A vector of column types ("character", "integer", "numeric")
+  A vector of column types ("character", "integer", "numeric",
+  "logical")
 
 - date_cols:
 
@@ -46,7 +47,7 @@ create_new_schema(
 #> $arrow_schema
 #> Schema
 #> name: string
-#> age: int32
+#> age: int64
 #> birthdate: string
 #> 
 ```

@@ -45,7 +45,7 @@
 
 
 <dl><dt id="arg-dataset-name">dataset_name<a class="anchor" aria-label="anchor" href="#arg-dataset-name"></a></dt>
-<dd><p>Name of dataset - "aurum" or "gold"</p></dd>
+<dd><p>Name of dataset - "aurum", "gold", or "linked"</p></dd>
 
 
 <dt id="arg-table-name">table_name<a class="anchor" aria-label="anchor" href="#arg-table-name"></a></dt>
@@ -60,9 +60,6 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">get_schema</span><span class="op">(</span><span class="st">"aurum"</span>, <span class="st">"observation"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $date_cols</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "obsdate"   "enterdate"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $names</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "patid"        "consid"       "pracid"       "obsid"        "obsdate"     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [6] "enterdate"    "staffid"      "parentobsid"  "medcodeid"    "value"       </span>
@@ -72,6 +69,9 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "character" "character" "integer"   "character" "character" "character"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "character" "character" "character" "numeric"   "integer"   "integer"  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [13] "numeric"   "numeric"   "character"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $date_cols</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "obsdate"   "enterdate"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $arrow_schema</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Schema</span>
@@ -92,9 +92,6 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> probobsid: string</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">get_schema</span><span class="op">(</span><span class="st">"aurum"</span>, <span class="st">"patient"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $date_cols</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "emis_ddate"   "regstartdate" "regenddate"   "cprd_ddate"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $names</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "patid"          "pracid"         "usualgpstaffid" "gender"        </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [5] "yob"            "mob"            "emis_ddate"     "regstartdate"  </span>
@@ -103,6 +100,9 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> $read_in_types</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "character" "integer"   "character" "integer"   "integer"   "integer"  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "character" "character" "integer"   "character" "integer"   "character"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $date_cols</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "emis_ddate"   "regstartdate" "regenddate"   "cprd_ddate"  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $arrow_schema</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Schema</span>
