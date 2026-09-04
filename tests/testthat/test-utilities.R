@@ -10,6 +10,13 @@ test_that("reading schema works", {
 })
 
 
+test_that("arrow_schema_from_types() rejects unknown types", {
+
+  expect_error(arrow_schema_from_types("a", "b"), "Unknown column type")
+
+})
+
+
 test_that("coercing dates in a data.table works", {
 
   dt_in <- data.table::data.table(adate = "2026/01/01", bdate = "02/03/2028")

@@ -40,7 +40,7 @@ arrow_schema_from_types <- function(col_names, col_types) {
 .expand_schema <- function(spec) {
 
   if (is.null(spec$col_types)) {
-    return(spec)
+    return(spec) ## nocov
   }
 
   col_names <- names(spec$col_types)
