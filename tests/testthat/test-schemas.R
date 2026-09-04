@@ -31,7 +31,8 @@ test_that("get_schema returns error for only bad table/dataset name", {
 
 test_that("schema gives suggestions", {
 
-  expect_message(get_schema(), "Please use one of the following")
+  expect_message(get_schema(), "Available schemas")
+  expect_message(get_schema(), 'get_schema\\("linked", "hes_patient"\\)')
 
 })
 
@@ -39,6 +40,26 @@ test_that("schema prints", {
 
   expect_no_error(print(get_schema("aurum", "patient")))
 
+})
+
+test_that("schema definitions are internally consistent", {
+  for (key in names(.schemas())) {
+    spec <- .schemas()[[key]]
+
+    if (is.null(spec$col_types)) next
+
+    col_names <- names(spec$col_types)
+
+    expect_false(anyDuplicated(col_names) > 0,
+                 info = sprintf("duplicate column names in '%s'", key))
+
+    if (!is.null(spec$date_cols)) {
+      expect_true(all(spec$date_cols %in% col_names),
+                  info = sprintf("date_cols not a subset of columns in '%s'", key))
+    }
+
+    expect_no_error(.expand_schema(spec))
+  }
 })
 
 test_that("schema types match up", {
@@ -49,7 +70,8 @@ test_that("schema types match up", {
     numeric = "double"
   )
 
-  match_tables <- .schemas |>
+  match_tables <- .schemas() |>
+    purrr::map(.expand_schema) |>
     purrr::map(\(schema) {
       if (is.null(schema[["arrow_schema"]]))
         return(
@@ -61,7 +83,7 @@ test_that("schema types match up", {
         )
 
       with(schema, {
-        codes <- eval(arrow_schema)
+        codes <- arrow_schema
         tibble::tibble(names,
                        read_in_types,
                        arrow = codes$fields |> purrr::map_chr(~ .x$ToString()))

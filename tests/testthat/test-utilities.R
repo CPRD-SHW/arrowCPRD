@@ -1,13 +1,18 @@
 test_that("reading schema works", {
 
-  schema_code <- get_arrow_schema(c("a", "b", "c"), c("integer", "character", "numeric"))
+  out_schema <- arrow_schema_from_types(c("a", "b", "c"), c("integer", "character", "numeric"))
 
-  expected_schema <- arrow::schema(a = arrow::int32(), b = arrow::utf8(), c = arrow::float64())
-
-  out_schema <- eval(schema_code(namespace = TRUE))
+  expected_schema <- arrow::schema(a = arrow::int64(), b = arrow::utf8(), c = arrow::float64())
 
   expect_equal(expected = expected_schema$names, object = out_schema$names)
   expect_equal(expected = expected_schema$ToString(), object = out_schema$ToString())
+
+})
+
+
+test_that("arrow_schema_from_types() rejects unknown types", {
+
+  expect_error(arrow_schema_from_types("a", "b"), "Unknown column type")
 
 })
 
@@ -54,7 +59,7 @@ test_that("new schema catches wrong variable types", {
       col_names = c("name", "age", "birthdate"),
       col_types = c("character", "integer", "fakevar")
     ),
-    "Variable type \"fakevar\" not recognised. Please use \"character\", \"integer\" or \"numeric\""
+    "Variable type \"fakevar\" not recognised"
   )
 
 })

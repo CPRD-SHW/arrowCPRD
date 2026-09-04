@@ -7,7 +7,7 @@
 get_schema(dataset_name = NULL, table_name = NULL)
 }
 \arguments{
-\item{dataset_name}{Name of dataset - "aurum" or "gold"}
+\item{dataset_name}{Name of dataset - "aurum", "gold", or "linked"}
 
 \item{table_name}{Name of table - "observation" etc.}
 }

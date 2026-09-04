@@ -9,7 +9,8 @@ create_new_schema(col_names, col_types, date_cols = NULL)
 \arguments{
 \item{col_names}{A vector of column names in your dataset}
 
-\item{col_types}{A vector of column types ("character", "integer", "numeric")}
+\item{col_types}{A vector of column types ("character", "integer", "numeric",
+"logical")}
 
 \item{date_cols}{A vector of column names to cast to date}
 }
