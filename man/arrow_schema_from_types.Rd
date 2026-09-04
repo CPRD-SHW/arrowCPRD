@@ -2,19 +2,19 @@
 % Please edit documentation in R/utilities.R
 \name{arrow_schema_from_types}
 \alias{arrow_schema_from_types}
-\title{Build an \code{arrow::Schema} from column names and R types}
+\title{Build an \code{arrow::Schema} from column names and types}
 \usage{
 arrow_schema_from_types(col_names, col_types)
 }
 \arguments{
 \item{col_names}{Character vector of column names}
 
-\item{col_types}{Character vector of R types}
+\item{col_types}{Character vector of types}
 }
 \value{
 An \code{arrow::Schema}
 }
 \description{
-Build an \code{arrow::Schema} from column names and R types
+Build an \code{arrow::Schema} from column names and types
 }
 \keyword{internal}
