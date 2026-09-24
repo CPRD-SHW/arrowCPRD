@@ -29,11 +29,14 @@ read_tsv_dataset_to_parquet(
 - dataset_tag:
 
   Term that will identify relevant files (e.g. 'observation',
-  'consultation')
+  'consultation'). Matches any file containing the tag, in all
+  sub-folders.
 
 - data_schema:
 
-  Table schema to use
+  Table schema to use, e.g. from
+  [`get_schema()`](https://cprd-shw.github.io/arrowCPRD/reference/get_schema.md).
+  If `NULL`, all columns are read as text.
 
 - table_name:
 

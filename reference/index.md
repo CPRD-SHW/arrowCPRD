@@ -13,7 +13,7 @@
   : Return a list of files from within zips which match a pattern
 
 - [`get_schema()`](https://cprd-shw.github.io/arrowCPRD/reference/get_schema.md)
-  : Schemas for reading in Aurum data by types
+  : Schemas for reading in CPRD data by types
 
 - [`read_file_from_zip()`](https://cprd-shw.github.io/arrowCPRD/reference/read_file_from_zip.md)
   :

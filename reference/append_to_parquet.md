@@ -1,6 +1,11 @@
 # Append data frame to parquet
 
-Append data frame to parquet
+Several schemas are included in the package and accessed by passing
+`dataset_name` and `table_name` to
+[`get_schema()`](https://cprd-shw.github.io/arrowCPRD/reference/get_schema.md).
+You can use
+[`get_schema()`](https://cprd-shw.github.io/arrowCPRD/reference/get_schema.md)
+with no arguments to list available schemas.
 
 ## Usage
 
@@ -38,16 +43,11 @@ append_to_parquet(
 
   Default "%d/%m/%Y"
 
-  Several schemas are included in the package and accessed by passing
-  `dataset_name` and `table_name` to
-  [`get_schema()`](https://cprd-shw.github.io/arrowCPRD/reference/get_schema.md).
-  You can use
-  [`get_schema()`](https://cprd-shw.github.io/arrowCPRD/reference/get_schema.md)
-  with no arguments to list available schemas.
-
-  You can also construct a custom schema using
-  [`create_new_schema()`](https://cprd-shw.github.io/arrowCPRD/reference/create_new_schema.md)
-
 ## Value
 
 output directory
+
+## Details
+
+You can also construct a custom schema using
+[`create_new_schema()`](https://cprd-shw.github.io/arrowCPRD/reference/create_new_schema.md)

@@ -59,24 +59,46 @@ pq_patient |>
 ## Creating parquet files from unzipped datasets
 
 If you’ve unzipped your CPRD data, you can use
-`read_tsv_dataset_to_parquet` on the whole folder also.
+`read_tsv_dataset_to_parquet` on the whole folder also. This works the
+same way for primary care and linked data.
 
 ``` r
 
+# Aurum primary care data
 read_tsv_dataset_to_parquet(
   tsv_file_directory = "path/to/data",
-  write_directory ="parquet_data",
+  write_directory = "parquet_data",
   dataset_tag = "observation",
   data_schema = get_schema("aurum", "observation"),
-  table_name = "patient"
+  table_name = "observation"
 )
 
-# Loading dataset in a fresh session
+# Linked HES APC data
+read_tsv_dataset_to_parquet(
+  tsv_file_directory = "path/to/linked/data",
+  write_directory = "parquet_data",
+  dataset_tag = "hes_patient",
+  data_schema = get_schema("linked", "hes_patient"),
+  table_name = "hes_patient"
+)
+
+# Loading datasets in a fresh session
 
 library(arrow)
 
-pq_observation <- open_dataset("parquet_files/observation")
-  
+pq_observation <- open_dataset("parquet_data/observation")
+pq_hes_patient <- open_dataset("parquet_data/hes_patient")
+```
+
+## Finding a schema
+
+Schemas are chosen by dataset (`"aurum"`, `"gold"` or `"linked"`) and
+table. Linked data always uses `"linked"`, whatever database it is
+linked to. To list every available schema:
+
+``` r
+
+get_schema()
 ```
 
 # More to come!

@@ -1,6 +1,7 @@
-# Schemas for reading in Aurum data by types
+# Schemas for reading in CPRD data by types
 
-Schemas for reading in Aurum data by types
+Linked data always uses `dataset_name = "linked"`, whatever database it
+is linked to. Call with no arguments to list all available schemas.
 
 ## Usage
 
@@ -16,7 +17,7 @@ get_schema(dataset_name = NULL, table_name = NULL)
 
 - table_name:
 
-  Name of table - "observation" etc.
+  Name of table - "observation", "hes_patient" etc.
 
 ## Value
 
@@ -25,6 +26,68 @@ A "schema" - a list of names of variables, r data types and arrow types
 ## Examples
 
 ``` r
+get_schema()
+#> Please choose a dataset and table. Available schemas:
+#> 
+#> aurum:
+#>   get_schema("aurum", "observation")
+#>   get_schema("aurum", "patient")
+#>   get_schema("aurum", "practice")
+#>   get_schema("aurum", "problem")
+#>   get_schema("aurum", "referral")
+#>   get_schema("aurum", "drug")
+#>   get_schema("aurum", "consultation")
+#>   get_schema("aurum", "staff")
+#> 
+#> gold:
+#>   get_schema("gold", "patient")
+#>   get_schema("gold", "practice")
+#>   get_schema("gold", "staff")
+#>   get_schema("gold", "consultation")
+#>   get_schema("gold", "clinical")
+#>   get_schema("gold", "additional")
+#>   get_schema("gold", "referral")
+#>   get_schema("gold", "immunisation")
+#>   get_schema("gold", "test")
+#>   get_schema("gold", "therapy")
+#> 
+#> linked:
+#>   get_schema("linked", "hes_patient")
+#>   get_schema("linked", "hes_hospital")
+#>   get_schema("linked", "hes_episodes")
+#>   get_schema("linked", "hes_diagnosis_epi")
+#>   get_schema("linked", "hes_diagnosis_hosp")
+#>   get_schema("linked", "hes_primary_diag_hosp")
+#>   get_schema("linked", "hes_procedures_epi")
+#>   get_schema("linked", "hes_ccare")
+#>   get_schema("linked", "hes_maternity")
+#>   get_schema("linked", "hes_hrg")
+#>   get_schema("linked", "hesop_patient")
+#>   get_schema("linked", "hesop_patient_pathway")
+#>   get_schema("linked", "hesop_appointment")
+#>   get_schema("linked", "hesop_clinical")
+#>   get_schema("linked", "hesop_operation")
+#>   get_schema("linked", "hesae_patient")
+#>   get_schema("linked", "hesae_attendance")
+#>   get_schema("linked", "hesae_diagnosis")
+#>   get_schema("linked", "hesae_investigation")
+#>   get_schema("linked", "hesae_treatment")
+#>   get_schema("linked", "hesae_hrg")
+#>   get_schema("linked", "hesae_pathway")
+#>   get_schema("linked", "hesdid_patient")
+#>   get_schema("linked", "hesdid_referral")
+#>   get_schema("linked", "hesdid_test")
+#>   get_schema("linked", "deaths_patient")
+#>   get_schema("linked", "dispensing")
+#>   get_schema("linked", "practice_imd")
+#>   get_schema("linked", "imd_domains")
+#>   get_schema("linked", "practice_townsend2011")
+#>   get_schema("linked", "practice_carstairs")
+#>   get_schema("linked", "practice_urbanrural")
+#>   get_schema("linked", "practice_subicbloc")
+#>   get_schema("linked", "practice_coastal")
+#>   get_schema("linked", "cancer_tumour")
+#>   get_schema("linked", "cancer_treatment")
 get_schema("aurum", "observation")
 #> $names
 #>  [1] "patid"        "consid"       "pracid"       "obsid"        "obsdate"     
@@ -57,32 +120,21 @@ get_schema("aurum", "observation")
 #> numrangehigh: double
 #> probobsid: string
 #> 
-get_schema("aurum", "patient")
+get_schema("linked", "hes_patient")
 #> $names
-#>  [1] "patid"          "pracid"         "usualgpstaffid" "gender"        
-#>  [5] "yob"            "mob"            "emis_ddate"     "regstartdate"  
-#>  [9] "patienttypeid"  "regenddate"     "acceptable"     "cprd_ddate"    
+#> [1] "patid"         "pracid"        "cprd_mpsid"    "gen_ethnicity"
 #> 
 #> $read_in_types
-#>  [1] "character" "integer"   "character" "integer"   "integer"   "integer"  
-#>  [7] "character" "character" "integer"   "character" "integer"   "character"
+#> [1] "character" "character" "integer"   "character"
 #> 
 #> $date_cols
-#> [1] "emis_ddate"   "regstartdate" "regenddate"   "cprd_ddate"  
+#> NULL
 #> 
 #> $arrow_schema
 #> Schema
 #> patid: string
-#> pracid: int64
-#> usualgpstaffid: string
-#> gender: int64
-#> yob: int64
-#> mob: int64
-#> emis_ddate: string
-#> regstartdate: string
-#> patienttypeid: int64
-#> regenddate: string
-#> acceptable: int64
-#> cprd_ddate: string
+#> pracid: string
+#> cprd_mpsid: int64
+#> gen_ethnicity: string
 #> 
 ```

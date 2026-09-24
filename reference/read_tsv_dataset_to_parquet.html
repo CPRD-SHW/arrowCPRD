@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">arrowCPRD</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.9008</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.9009</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,11 +61,13 @@
 
 
 <dt id="arg-dataset-tag">dataset_tag<a class="anchor" aria-label="anchor" href="#arg-dataset-tag"></a></dt>
-<dd><p>Term that will identify relevant files (e.g. 'observation', 'consultation')</p></dd>
+<dd><p>Term that will identify relevant files (e.g. 'observation', 'consultation').
+Matches any file containing the tag, in all sub-folders.</p></dd>
 
 
 <dt id="arg-data-schema">data_schema<a class="anchor" aria-label="anchor" href="#arg-data-schema"></a></dt>
-<dd><p>Table schema to use</p></dd>
+<dd><p>Table schema to use, e.g. from <code><a href="get_schema.html">get_schema()</a></code>. If <code>NULL</code>,
+all columns are read as text.</p></dd>
 
 
 <dt id="arg-table-name">table_name<a class="anchor" aria-label="anchor" href="#arg-table-name"></a></dt>
