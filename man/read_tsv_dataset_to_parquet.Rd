@@ -19,9 +19,11 @@ read_tsv_dataset_to_parquet(
 
 \item{write_directory}{Directory in which to write parquet files}
 
-\item{dataset_tag}{Term that will identify relevant files (e.g. 'observation', 'consultation')}
+\item{dataset_tag}{Term that will identify relevant files (e.g. 'observation', 'consultation').
+Matches any file containing the tag, in all sub-folders.}
 
-\item{data_schema}{Table schema to use}
+\item{data_schema}{Table schema to use, e.g. from \code{\link[=get_schema]{get_schema()}}. If \code{NULL},
+all columns are read as text.}
 
 \item{table_name}{Optional, defaults to \code{dataset_tag}. Data for the table will be written in this sub-folder within \code{write_directory}}
 

@@ -23,17 +23,16 @@ append_to_parquet(
 provided, types are taken from the data frame and any character column
 whose name ends in "date" is cast to a date.}
 
-\item{date_format}{Default "\%d/\%m/\%Y"
-
-Several schemas are included in the package and accessed by passing
-\code{dataset_name} and \code{table_name} to \code{\link[=get_schema]{get_schema()}}.
-You can use \code{get_schema()} with no arguments to list available schemas.
-
-You can also construct a custom schema using \code{\link[=create_new_schema]{create_new_schema()}}}
+\item{date_format}{Default "\%d/\%m/\%Y"}
 }
 \value{
 output directory
 }
 \description{
-Append data frame to parquet
+Several schemas are included in the package and accessed by passing
+\code{dataset_name} and \code{table_name} to \code{\link[=get_schema]{get_schema()}}.
+You can use \code{get_schema()} with no arguments to list available schemas.
+}
+\details{
+You can also construct a custom schema using \code{\link[=create_new_schema]{create_new_schema()}}
 }

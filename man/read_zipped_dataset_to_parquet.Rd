@@ -33,14 +33,13 @@ read_zipped_dataset_to_parquet(
 
 \item{zip_file_pattern}{Name pattern of zips to include (e.g. "Aurum.*\\.zip)}
 
-\item{...}{Extra arguments passed to \code{\link[=append_to_parquet]{append_to_parquet()}} (e.g. date formatting)
-
+\item{...}{Extra arguments passed to \code{\link[=append_to_parquet]{append_to_parquet()}} (e.g. date formatting)}
+}
+\description{
 Several schemas are included in the package and accessed by passing
 \code{dataset_name} and \code{table_name} to \code{\link[=get_schema]{get_schema()}}.
 You can use \code{get_schema()} with no arguments to list available schemas.
-
-You can also construct a custom schema using \code{\link[=create_new_schema]{create_new_schema()}}}
 }
-\description{
-Extract all files from a zip and write to a parquet file
+\details{
+You can also construct a custom schema using \code{\link[=create_new_schema]{create_new_schema()}}
 }

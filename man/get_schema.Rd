@@ -2,23 +2,25 @@
 % Please edit documentation in R/schemas.R
 \name{get_schema}
 \alias{get_schema}
-\title{Schemas for reading in Aurum data by types}
+\title{Schemas for reading in CPRD data by types}
 \usage{
 get_schema(dataset_name = NULL, table_name = NULL)
 }
 \arguments{
 \item{dataset_name}{Name of dataset - "aurum", "gold", or "linked"}
 
-\item{table_name}{Name of table - "observation" etc.}
+\item{table_name}{Name of table - "observation", "hes_patient" etc.}
 }
 \value{
 A "schema" - a list of names of variables, r data types and arrow types
 }
 \description{
-Schemas for reading in Aurum data by types
+Linked data always uses \code{dataset_name = "linked"}, whatever database it is
+linked to. Call with no arguments to list all available schemas.
 }
 \examples{
+get_schema()
 get_schema("aurum", "observation")
-get_schema("aurum", "patient")
+get_schema("linked", "hes_patient")
 
 }

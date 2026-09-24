@@ -47,15 +47,15 @@ read_file_from_zip <- function(zipfile, filename, schema = NULL, ...) {
 
 #' Open a tsv file or multiple tsv files with a file_tag as an arrow dataset
 #'
-#' @param file_tag "observation", "practice" etc.
-#' @param input_dir Directory with tsv files (or in sub-directories)
-#' @param schema Optional - an `arrow::Schema` object to set variable types
-#'
 #' Several schemas are included in the package and accessed by passing
 #' `dataset_name` and `table_name` to [get_schema()].
 #' You can use `get_schema()` with no arguments to list available schemas.
 #'
 #' You can also construct a custom schema using [create_new_schema()]
+#'
+#' @param file_tag "observation", "practice" etc.
+#' @param input_dir Directory with tsv files (or in sub-directories)
+#' @param schema Optional - an `arrow::Schema` object to set variable types
 #'
 #' @returns An arrow dataset
 #'
@@ -107,6 +107,12 @@ write_arrow_to_parquet <- function(arrow_data, output_path, partitioning = NULL,
 
 #' Append data frame to parquet
 #'
+#' Several schemas are included in the package and accessed by passing
+#' `dataset_name` and `table_name` to [get_schema()].
+#' You can use `get_schema()` with no arguments to list available schemas.
+#'
+#' You can also construct a custom schema using [create_new_schema()]
+#'
 #' @param df A data frame
 #' @param out_dir Out directory
 #' @param table_name "Observation", "Patient" etc.
@@ -114,12 +120,6 @@ write_arrow_to_parquet <- function(arrow_data, output_path, partitioning = NULL,
 #'   provided, types are taken from the data frame and any character column
 #'   whose name ends in "date" is cast to a date.
 #' @param date_format Default "%d/%m/%Y"
-#'
-#' Several schemas are included in the package and accessed by passing
-#' `dataset_name` and `table_name` to [get_schema()].
-#' You can use `get_schema()` with no arguments to list available schemas.
-#'
-#' You can also construct a custom schema using [create_new_schema()]
 #'
 #' @returns output directory
 #'
@@ -208,6 +208,12 @@ find_files_from_zip <- function(zipfile, tag) {
 
 #' Extract all files from a zip and write to a parquet file
 #'
+#' Several schemas are included in the package and accessed by passing
+#' `dataset_name` and `table_name` to [get_schema()].
+#' You can use `get_schema()` with no arguments to list available schemas.
+#'
+#' You can also construct a custom schema using [create_new_schema()]
+#'
 #' @param zip_directory Directory of zip files
 #' @param write_directory Directory in which to write parquet files
 #' @param dataset_tag Term that will identify relevant files (e.g. 'observation', 'consultation')
@@ -217,12 +223,6 @@ find_files_from_zip <- function(zipfile, tag) {
 #' @param zip_file_pattern Name pattern of zips to include (e.g. "Aurum.*\\.zip)
 #' @param date_format Read dates from files in this format. Check dataset! Default "%d/%m/%Y"
 #' @param ... Extra arguments passed to [append_to_parquet()] (e.g. date formatting)
-#'
-#' Several schemas are included in the package and accessed by passing
-#' `dataset_name` and `table_name` to [get_schema()].
-#' You can use `get_schema()` with no arguments to list available schemas.
-#'
-#' You can also construct a custom schema using [create_new_schema()]
 #'
 #' @export
 #'
@@ -273,8 +273,10 @@ read_zipped_dataset_to_parquet <- function(zip_directory,
 #'
 #' @param tsv_file_directory Directory with .txt tsv files
 #' @param write_directory Directory in which to write parquet files
-#' @param dataset_tag Term that will identify relevant files (e.g. 'observation', 'consultation')
-#' @param data_schema Table schema to use
+#' @param dataset_tag Term that will identify relevant files (e.g. 'observation', 'consultation').
+#'   Matches any file containing the tag, in all sub-folders.
+#' @param data_schema Table schema to use, e.g. from [get_schema()]. If `NULL`,
+#'   all columns are read as text.
 #' @param table_name Optional, defaults to `dataset_tag`. Data for the table will be written in this sub-folder within `write_directory`
 #' @param quietly Whether to print progress
 #' @param date_format Read dates from files in this format. Check dataset! Default "%d/%m/%Y"

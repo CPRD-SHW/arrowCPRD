@@ -1,14 +1,18 @@
-#' Schemas for reading in Aurum data by types
+#' Schemas for reading in CPRD data by types
+#'
+#' Linked data always uses `dataset_name = "linked"`, whatever database it is
+#' linked to. Call with no arguments to list all available schemas.
 #'
 #' @param dataset_name Name of dataset - "aurum", "gold", or "linked"
-#' @param table_name Name of table - "observation" etc.
+#' @param table_name Name of table - "observation", "hes_patient" etc.
 #'
 #' @returns A "schema" - a list of names of variables, r data types and arrow types
 #'
 #' @export
 #' @examples
+#' get_schema()
 #' get_schema("aurum", "observation")
-#' get_schema("aurum", "patient")
+#' get_schema("linked", "hes_patient")
 #'
 get_schema <- function(dataset_name = NULL,
                        table_name = NULL) {
