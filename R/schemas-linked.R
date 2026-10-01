@@ -898,6 +898,26 @@
 )
 
 
+# Mother Baby Link
+.schemas_linked_mbl <- list(
+
+  linked_mbl = list(
+    date_cols = c("deldate"),
+
+    col_types = c(
+      pracid        = "character",
+      mumpatid      = "character",
+      babypatid     = "character",
+      deldate       = "character",
+      mumbirthyear  = "integer",
+      babybirthyear = "integer",
+      gender        = "character",
+      children      = "integer"
+    )
+  )
+)
+
+
 # CPRD Ethnicity Record
 .schemas_linked_ethnicity <- list(
 
