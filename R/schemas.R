@@ -67,5 +67,6 @@ get_schema <- function(dataset_name = NULL,
     .schemas_linked_dispensing,
     .schemas_linked_smallarea,
     .schemas_linked_cancer,
+    .schemas_linked_pregnancy,
     .schemas_linked_ethnicity)
 }

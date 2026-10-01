@@ -832,6 +832,72 @@
 )
 
 
+# Pregnancy Register
+.schemas_linked_pregnancy <- list(
+
+  linked_pregnancy_aurum = list(
+    date_cols = c("pregstart", "firstantenatal", "secondtrim", "thirdtrim",
+                  "pregend"),
+
+    col_types = c(
+      patid          = "character",
+      pregid         = "character",
+      totalpregs     = "integer",
+      pregnumber     = "integer",
+      pregstart      = "character",
+      firstantenatal = "character",
+      startsource    = "integer",
+      startadj       = "integer",
+      secondtrim     = "character",
+      thirdtrim      = "character",
+      pregend        = "character",
+      endsource      = "integer",
+      endadj         = "integer",
+      gestdays       = "integer",
+      matage         = "integer",
+      outcome        = "integer",
+      preterm_ev     = "integer",
+      postterm_ev    = "integer",
+      multiple_ev    = "integer",
+      conflict       = "integer"
+    )
+  ),
+
+
+  linked_pregnancy_gold = list(
+    date_cols = c("pregstart", "firstantenatal", "secondtrim", "thirdtrim",
+                  "pregend"),
+
+    col_types = c(
+      patid          = "character",
+      pregid         = "character",
+      mblbabies      = "integer",
+      babypatid1     = "character",
+      babymob        = "integer",
+      babyyob        = "integer",
+      totalpregs     = "integer",
+      pregnumber     = "integer",
+      pregstart      = "character",
+      firstantenatal = "character",
+      startsource    = "integer",
+      startadj       = "integer",
+      secondtrim     = "character",
+      thirdtrim      = "character",
+      pregend        = "character",
+      endsource      = "integer",
+      endadj         = "integer",
+      gestdays       = "integer",
+      matage         = "integer",
+      outcome        = "integer",
+      preterm_ev     = "integer",
+      postterm_ev    = "integer",
+      multiple_ev    = "integer",
+      conflict       = "integer"
+    )
+  )
+)
+
+
 # CPRD Ethnicity Record
 .schemas_linked_ethnicity <- list(
 
