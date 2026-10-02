@@ -8,6 +8,8 @@ To get started, try some things below.
 
 ## Installation
 
+### With [RTools](https://cran.r-project.org/bin/windows/Rtools/) installed
+
 You can install the development version of arrowCPRD from
 [GitHub](https://github.com/) with:
 
@@ -16,6 +18,16 @@ You can install the development version of arrowCPRD from
 # install.packages("pak")
 pak::pak("CPRD-SHW/arrowCPRD")
 ```
+
+### Without RTools installed
+
+You can download the latest release version from
+github.com/CPRD-SHW/arrowCPRD/releases (the newest
+`arrowCPRD_[x.x.x].zip` file) and install it with
+`install.packages("path/to/arrowCPRD_[x.x.x].zip", repos = NULL, type = "binary")`.
+Or `install.packages` can download it directly:
+
+    install.packages("https://github.com/CPRD-SHW/arrowCPRD/releases/download/0.1.5/arrowCPRD_0.1.5.zip", repos = NULL, type = "binary")
 
 ## Creating parquet directly from zip files
 

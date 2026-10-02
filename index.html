@@ -62,16 +62,26 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
+<div class="section level3">
+<h3 id="with-rtools-installed">With <a href="https://cran.r-project.org/bin/windows/Rtools/" class="external-link">RTools</a> installed<a class="anchor" aria-label="anchor" href="#with-rtools-installed"></a>
+</h3>
 <p>You can install the development version of arrowCPRD from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("pak")</span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"CPRD-SHW/arrowCPRD"</span><span class="op">)</span></span></code></pre></div>
 </div>
+<div class="section level3">
+<h3 id="without-rtools-installed">Without RTools installed<a class="anchor" aria-label="anchor" href="#without-rtools-installed"></a>
+</h3>
+<p>You can download the latest release version from github.com/CPRD-SHW/arrowCPRD/releases (the newest <code>arrowCPRD_[x.x.x].zip</code> file) and install it with <code>install.packages("path/to/arrowCPRD_[x.x.x].zip", repos = NULL, type = "binary")</code>. Or <code>install.packages</code> can download it directly:</p>
+<pre><code><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"https://github.com/CPRD-SHW/arrowCPRD/releases/download/0.1.5/arrowCPRD_0.1.5.zip"</span>, repos <span class="op">=</span> <span class="cn">NULL</span>, type <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span></code></pre>
+</div>
+</div>
 <div class="section level2">
 <h2 id="creating-parquet-directly-from-zip-files">Creating parquet directly from zip files<a class="anchor" aria-label="anchor" href="#creating-parquet-directly-from-zip-files"></a>
 </h2>
 <p>You can use the function <code>read_zipped_dataset_to_parquet</code></p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/CPRD-SHW/arrowCPRD" class="external-link">arrowCPRD</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/read_zipped_dataset_to_parquet.html">read_zipped_dataset_to_parquet</a></span><span class="op">(</span></span>
@@ -90,7 +100,7 @@
 <span>  <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>You can do this for each of the tables (‘patient’, ‘observation’, ‘practice’) in your dataset.</p>
 <p><code>pq_patient</code> then functions like a normal data frame (running <code>collect</code> to bring into R session after computations):</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">pq_patient</span> <span class="op">|&gt;</span> </span>
@@ -101,7 +111,7 @@
 <h2 id="creating-parquet-files-from-unzipped-datasets">Creating parquet files from unzipped datasets<a class="anchor" aria-label="anchor" href="#creating-parquet-files-from-unzipped-datasets"></a>
 </h2>
 <p>If you’ve unzipped your CPRD data, you can use <code>read_tsv_dataset_to_parquet</code> on the whole folder also. This works the same way for primary care and linked data.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Aurum primary care data</span></span>
 <span><span class="fu"><a href="reference/read_tsv_dataset_to_parquet.html">read_tsv_dataset_to_parquet</a></span><span class="op">(</span></span>
 <span>  tsv_file_directory <span class="op">=</span> <span class="st">"path/to/data"</span>,</span>
@@ -131,7 +141,7 @@
 <h2 id="finding-a-schema">Finding a schema<a class="anchor" aria-label="anchor" href="#finding-a-schema"></a>
 </h2>
 <p>Schemas are chosen by dataset (<code>"aurum"</code>, <code>"gold"</code> or <code>"linked"</code>) and table. Linked data always uses <code>"linked"</code>, whatever database it is linked to. To list every available schema:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/get_schema.html">get_schema</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
