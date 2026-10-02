@@ -26,6 +26,7 @@ jobs:
       - name: Build binary package
         shell: Rscript {0}
         run: |
+          dir.create("dist")
           pkgbuild::build(binary = TRUE, dest_path = "dist")
 
       - name: Upload binary to release
