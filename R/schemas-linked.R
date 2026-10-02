@@ -830,3 +830,187 @@
     )
   )
 )
+
+
+# Pregnancy Register
+.schemas_linked_pregnancy <- list(
+
+  linked_pregnancy_aurum = list(
+    date_cols = c("pregstart", "firstantenatal", "secondtrim", "thirdtrim",
+                  "pregend"),
+
+    col_types = c(
+      patid          = "character",
+      pregid         = "character",
+      totalpregs     = "integer",
+      pregnumber     = "integer",
+      pregstart      = "character",
+      firstantenatal = "character",
+      startsource    = "integer",
+      startadj       = "integer",
+      secondtrim     = "character",
+      thirdtrim      = "character",
+      pregend        = "character",
+      endsource      = "integer",
+      endadj         = "integer",
+      gestdays       = "integer",
+      matage         = "integer",
+      outcome        = "integer",
+      preterm_ev     = "integer",
+      postterm_ev    = "integer",
+      multiple_ev    = "integer",
+      conflict       = "integer"
+    )
+  ),
+
+
+  linked_pregnancy_gold = list(
+    date_cols = c("pregstart", "firstantenatal", "secondtrim", "thirdtrim",
+                  "pregend"),
+
+    col_types = c(
+      patid          = "character",
+      pregid         = "character",
+      mblbabies      = "integer",
+      babypatid1     = "character",
+      babymob        = "integer",
+      babyyob        = "integer",
+      totalpregs     = "integer",
+      pregnumber     = "integer",
+      pregstart      = "character",
+      firstantenatal = "character",
+      startsource    = "integer",
+      startadj       = "integer",
+      secondtrim     = "character",
+      thirdtrim      = "character",
+      pregend        = "character",
+      endsource      = "integer",
+      endadj         = "integer",
+      gestdays       = "integer",
+      matage         = "integer",
+      outcome        = "integer",
+      preterm_ev     = "integer",
+      postterm_ev    = "integer",
+      multiple_ev    = "integer",
+      conflict       = "integer"
+    )
+  )
+)
+
+
+# Mother Baby Link
+.schemas_linked_mbl <- list(
+
+  linked_mbl = list(
+    date_cols = c("deldate"),
+
+    col_types = c(
+      pracid        = "character",
+      mumpatid      = "character",
+      babypatid     = "character",
+      deldate       = "character",
+      mumbirthyear  = "integer",
+      babybirthyear = "integer",
+      gender        = "character",
+      children      = "integer"
+    )
+  )
+)
+
+
+# CPRD Ethnicity Record
+.schemas_linked_ethnicity <- list(
+
+  linked_ethnicity = list(
+    col_types = c(
+      patid = "character",
+      ethnic_6 = "integer",
+      ethnic_s22 = "integer",
+      ethnic_ew21 = "integer",
+      ethnic_ni11 = "integer",
+      ethnic_ew11 = "integer",
+      ethnic_s11 = "integer"
+    )
+  )
+)
+
+
+# Small area data (patient postcode level)
+.schemas_linked_smallarea_patient <- list(
+
+  linked_patient_imdcomposite = list(
+    col_types = c(
+      patid        = "character",
+      pracid       = "character",
+      e2019_imd_5  = "integer",
+      e2019_imd_10 = "integer",
+      e2019_imd_20 = "integer"
+    )
+  ),
+
+
+  linked_patient_imddomains = list(
+    col_types = c(
+      patid                          = "character",
+      pracid                         = "character",
+      e2019_income_5                 = "integer",
+      e2019_income_10                = "integer",
+      e2019_income_20                = "integer",
+      e2019_employment_5             = "integer",
+      e2019_employment_10            = "integer",
+      e2019_employment_20            = "integer",
+      e2019_education_5              = "integer",
+      e2019_education_10             = "integer",
+      e2019_education_20             = "integer",
+      e2019_health_5                 = "integer",
+      e2019_health_10                = "integer",
+      e2019_health_20                = "integer",
+      e2019_crime_5                  = "integer",
+      e2019_crime_10                 = "integer",
+      e2019_crime_20                 = "integer",
+      e2019_access_5                 = "integer",
+      e2019_access_10                = "integer",
+      e2019_access_20                = "integer",
+      e2019_living_environment_5     = "integer",
+      e2019_living_environment_10    = "integer",
+      e2019_living_environment_20    = "integer",
+      e2019_housing_5                = "integer",
+      e2019_housing_10               = "integer",
+      e2019_housing_20               = "integer",
+      e2019_outdoor_environment_5    = "integer",
+      e2019_outdoor_environment_10   = "integer",
+      e2019_outdoor_environment_20   = "integer"
+    )
+  ),
+
+
+  linked_patient_townsend = list(
+    col_types = c(
+      patid             = "character",
+      pracid            = "character",
+      e2011_townsend_5  = "integer",
+      e2011_townsend_10 = "integer",
+      e2011_townsend_20 = "integer"
+    )
+  ),
+
+
+  linked_patient_carstairs = list(
+    col_types = c(
+      patid              = "character",
+      pracid             = "character",
+      e2011_carstairs_5  = "integer",
+      e2011_carstairs_10 = "integer",
+      e2011_carstairs_20 = "integer"
+    )
+  ),
+
+
+  linked_patient_urbanrural = list(
+    col_types = c(
+      patid             = "character",
+      pracid            = "character",
+      e2011_urbanrural  = "integer"
+    )
+  )
+)
