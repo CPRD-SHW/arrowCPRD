@@ -13,6 +13,7 @@ read_zipped_dataset_to_parquet(
   quietly = FALSE,
   date_format = "\%d/\%m/\%Y",
   zip_file_pattern = ".*\\\\.zip",
+  allow_missing = FALSE,
   ...
 )
 }
@@ -23,7 +24,7 @@ read_zipped_dataset_to_parquet(
 
 \item{dataset_tag}{Term that will identify relevant files (e.g. 'observation', 'consultation')}
 
-\item{data_schema}{Table schema to use. Missing columns are filled with NA}
+\item{data_schema}{Table schema to use}
 
 \item{table_name}{Optional, defaults to \code{dataset_tag}. Data for the table will be written in this sub-folder within \code{write_directory}}
 
@@ -32,6 +33,8 @@ read_zipped_dataset_to_parquet(
 \item{date_format}{Read dates from files in this format. Check dataset! Default "\%d/\%m/\%Y"}
 
 \item{zip_file_pattern}{Name pattern of zips to include (e.g. "Aurum.*\\.zip)}
+
+\item{allow_missing}{Fill missing schema columns with NA instead of erroring}
 
 \item{...}{Extra arguments passed to \code{\link[=append_to_parquet]{append_to_parquet()}} (e.g. date formatting)}
 }

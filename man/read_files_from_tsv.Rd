@@ -4,14 +4,16 @@
 \alias{read_files_from_tsv}
 \title{Open a tsv file or multiple tsv files with a file_tag as an arrow dataset}
 \usage{
-read_files_from_tsv(file_tag, input_dir, schema = NULL)
+read_files_from_tsv(file_tag, input_dir, schema = NULL, allow_missing = FALSE)
 }
 \arguments{
 \item{file_tag}{"observation", "practice" etc.}
 
 \item{input_dir}{Directory with tsv files (or in sub-directories)}
 
-\item{schema}{Optional - an \code{arrow::Schema} object to set variable types. Missing columns are left out}
+\item{schema}{Optional - an \code{arrow::Schema} object to set variable types}
+
+\item{allow_missing}{Leave out missing schema columns instead of erroring}
 }
 \value{
 An arrow dataset

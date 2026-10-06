@@ -180,18 +180,21 @@ read_header <- function(con) {
 }
 
 
-#' Warn about schema columns missing from files
+#' Warn or error about schema columns missing from files
 #'
 #' @param missing_cols Missing column names
 #' @param label Dataset tag or filename
+#' @param allow_missing Warn if `TRUE`, error if `FALSE`
 #'
 #' @keywords internal
-warn_missing_columns <- function(missing_cols, label) {
+check_missing_columns <- function(missing_cols, label, allow_missing) {
   if (length(missing_cols) == 0) return(invisible(NULL))
 
-  warning(sprintf("Columns in schema but not in files for '%s': %s",
-                  label, paste(missing_cols, collapse = ", ")),
-          call. = FALSE)
+  msg <- sprintf("Columns in schema but not in files for '%s': %s",
+                 label, paste(missing_cols, collapse = ", "))
+
+  if (allow_missing) warning(msg, call. = FALSE)
+  else stop(msg, ". Set `allow_missing = TRUE` to read without them.", call. = FALSE)
 }
 
 

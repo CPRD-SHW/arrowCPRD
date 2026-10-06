@@ -554,8 +554,9 @@ test_that("read_zipped_dataset_to_parquet() fills a missing column with NA", {
   zip::zip(file.path(temp_pq, "data.zip"), file.path(temp_pq, "testfile1.txt"), mode = "cherry-pick")
 
   expect_warning(
-    read_zipped_dataset_to_parquet(temp_pq, file.path(temp_pq, "out"), "testfile", mc_schema, quietly = TRUE),
-    "Columns in schema but not in files for 'testfile': a_date"
+    read_zipped_dataset_to_parquet(temp_pq, file.path(temp_pq, "out"), "testfile", mc_schema, quietly = TRUE,
+                                   allow_missing = TRUE),
+    "Columns in schema but not in files for 'testfile1.txt': a_date"
   )
 
   pq_in <- open_dataset(file.path(temp_pq, "out")) |> dplyr::collect() |> dplyr::arrange(id)
@@ -571,7 +572,7 @@ test_that("read_tsv_dataset_to_parquet() fills a missing column with NA", {
   write.table(mc_partial, file.path(temp_pq, "testfile1.txt"), sep = "\t", row.names = FALSE)
 
   expect_warning(
-    read_tsv_dataset_to_parquet(temp_pq, file.path(temp_pq, "out"), "testfile", mc_schema),
+    read_tsv_dataset_to_parquet(temp_pq, file.path(temp_pq, "out"), "testfile", mc_schema, allow_missing = TRUE),
     "Columns in schema but not in files for 'testfile': a_date"
   )
 
@@ -589,4 +590,40 @@ test_that("read_files_from_tsv() errors on mismatched headers", {
   write.table(mc_partial["id"], file.path(temp_pq, "testfile2.txt"), sep = "\t", row.names = FALSE)
 
   expect_error(read_files_from_tsv("testfile", temp_pq, mc_schema), "testfile2.txt")
+})
+
+test_that("read_zipped_dataset_to_parquet() errors on a missing column by default", {
+  temp_pq <- withr::local_tempdir()
+
+  write.table(mc_partial, file.path(temp_pq, "testfile1.txt"), sep = "\t", row.names = FALSE)
+  zip::zip(file.path(temp_pq, "data.zip"), file.path(temp_pq, "testfile1.txt"), mode = "cherry-pick")
+
+  expect_error(
+    read_zipped_dataset_to_parquet(temp_pq, file.path(temp_pq, "out"), "testfile", mc_schema, quietly = TRUE),
+    "'testfile': a_date. Set `allow_missing = TRUE`"
+  )
+  expect_false(dir.exists(file.path(temp_pq, "out")))
+})
+
+test_that("read_tsv_dataset_to_parquet() errors on a missing column by default", {
+  temp_pq <- withr::local_tempdir()
+
+  write.table(mc_partial, file.path(temp_pq, "testfile1.txt"), sep = "\t", row.names = FALSE)
+
+  expect_error(
+    read_tsv_dataset_to_parquet(temp_pq, file.path(temp_pq, "out"), "testfile", mc_schema),
+    "'testfile': a_date. Set `allow_missing = TRUE`"
+  )
+})
+
+test_that("read_tsv_dataset_to_parquet() hints when a later file is missing a column", {
+  temp_pq <- withr::local_tempdir()
+
+  write.table(data.frame(mc_partial, a_date = "01/01/2020"), file.path(temp_pq, "testfile1.txt"), sep = "\t", row.names = FALSE)
+  write.table(mc_partial, file.path(temp_pq, "testfile2.txt"), sep = "\t", row.names = FALSE)
+
+  expect_error(
+    read_tsv_dataset_to_parquet(temp_pq, file.path(temp_pq, "out"), "testfile", mc_schema),
+    "set `allow_missing = TRUE`"
+  )
 })

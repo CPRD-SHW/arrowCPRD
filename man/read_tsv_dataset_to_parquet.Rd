@@ -11,7 +11,8 @@ read_tsv_dataset_to_parquet(
   data_schema = NULL,
   table_name = NULL,
   quietly = FALSE,
-  date_format = "\%d/\%m/\%Y"
+  date_format = "\%d/\%m/\%Y",
+  allow_missing = FALSE
 )
 }
 \arguments{
@@ -23,13 +24,15 @@ read_tsv_dataset_to_parquet(
 Matches any file containing the tag, in all sub-folders.}
 
 \item{data_schema}{Table schema to use, e.g. from \code{\link[=get_schema]{get_schema()}}. If \code{NULL},
-all columns are read as text. Missing columns are filled with NA}
+all columns are read as text.}
 
 \item{table_name}{Optional, defaults to \code{dataset_tag}. Data for the table will be written in this sub-folder within \code{write_directory}}
 
 \item{quietly}{Whether to print progress}
 
 \item{date_format}{Read dates from files in this format. Check dataset! Default "\%d/\%m/\%Y"}
+
+\item{allow_missing}{Fill missing schema columns with NA instead of erroring. Ignored if \code{data_schema} is \code{NULL}}
 }
 \value{
 The directory name where files were stored
