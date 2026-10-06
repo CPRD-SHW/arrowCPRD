@@ -90,6 +90,8 @@ coerce_date_columns_dt <- function(data_in, date_cols = NULL) {
 #' @keywords internal
 coerce_date_columns_arrow <- function(data_in, date_cols = NULL) {
 
+  date_cols <- intersect(date_cols, names(data_in))
+
   if (length(date_cols) == 0) return(data_in)
 
   data_in |>
@@ -107,10 +109,13 @@ coerce_date_columns_arrow <- function(data_in, date_cols = NULL) {
 #'   `date_cols`
 #' @param table_name Name of table to include in cast statement
 #' @param date_format (default "%d/%m/%Y")
+#' @param present_cols Names of the columns present in the data. Any schema
+#'   column not in `present_cols` is written as a typed all-NA column.
 #'
 #' @returns a string to be passed to duckdb as a cast expression
 #' @keywords internal
-cast_expression_from_schema <- function(data_schema, table_name, date_format = "%d/%m/%Y") {
+cast_expression_from_schema <- function(data_schema, table_name, date_format = "%d/%m/%Y",
+                                        present_cols = data_schema$names) {
 
   variable_types <- data_schema$read_in_types
   names(variable_types) <- data_schema$names
@@ -126,15 +131,17 @@ cast_expression_from_schema <- function(data_schema, table_name, date_format = "
 
   base_variables <- setdiff(data_schema$names, time_variables)
 
-  base_casts <- sprintf(
-    "%s::%s AS %s",
-    base_variables, base_types[variable_types[base_variables]], base_variables
+  base_casts <- ifelse(
+    base_variables %in% present_cols,
+    sprintf("%s::%s AS %s", base_variables, base_types[variable_types[base_variables]], base_variables),
+    sprintf("CAST(NULL AS %s) AS %s", base_types[variable_types[base_variables]], base_variables)
   )
 
 
-  date_casts <- sprintf(
-    "CAST(try_strptime(%s, '%s') AS DATE) AS %s",
-    time_variables, date_format, time_variables
+  date_casts <- ifelse(
+    time_variables %in% present_cols,
+    sprintf("CAST(try_strptime(%s, '%s') AS DATE) AS %s", time_variables, date_format, time_variables),
+    sprintf("CAST(NULL AS DATE) AS %s", time_variables)
   )
 
 
@@ -143,6 +150,23 @@ cast_expression_from_schema <- function(data_schema, table_name, date_format = "
     collapse = ",\n  "
   )
 
+}
+
+
+#' Trim a schema to the columns present in a file header
+#'
+#' @param schema A schema, e.g. from [get_schema()]
+#' @param header Character vector of column names from a file header
+#'
+#' @returns A schema with only the columns in `header`, in header order
+#' @keywords internal
+subset_schema <- function(schema, header) {
+  keep <- header[header %in% schema$names]
+  create_new_schema(
+    col_names = keep,
+    col_types = schema$read_in_types[match(keep, schema$names)],
+    date_cols = intersect(schema$date_cols, keep)
+  )
 }
 
 
