@@ -535,3 +535,58 @@ test_that("read_zipped_dataset_to_parquet() dataset can take alternative date fo
 
 
 })
+
+
+# Missing columns ---------------------------------------------------------
+
+mc_schema <- create_new_schema(
+  col_names = c("id", "a_date", "value"),
+  col_types = c("integer", "character", "numeric"),
+  date_cols = "a_date"
+)
+
+mc_partial <- data.frame(id = 1:2, value = c(1.5, 2.5))
+
+test_that("read_zipped_dataset_to_parquet() fills a missing column with NA", {
+  temp_pq <- withr::local_tempdir()
+
+  write.table(mc_partial, file.path(temp_pq, "testfile1.txt"), sep = "\t", row.names = FALSE)
+  zip::zip(file.path(temp_pq, "data.zip"), file.path(temp_pq, "testfile1.txt"), mode = "cherry-pick")
+
+  expect_warning(
+    read_zipped_dataset_to_parquet(temp_pq, file.path(temp_pq, "out"), "testfile", mc_schema, quietly = TRUE),
+    "Columns in schema but not in files for 'testfile': a_date"
+  )
+
+  pq_in <- open_dataset(file.path(temp_pq, "out")) |> dplyr::collect() |> dplyr::arrange(id)
+
+  expect_equal(names(pq_in), c("id", "value", "a_date", "table"))
+  expect_equal(pq_in$value, c(1.5, 2.5))
+  expect_equal(pq_in$a_date, as.Date(c(NA, NA)))
+})
+
+test_that("read_tsv_dataset_to_parquet() fills a missing column with NA", {
+  temp_pq <- withr::local_tempdir()
+
+  write.table(mc_partial, file.path(temp_pq, "testfile1.txt"), sep = "\t", row.names = FALSE)
+
+  expect_warning(
+    read_tsv_dataset_to_parquet(temp_pq, file.path(temp_pq, "out"), "testfile", mc_schema),
+    "Columns in schema but not in files for 'testfile': a_date"
+  )
+
+  pq_in <- open_dataset(file.path(temp_pq, "out")) |> dplyr::collect() |> dplyr::arrange(id)
+
+  expect_equal(names(pq_in), c("id", "value", "a_date", "table"))
+  expect_equal(pq_in$value, c(1.5, 2.5))
+  expect_equal(pq_in$a_date, as.Date(c(NA, NA)))
+})
+
+test_that("read_files_from_tsv() errors on mismatched headers", {
+  temp_pq <- withr::local_tempdir()
+
+  write.table(mc_partial, file.path(temp_pq, "testfile1.txt"), sep = "\t", row.names = FALSE)
+  write.table(mc_partial["id"], file.path(temp_pq, "testfile2.txt"), sep = "\t", row.names = FALSE)
+
+  expect_error(read_files_from_tsv("testfile", temp_pq, mc_schema), "testfile2.txt")
+})
