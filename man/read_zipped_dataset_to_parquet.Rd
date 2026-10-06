@@ -23,7 +23,7 @@ read_zipped_dataset_to_parquet(
 
 \item{dataset_tag}{Term that will identify relevant files (e.g. 'observation', 'consultation')}
 
-\item{data_schema}{Table schema to use}
+\item{data_schema}{Table schema to use. Missing columns are filled with NA}
 
 \item{table_name}{Optional, defaults to \code{dataset_tag}. Data for the table will be written in this sub-folder within \code{write_directory}}
 

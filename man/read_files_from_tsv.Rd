@@ -11,7 +11,7 @@ read_files_from_tsv(file_tag, input_dir, schema = NULL)
 
 \item{input_dir}{Directory with tsv files (or in sub-directories)}
 
-\item{schema}{Optional - an \code{arrow::Schema} object to set variable types}
+\item{schema}{Optional - an \code{arrow::Schema} object to set variable types. Missing columns are left out}
 }
 \value{
 An arrow dataset

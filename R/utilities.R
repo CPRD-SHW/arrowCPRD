@@ -109,8 +109,7 @@ coerce_date_columns_arrow <- function(data_in, date_cols = NULL) {
 #'   `date_cols`
 #' @param table_name Name of table to include in cast statement
 #' @param date_format (default "%d/%m/%Y")
-#' @param present_cols Names of the columns present in the data. Any schema
-#'   column not in `present_cols` is written as a typed all-NA column.
+#' @param present_cols Columns present in the data; others are filled with NA
 #'
 #' @returns a string to be passed to duckdb as a cast expression
 #' @keywords internal
@@ -153,12 +152,12 @@ cast_expression_from_schema <- function(data_schema, table_name, date_format = "
 }
 
 
-#' Trim a schema to the columns present in a file header
+#' Trim a schema to the columns in a file header
 #'
-#' @param schema A schema, e.g. from [get_schema()]
-#' @param header Character vector of column names from a file header
+#' @param schema A schema
+#' @param header Column names from a file header
 #'
-#' @returns A schema with only the columns in `header`, in header order
+#' @returns A schema in header order
 #' @keywords internal
 subset_schema <- function(schema, header) {
   keep <- header[header %in% schema$names]
@@ -167,6 +166,32 @@ subset_schema <- function(schema, header) {
     col_types = schema$read_in_types[match(keep, schema$names)],
     date_cols = intersect(schema$date_cols, keep)
   )
+}
+
+
+#' Read column names from the first line of a tab-separated file
+#'
+#' @param con A file path or connection
+#'
+#' @returns Column names
+#' @keywords internal
+read_header <- function(con) {
+  gsub('^"|"$', "", strsplit(readLines(con, n = 1), "\t")[[1]])
+}
+
+
+#' Warn about schema columns missing from files
+#'
+#' @param missing_cols Missing column names
+#' @param label Dataset tag or filename
+#'
+#' @keywords internal
+warn_missing_columns <- function(missing_cols, label) {
+  if (length(missing_cols) == 0) return(invisible(NULL))
+
+  warning(sprintf("Columns in schema but not in files for '%s': %s",
+                  label, paste(missing_cols, collapse = ", ")),
+          call. = FALSE)
 }
 
 

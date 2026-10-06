@@ -3,6 +3,7 @@
 #' @param zipfile The Zip file to read from
 #' @param filename Filename within Zip file
 #' @param schema A list with 'names' and 'read_in_types'. If not provided these types will be automatically generated on reading files.
+#' @param warn_missing Warn about schema columns missing from the file
 #' @param ... Additional arguments to `data.table::fread`
 #'
 #' Several schemas are included in the package and accessed by passing
@@ -16,7 +17,7 @@
 #' @import data.table
 #' @export
 #'
-read_file_from_zip <- function(zipfile, filename, schema = NULL, ...) {
+read_file_from_zip <- function(zipfile, filename, schema = NULL, warn_missing = TRUE, ...) {
   if (is.null(schema)) {
     dt_in <- data.table::fread(cmd = sprintf("unzip -p \'%s\' \'%s\'", zipfile, filename), integer64 = "character", ...)
 
@@ -27,12 +28,20 @@ read_file_from_zip <- function(zipfile, filename, schema = NULL, ...) {
     dt_in
 
   } else {
+    con <- unz(zipfile, filename)
+    header <- read_header(con)
+    close(con)
+
+    present <- subset_schema(schema, header)
+
+    if (warn_missing) warn_missing_columns(setdiff(schema$names, header), filename)
+
     dt_in <- data.table::fread(
       cmd = sprintf("unzip -p \'%s\' \'%s\'", zipfile, filename),
-      colClasses = schema$read_in_types, ...
+      colClasses = stats::setNames(present$read_in_types, present$names), ...
     )
 
-    bool_cols <-  schema$names[schema$read_in_types == "logical"]
+    bool_cols <-  present$names[present$read_in_types == "logical"]
 
     if(!is.null(bool_cols)) {
 
@@ -55,7 +64,7 @@ read_file_from_zip <- function(zipfile, filename, schema = NULL, ...) {
 #'
 #' @param file_tag "observation", "practice" etc.
 #' @param input_dir Directory with tsv files (or in sub-directories)
-#' @param schema Optional - an `arrow::Schema` object to set variable types
+#' @param schema Optional - an `arrow::Schema` object to set variable types. Missing columns are left out
 #'
 #' @returns An arrow dataset
 #'
@@ -72,8 +81,20 @@ read_files_from_tsv <- function(file_tag, input_dir, schema = NULL) {
     )
 
   if (!is.null(schema)) {
+    headers <- lapply(files_in, read_header)
+    header <- headers[[1]]
+
+    differs <- !vapply(headers, identical, logical(1), header)
+    if (any(differs)) {
+      stop(sprintf("Files have different headers to %s: %s",
+                   files_in[1], paste(files_in[differs], collapse = ", ")),
+           call. = FALSE)
+    }
+
+    warn_missing_columns(setdiff(schema$names, header), file_tag)
+
     files_in |>
-      arrow::open_tsv_dataset(schema = schema$arrow_schema, skip = 1)
+      arrow::open_tsv_dataset(schema = subset_schema(schema, header)$arrow_schema, skip = 1)
   }
   else {
     files_in |>
@@ -118,7 +139,7 @@ write_arrow_to_parquet <- function(arrow_data, output_path, partitioning = NULL,
 #' @param table_name "Observation", "Patient" etc.
 #' @param data_schema A schema with `names` and `read_in_types`. If not
 #'   provided, types are taken from the data frame and any character column
-#'   whose name ends in "date" is cast to a date.
+#'   whose name ends in "date" is cast to a date. Missing columns are filled with NA.
 #' @param date_format Default "%d/%m/%Y"
 #'
 #' @returns output directory
@@ -145,7 +166,8 @@ append_to_parquet <- function(df, out_dir, table_name, data_schema = NULL, date_
 
   }
 
-  cast_expression <- cast_expression_from_schema(data_schema, table_name, date_format = date_format)
+  cast_expression <- cast_expression_from_schema(data_schema, table_name, date_format = date_format,
+                                                 present_cols = names(df))
 
   sql <- sprintf(
     "
@@ -217,7 +239,7 @@ find_files_from_zip <- function(zipfile, tag) {
 #' @param zip_directory Directory of zip files
 #' @param write_directory Directory in which to write parquet files
 #' @param dataset_tag Term that will identify relevant files (e.g. 'observation', 'consultation')
-#' @param data_schema Table schema to use
+#' @param data_schema Table schema to use. Missing columns are filled with NA
 #' @param table_name Optional, defaults to `dataset_tag`. Data for the table will be written in this sub-folder within `write_directory`
 #' @param quietly Whether to print progress
 #' @param zip_file_pattern Name pattern of zips to include (e.g. "Aurum.*\\.zip)
@@ -245,7 +267,7 @@ read_zipped_dataset_to_parquet <- function(zip_directory,
 
   files_to_read <- files_to_read[lapply(files_to_read, length) != 0]
 
-  Map(\(tsv_files, zipfile) {
+  missing_cols <- Map(\(tsv_files, zipfile) {
     files_n <- length(tsv_files)
 
     Map(\(filename, n) {
@@ -259,12 +281,17 @@ read_zipped_dataset_to_parquet <- function(zip_directory,
           " extracting and adding to parquet\n"
         ))
 
-      read_file_from_zip(zipfile, filename, data_schema) |>
-        append_to_parquet(write_directory, table_name, data_schema, date_format = date_format, ...)
+      df <- read_file_from_zip(zipfile, filename, data_schema, warn_missing = FALSE)
+
+      append_to_parquet(df, write_directory, table_name, data_schema, date_format = date_format, ...)
+
+      setdiff(data_schema$names, names(df))
     }, tsv_files, seq(files_n))
 
 
   }, files_to_read, names(files_to_read))
+
+  warn_missing_columns(unique(unlist(missing_cols)), dataset_tag)
 
   invisible(files_to_read)
 }
@@ -276,7 +303,7 @@ read_zipped_dataset_to_parquet <- function(zip_directory,
 #' @param dataset_tag Term that will identify relevant files (e.g. 'observation', 'consultation').
 #'   Matches any file containing the tag, in all sub-folders.
 #' @param data_schema Table schema to use, e.g. from [get_schema()]. If `NULL`,
-#'   all columns are read as text.
+#'   all columns are read as text. Missing columns are filled with NA
 #' @param table_name Optional, defaults to `dataset_tag`. Data for the table will be written in this sub-folder within `write_directory`
 #' @param quietly Whether to print progress
 #' @param date_format Read dates from files in this format. Check dataset! Default "%d/%m/%Y"
@@ -301,13 +328,22 @@ read_tsv_dataset_to_parquet <- function(tsv_file_directory,
 
 
   if (!is.null(data_schema)) {
-    cast_expression <- cast_expression_from_schema(data_schema, table_name, date_format = date_format)
+    present_cols <- DBI::dbGetQuery(con, sprintf(
+      "DESCRIBE SELECT * FROM read_csv('%s/**/*%s*', all_varchar = true, union_by_name = true)",
+      tsv_file_directory,
+      dataset_tag
+    ))$column_name
+
+    warn_missing_columns(setdiff(data_schema$names, present_cols), dataset_tag)
+
+    cast_expression <- cast_expression_from_schema(data_schema, table_name, date_format = date_format,
+                                                   present_cols = present_cols)
 
     sql <- sprintf(
       "
     COPY (
       SELECT %s
-      FROM read_csv('%s/**/*%s*', all_varchar = true)
+      FROM read_csv('%s/**/*%s*', all_varchar = true, union_by_name = true)
     )
     TO '%s'
     (FORMAT 'parquet', COMPRESSION 'ZSTD', APPEND TRUE, PARTITION_BY ('table'))
@@ -324,7 +360,7 @@ read_tsv_dataset_to_parquet <- function(tsv_file_directory,
       "
     COPY (
       SELECT %s
-      FROM read_csv('%s/**/*%s*', all_varchar = true)
+      FROM read_csv('%s/**/*%s*', all_varchar = true, union_by_name = true)
     )
     TO '%s'
     (FORMAT 'parquet', COMPRESSION 'ZSTD', APPEND TRUE, PARTITION_BY ('table'))

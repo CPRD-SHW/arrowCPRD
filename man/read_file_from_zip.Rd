@@ -4,7 +4,7 @@
 \alias{read_file_from_zip}
 \title{Read a single file from a zip file (into a \code{data.table})}
 \usage{
-read_file_from_zip(zipfile, filename, schema = NULL, ...)
+read_file_from_zip(zipfile, filename, schema = NULL, warn_missing = TRUE, ...)
 }
 \arguments{
 \item{zipfile}{The Zip file to read from}
@@ -12,6 +12,8 @@ read_file_from_zip(zipfile, filename, schema = NULL, ...)
 \item{filename}{Filename within Zip file}
 
 \item{schema}{A list with 'names' and 'read_in_types'. If not provided these types will be automatically generated on reading files.}
+
+\item{warn_missing}{Warn about schema columns missing from the file}
 
 \item{...}{Additional arguments to \code{data.table::fread}
 
