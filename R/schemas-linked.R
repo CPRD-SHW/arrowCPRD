@@ -927,8 +927,9 @@
       ethnic_6 = "integer",
       ethnic_s22 = "integer",
       ethnic_ew21 = "integer",
-      ethnic_ni11 = "integer",
+      ethnic_ni21 = "integer",
       ethnic_ew11 = "integer",
+      ethnic_ni11 = "integer",
       ethnic_s11 = "integer"
     )
   )
