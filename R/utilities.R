@@ -90,6 +90,8 @@ coerce_date_columns_dt <- function(data_in, date_cols = NULL) {
 #' @keywords internal
 coerce_date_columns_arrow <- function(data_in, date_cols = NULL) {
 
+  date_cols <- intersect(date_cols, names(data_in))
+
   if (length(date_cols) == 0) return(data_in)
 
   data_in |>
@@ -107,10 +109,12 @@ coerce_date_columns_arrow <- function(data_in, date_cols = NULL) {
 #'   `date_cols`
 #' @param table_name Name of table to include in cast statement
 #' @param date_format (default "%d/%m/%Y")
+#' @param present_cols Columns present in the data; others are filled with NA
 #'
 #' @returns a string to be passed to duckdb as a cast expression
 #' @keywords internal
-cast_expression_from_schema <- function(data_schema, table_name, date_format = "%d/%m/%Y") {
+cast_expression_from_schema <- function(data_schema, table_name, date_format = "%d/%m/%Y",
+                                        present_cols = data_schema$names) {
 
   variable_types <- data_schema$read_in_types
   names(variable_types) <- data_schema$names
@@ -126,15 +130,17 @@ cast_expression_from_schema <- function(data_schema, table_name, date_format = "
 
   base_variables <- setdiff(data_schema$names, time_variables)
 
-  base_casts <- sprintf(
-    "%s::%s AS %s",
-    base_variables, base_types[variable_types[base_variables]], base_variables
+  base_casts <- ifelse(
+    base_variables %in% present_cols,
+    sprintf("%s::%s AS %s", base_variables, base_types[variable_types[base_variables]], base_variables),
+    sprintf("CAST(NULL AS %s) AS %s", base_types[variable_types[base_variables]], base_variables)
   )
 
 
-  date_casts <- sprintf(
-    "CAST(try_strptime(%s, '%s') AS DATE) AS %s",
-    time_variables, date_format, time_variables
+  date_casts <- ifelse(
+    time_variables %in% present_cols,
+    sprintf("CAST(try_strptime(%s, '%s') AS DATE) AS %s", time_variables, date_format, time_variables),
+    sprintf("CAST(NULL AS DATE) AS %s", time_variables)
   )
 
 
@@ -143,6 +149,52 @@ cast_expression_from_schema <- function(data_schema, table_name, date_format = "
     collapse = ",\n  "
   )
 
+}
+
+
+#' Trim a schema to the columns in a file header
+#'
+#' @param schema A schema
+#' @param header Column names from a file header
+#'
+#' @returns A schema in header order
+#' @keywords internal
+subset_schema <- function(schema, header) {
+  keep <- header[header %in% schema$names]
+  create_new_schema(
+    col_names = keep,
+    col_types = schema$read_in_types[match(keep, schema$names)],
+    date_cols = intersect(schema$date_cols, keep)
+  )
+}
+
+
+#' Read column names from the first line of a tab-separated file
+#'
+#' @param con A file path or connection
+#'
+#' @returns Column names
+#' @keywords internal
+read_header <- function(con) {
+  gsub('^"|"$', "", strsplit(readLines(con, n = 1), "\t")[[1]])
+}
+
+
+#' Warn or error about schema columns missing from files
+#'
+#' @param missing_cols Missing column names
+#' @param label Dataset tag or filename
+#' @param allow_missing Warn if `TRUE`, error if `FALSE`
+#'
+#' @keywords internal
+check_missing_columns <- function(missing_cols, label, allow_missing) {
+  if (length(missing_cols) == 0) return(invisible(NULL))
+
+  msg <- sprintf("Columns in schema but not in files for '%s': %s",
+                 label, paste(missing_cols, collapse = ", "))
+
+  if (allow_missing) warning(msg, call. = FALSE)
+  else stop(msg, ". Set `allow_missing = TRUE` to read without them.", call. = FALSE)
 }
 
 

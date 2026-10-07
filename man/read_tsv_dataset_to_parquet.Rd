@@ -11,7 +11,8 @@ read_tsv_dataset_to_parquet(
   data_schema = NULL,
   table_name = NULL,
   quietly = FALSE,
-  date_format = "\%d/\%m/\%Y"
+  date_format = "\%d/\%m/\%Y",
+  allow_missing = FALSE
 )
 }
 \arguments{
@@ -30,6 +31,8 @@ all columns are read as text.}
 \item{quietly}{Whether to print progress}
 
 \item{date_format}{Read dates from files in this format. Check dataset! Default "\%d/\%m/\%Y"}
+
+\item{allow_missing}{Fill missing schema columns with NA instead of erroring. Ignored if \code{data_schema} is \code{NULL}}
 }
 \value{
 The directory name where files were stored

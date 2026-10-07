@@ -21,7 +21,7 @@ append_to_parquet(
 
 \item{data_schema}{A schema with \code{names} and \code{read_in_types}. If not
 provided, types are taken from the data frame and any character column
-whose name ends in "date" is cast to a date.}
+whose name ends in "date" is cast to a date. Missing columns are filled with NA.}
 
 \item{date_format}{Default "\%d/\%m/\%Y"}
 }

@@ -7,7 +7,8 @@
 cast_expression_from_schema(
   data_schema,
   table_name,
-  date_format = "\%d/\%m/\%Y"
+  date_format = "\%d/\%m/\%Y",
+  present_cols = data_schema$names
 )
 }
 \arguments{
@@ -17,6 +18,8 @@ cast_expression_from_schema(
 \item{table_name}{Name of table to include in cast statement}
 
 \item{date_format}{(default "\%d/\%m/\%Y")}
+
+\item{present_cols}{Columns present in the data; others are filled with NA}
 }
 \value{
 a string to be passed to duckdb as a cast expression
