@@ -10,7 +10,7 @@ with no arguments to list available schemas.
 ## Usage
 
 ``` r
-read_files_from_tsv(file_tag, input_dir, schema = NULL)
+read_files_from_tsv(file_tag, input_dir, schema = NULL, allow_missing = FALSE)
 ```
 
 ## Arguments
@@ -28,6 +28,10 @@ read_files_from_tsv(file_tag, input_dir, schema = NULL)
   Optional - an
   [`arrow::Schema`](https://arrow.apache.org/docs/r/reference/Schema-class.html)
   object to set variable types
+
+- allow_missing:
+
+  Leave out missing schema columns instead of erroring
 
 ## Value
 

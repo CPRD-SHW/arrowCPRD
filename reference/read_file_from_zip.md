@@ -5,7 +5,13 @@ Read a single file from a zip file (into a `data.table`)
 ## Usage
 
 ``` r
-read_file_from_zip(zipfile, filename, schema = NULL, ...)
+read_file_from_zip(
+  zipfile,
+  filename,
+  schema = NULL,
+  allow_missing = FALSE,
+  ...
+)
 ```
 
 ## Arguments
@@ -22,6 +28,10 @@ read_file_from_zip(zipfile, filename, schema = NULL, ...)
 
   A list with 'names' and 'read_in_types'. If not provided these types
   will be automatically generated on reading files.
+
+- allow_missing:
+
+  Fill missing schema columns with NA instead of erroring
 
 - ...:
 

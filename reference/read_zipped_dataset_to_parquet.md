@@ -19,6 +19,7 @@ read_zipped_dataset_to_parquet(
   quietly = FALSE,
   date_format = "%d/%m/%Y",
   zip_file_pattern = ".*\\.zip",
+  allow_missing = FALSE,
   ...
 )
 ```
@@ -59,6 +60,10 @@ read_zipped_dataset_to_parquet(
 - zip_file_pattern:
 
   Name pattern of zips to include (e.g. "Aurum.\*\\zip)
+
+- allow_missing:
+
+  Fill missing schema columns with NA instead of erroring
 
 - ...:
 

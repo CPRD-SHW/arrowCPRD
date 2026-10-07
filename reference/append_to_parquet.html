@@ -71,7 +71,7 @@ You can use <code><a href="get_schema.html">get_schema()</a></code> with no argu
 <dt id="arg-data-schema">data_schema<a class="anchor" aria-label="anchor" href="#arg-data-schema"></a></dt>
 <dd><p>A schema with <code>names</code> and <code>read_in_types</code>. If not
 provided, types are taken from the data frame and any character column
-whose name ends in "date" is cast to a date.</p></dd>
+whose name ends in "date" is cast to a date. Missing columns are filled with NA.</p></dd>
 
 
 <dt id="arg-date-format">date_format<a class="anchor" aria-label="anchor" href="#arg-date-format"></a></dt>

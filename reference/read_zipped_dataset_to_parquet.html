@@ -52,6 +52,7 @@ You can use <code><a href="get_schema.html">get_schema()</a></code> with no argu
 <span>  quietly <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  date_format <span class="op">=</span> <span class="st">"%d/%m/%Y"</span>,</span>
 <span>  zip_file_pattern <span class="op">=</span> <span class="st">".*\\.zip"</span>,</span>
+<span>  allow_missing <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -90,6 +91,10 @@ You can use <code><a href="get_schema.html">get_schema()</a></code> with no argu
 
 <dt id="arg-zip-file-pattern">zip_file_pattern<a class="anchor" aria-label="anchor" href="#arg-zip-file-pattern"></a></dt>
 <dd><p>Name pattern of zips to include (e.g. "Aurum.*\.zip)</p></dd>
+
+
+<dt id="arg-allow-missing">allow_missing<a class="anchor" aria-label="anchor" href="#arg-allow-missing"></a></dt>
+<dd><p>Fill missing schema columns with NA instead of erroring</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

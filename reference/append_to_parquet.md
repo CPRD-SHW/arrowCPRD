@@ -37,7 +37,7 @@ append_to_parquet(
 
   A schema with `names` and `read_in_types`. If not provided, types are
   taken from the data frame and any character column whose name ends in
-  "date" is cast to a date.
+  "date" is cast to a date. Missing columns are filled with NA.
 
 - date_format:
 

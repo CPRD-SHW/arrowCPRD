@@ -8,7 +8,8 @@ Cast data-type schema to a duckdb schema
 cast_expression_from_schema(
   data_schema,
   table_name,
-  date_format = "%d/%m/%Y"
+  date_format = "%d/%m/%Y",
+  present_cols = data_schema$names
 )
 ```
 
@@ -25,6 +26,10 @@ cast_expression_from_schema(
 - date_format:
 
   (default "%d/%m/%Y")
+
+- present_cols:
+
+  Columns present in the data; others are filled with NA
 
 ## Value
 

@@ -43,7 +43,7 @@ You can use <code><a href="get_schema.html">get_schema()</a></code> with no argu
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">read_files_from_tsv</span><span class="op">(</span><span class="va">file_tag</span>, <span class="va">input_dir</span>, schema <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">read_files_from_tsv</span><span class="op">(</span><span class="va">file_tag</span>, <span class="va">input_dir</span>, schema <span class="op">=</span> <span class="cn">NULL</span>, allow_missing <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -60,6 +60,10 @@ You can use <code><a href="get_schema.html">get_schema()</a></code> with no argu
 
 <dt id="arg-schema">schema<a class="anchor" aria-label="anchor" href="#arg-schema"></a></dt>
 <dd><p>Optional - an <code><a href="https://arrow.apache.org/docs/r/reference/Schema-class.html" class="external-link">arrow::Schema</a></code> object to set variable types</p></dd>
+
+
+<dt id="arg-allow-missing">allow_missing<a class="anchor" aria-label="anchor" href="#arg-allow-missing"></a></dt>
+<dd><p>Leave out missing schema columns instead of erroring</p></dd>
 
 </dl></div>
     <div class="section level2">

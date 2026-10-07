@@ -12,7 +12,8 @@ read_tsv_dataset_to_parquet(
   data_schema = NULL,
   table_name = NULL,
   quietly = FALSE,
-  date_format = "%d/%m/%Y"
+  date_format = "%d/%m/%Y",
+  allow_missing = FALSE
 )
 ```
 
@@ -51,6 +52,11 @@ read_tsv_dataset_to_parquet(
 
   Read dates from files in this format. Check dataset! Default
   "%d/%m/%Y"
+
+- allow_missing:
+
+  Fill missing schema columns with NA instead of erroring. Ignored if
+  `data_schema` is `NULL`
 
 ## Value
 
